@@ -51,6 +51,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   const [engine] = React.useState(
     Engine.create({
       gravity: { x: 0, y: 0 },
+      enableSleeping: true,
     })
   );
   const world = React.useMemo(() => {
@@ -66,7 +67,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
   const player = React.useRef<Body>(
     Bodies.rectangle(350, 350, CELL_SIZE.width, CELL_SIZE.height, {
-      mass: 100,
+      mass: 1000,
       frictionAir: 0.2,
       friction: 0,
       restitution: 0,
@@ -81,7 +82,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   );
   const player2 = React.useRef<Body>(
     Bodies.rectangle(350, 350, CELL_SIZE.width, CELL_SIZE.height, {
-      mass: 100,
+      mass: 1000,
       frictionAir: 0.2,
       friction: 0,
       restitution: 0,
@@ -126,18 +127,18 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
         if (d > CELL_WIDTH || sign === invert.current)
           Body.applyForce(primary, primary.position, {
-            x: direction.current.x * 7.5,
-            y: direction.current.y * 7.5,
+            x: direction.current.x * 75,
+            y: direction.current.y * 75,
           });
         if (d > CELL_WIDTH)
           Body.applyForce(secondary, secondary.position, {
-            x: -direction.current.x * 7.5,
-            y: direction.current.y * 7.5,
+            x: -direction.current.x * 75,
+            y: direction.current.y * 75,
           });
       } else {
         Body.applyForce(primary, primary.position, {
-          x: direction.current.x * 7.5,
-          y: direction.current.y * 7.5,
+          x: direction.current.x * 75,
+          y: direction.current.y * 75,
         });
       }
     }, 0),
@@ -161,11 +162,11 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
         Body.setPosition(player2.current, player.current.position);
 
         Body.applyForce(player.current, player.current.position, {
-          x: -1 * 7.5,
+          x: -1 * 75,
           y: 0,
         });
         Body.applyForce(player2.current, player2.current.position, {
-          x: 1 * 7.5,
+          x: 1 * 75,
           y: 0,
         });
 
@@ -190,26 +191,32 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
       }
 
       if (player.current.speed === 0) {
-        player.current.position.x =
-          Math.trunc(Math.round((player.current.position.x - 50) / 100)) * 100 +
-          50;
-        player.current.position.y =
-          Math.trunc(Math.round((player.current.position.y - 50) / 100)) * 100 +
-          50;
-      } else if (Math.abs(player.current.speed) < 1) {
+        Body.setPosition(player.current, {
+          x:
+            Math.trunc(Math.round((player.current.position.x - 50) / 100)) *
+              100 +
+            50,
+          y:
+            Math.trunc(Math.round((player.current.position.y - 50) / 100)) *
+              100 +
+            50,
+        });
+      } else if (Math.abs(player.current.speed) <= 1) {
         Body.setVelocity(player.current, { x: 0, y: 0 });
       }
 
       if (player2.current.speed === 0) {
-        player2.current.position.x =
-          Math.trunc(Math.round((player2.current.position.x - 50) / 100)) *
-            100 +
-          50;
-        player2.current.position.y =
-          Math.trunc(Math.round((player2.current.position.y - 50) / 100)) *
-            100 +
-          50;
-      } else if (Math.abs(player2.current.speed) < 1) {
+        Body.setPosition(player2.current, {
+          x:
+            Math.trunc(Math.round((player2.current.position.x - 50) / 100)) *
+              100 +
+            50,
+          y:
+            Math.trunc(Math.round((player2.current.position.y - 50) / 100)) *
+              100 +
+            50,
+        });
+      } else if (Math.abs(player2.current.speed) <= 1) {
         Body.setVelocity(player2.current, { x: 0, y: 0 });
       }
 
