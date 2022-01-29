@@ -37,6 +37,14 @@ export function usePhysics() {
   return React.useContext(PhysicsStoreContext);
 }
 
+export function useFrame(
+  callback: (event: Matter.IEventTimestamped<Engine>) => void
+) {
+  const physics = usePhysics();
+
+  physics.subscribeOnFrame(callback);
+}
+
 export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   const game = useGame();
 
@@ -178,6 +186,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
       }
   }, [game.player, spaceKey]);
 
+
   React.useEffect(() => {
     World.add(world, player.current);
     World.add(world, player2.current);
@@ -186,7 +195,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
     Events.on(engine, "afterUpdate", function (event) {
       if (direction.current.x || direction.current.y) {
-        if (event.timestamp - tsStart > 500) {
+        if (event.timestamp - tsStart > 400) {
           tsStart = event.timestamp;
           updatePlayer();
         }
@@ -232,10 +241,6 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
           );
       }
 
-      game.changePlayerPosition(
-        player.current.position,
-        player2.current.position
-      );
       onFrameSubscribers.forEach((cb) => {
         if (cb) cb(event);
       });
