@@ -33,7 +33,7 @@ export function Player(props: React.PropsWithChildren<{}>) {
       })`}
     >
       {/* <circle cx={50} cy={50} r={50} fill="black" /> */}
-      <rect ref={ref} x={0} y={0} width={100} height={100} fill="black" />
+      <rect ref={ref} x={0} y={0} width={100} height={100} fill="black" opacity={0.2} />
       <g transform="translate(25, 25)">
         <defs>
           <pattern

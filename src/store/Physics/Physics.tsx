@@ -27,13 +27,15 @@ type IPhysicsStoreContext = {
   subscribeOnFrame: (
     callback: (event: Matter.IEventTimestamped<Engine>) => void
   ) => void;
+  setPlayerPosition: (position: Vector) => void;
 };
 
 export const PhysicsStoreContext = React.createContext<IPhysicsStoreContext>({
   engine: undefined,
   world: undefined,
-  subscribeCollision: () => { },
-  subscribeOnFrame: () => { },
+  subscribeCollision: () => {},
+  subscribeOnFrame: () => {},
+  setPlayerPosition: () => {},
 });
 
 export function usePhysics() {
@@ -86,8 +88,8 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
     )
   );
   const onPressPlayerSplitState = React.useCallback(() => {
-    game.onChangePlayerSplitState()
-  }, [game.onChangePlayerSplitState])
+    game.onChangePlayerSplitState();
+  }, [game.onChangePlayerSplitState]);
 
   const arrowLeft = useKeyPress(["ArrowLeft", "a"], useKeystrokeSound(1).play);
   const arrowRight = useKeyPress(
@@ -106,7 +108,6 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
       arrowLeft || arrowRight ? 0 : -(arrowUp ? 1 : 0) + (arrowDown ? 1 : 0)
     );
   }, [arrowLeft, arrowRight, arrowUp, arrowDown]);
-  
 
   const updatePlayer = React.useCallback(
     debounce(() => {
@@ -171,11 +172,16 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
     onFrameSubscribers.push(cb);
   };
 
+  const setPlayerPosition = React.useCallback((position: Position) => {
+    Body.setPosition(player.current, position);
+  }, []);
+
   const contextValue = {
     engine,
     world,
     subscribeCollision,
     subscribeOnFrame,
+    setPlayerPosition,
   };
 
   return (
