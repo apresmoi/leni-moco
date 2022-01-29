@@ -2,10 +2,22 @@ import { useSettings } from "../store";
 import debounce from "lodash.debounce";
 import * as React from "react";
 
-const sounds = {};
+const dungeon = new Audio("sounds/dungeon-placeholder.mp3");
+
+// todo: add music tension variations
+const musicTensions = [
+  new Audio("sounds/keystroke1.mp3"),
+  new Audio("sounds/keystroke2.mp3"),
+  new Audio("sounds/keystroke3.mp3"),
+];
+
+const sounds = {
+  dungeon,
+  musicTensions,
+};
 
 interface AudioHelper {
-  play: (...args: any) => Promise<void>;
+  play: (...args: any) => void;
   stop: () => void;
 }
 
@@ -21,21 +33,32 @@ export const useSound = (
   return React.useMemo(() => {
     //@ts-ignore
     const sound: HTMLAudioElement | undefined = sounds[name];
+
+    const startPlaying = (soundAsset: HTMLAudioElement | undefined) => {
+      if (soundActivated && soundAsset) {
+        soundAsset.loop = options?.loop || false;
+        soundAsset.volume = options?.volume || 1;
+        soundAsset.play();
+      }
+    };
+
+    let play = () => startPlaying(sound);
+    if (Array.isArray(sound)) {
+      play = () => sound.forEach(startPlaying);
+    }
+
     if (sound)
       return {
-        play: () => {
-          if (soundActivated) {
-            sound.loop = options?.loop || false;
-            sound.volume = options?.volume || 1;
-            return sound.play();
-          }
-          return new Promise(() => {});
-        },
+        play,
         stop: () => {
-          sound.pause();
+          if (Array.isArray(sound)) {
+            sound.forEach((s) => s?.pause());
+          } else {
+            sound?.pause();
+          }
         },
       };
-  }, [name, options, soundActivated]);
+  }, [name, soundActivated]);
 };
 
 export const useRandomSound = (
@@ -69,9 +92,7 @@ export const useRandomSound = (
 
 export const useKeystrokeSound = (volume: number) => {
   const sounds = React.useMemo(
-    () => [
-      new Audio("sounds/slime_move_1_cut.mp3")
-    ],
+    () => [new Audio("sounds/slime_move_1_cut.mp3")],
     []
   );
   return useRandomSound(sounds, { volume });
