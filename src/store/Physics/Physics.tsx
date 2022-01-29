@@ -77,11 +77,16 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
       },
     })
   );
+  const onPressPlayerSplitState = React.useCallback(() => {
+    game.onChangePlayerSplitState()
+  }, [game.onChangePlayerSplitState])
 
   const arrowLeft = useKeyPress(["ArrowLeft", "a"], useKeystrokeSound(1).play);
   const arrowRight = useKeyPress(["ArrowRight", "d"], useKeystrokeSound(1).play);
   const arrowUp = useKeyPress(["ArrowUp", "w"], useKeystrokeSound(1).play);
   const arrowDown = useKeyPress(["ArrowDown", "s"], useKeystrokeSound(1).play);
+  useKeyPress([" "], onPressPlayerSplitState);
+
   const direction = React.useRef<Vector>(new Vector(0, 0));
 
   React.useEffect(() => {
@@ -90,6 +95,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
       arrowLeft || arrowRight ? 0 : -(arrowUp ? 1 : 0) + (arrowDown ? 1 : 0)
     );
   }, [arrowLeft, arrowRight, arrowUp, arrowDown]);
+  
 
   const updatePlayer = React.useCallback(
     debounce(() => {

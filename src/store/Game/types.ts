@@ -5,4 +5,5 @@ export interface Position {
 
 export interface Player {
   position: Position;
+  isSplited: boolean;
 }
