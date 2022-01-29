@@ -4,19 +4,43 @@ import type { GameObject } from '../../sharedTypes'
 import { CollisionCategories } from "../../store/Physics";
 
 
-const LeftBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props}>
-  <line stroke-width="50" y2="25" x2="75" y1="25" x1="25" stroke="#000" />
-</svg>
-const TopBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props}>
-  <line stroke-width="50" y2="0" x2="100" y1="0" x1="0" stroke="#000" />
-</svg>
+const LeftBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = (props) => {
+  const { width, height, ...startingCoords } = props;
 
-const RightBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props}>
-  <line stroke-width="50" y2="75" x2="75" y1="25" x1="75" stroke="#000" />
-</svg>
-const BottomBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = (props) => <svg {...props}>
-  <line stroke-width="50" y2="75" x2="100" y1="50" x1="100" stroke="#000" />
-</svg>
+  return (
+    <svg {...props}>
+      <line stroke-width="50" y2="100%" x2="0%" y1="0%" x1="0%" stroke="#000" />
+    </svg>
+  )
+}
+const TopBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = (props) => {
+  const { width, height, ...startingCoords } = props;
+
+  return (
+    <svg {...props}>
+      <line stroke-width="50" y2="0%" x2="100%" y1="0%" x1="0%" stroke="#000" />
+    </svg>
+  )
+}
+
+const RightBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = (props) => {
+  const { width, height, ...startingCoords } = props;
+
+  return (
+    <svg {...props}>
+      <line stroke-width="50" y2="100%" x2="100%" y1="0%" x1="100%" stroke="#000" />
+    </svg>
+  )
+}
+const BottomBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = (props) => {
+  const { width, height, ...startingCoords } = props;
+
+  return (
+    <svg {...props}>
+      <line stroke-width="50" y2="100%" x2="100%" y1="100%" x1="0%" stroke="#000" />
+    </svg>
+  )
+}
 
 
 
@@ -33,9 +57,9 @@ interface WallProps extends GameObject {
 
 export function Wall(props: WallProps) {
   const { size } = useConstructGameObject({ ...props, collisionFilterCategory: CollisionCategories.WALL });
-  const { type = 'TOP_BUMP' } = props;
+  const { type = 'TOP_BUMP', ...rest } = props;
   const WallSvg = WALL_TYPE[type];
-  // return <WallSvg x={size.min.x} y={size.min.y} width={size.width} height={size.height} fill="black" />;
+  return <WallSvg  {...rest} x={size.min.x} y={size.min.y} width={size.width} height={size.height} fill="black" />;
 
   return (
     <rect

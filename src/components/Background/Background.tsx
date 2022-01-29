@@ -1,24 +1,25 @@
-import * as React from "react";
 import img from "./imagen.png";
+import {
+  useGetGrid,
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  CELL_WIDTH,
+  CELL_HEIGHT
+} from '../../utils/grid';
 
-const CANVAS_WIDTH = 2000;
-const CANVAS_HEIGHT = 2000;
 
-interface UseGridProps {
-  cellWidth: number;
-  cellHeight: number;
-}
-const useGrid = ({ cellWidth, cellHeight }: UseGridProps) => {
-  const rows = Math.floor(CANVAS_HEIGHT / cellHeight);
-  const columns = Math.floor(CANVAS_WIDTH / cellWidth);
+interface UseGridSVG { }
+const useGridSVG = (gridProps: UseGridSVG) => {
+  const { rows, cols } = useGetGrid();
 
-  return () => 
+
+  return () =>
   (
     <g>
       {
-        new Array(rows).fill('').map(
-          (_, row) => new Array(columns).fill('').map(
-            (_, col) => <rect x={col*cellWidth} y={row*cellHeight} width={cellWidth} height={cellHeight} style={{ stroke: 'pink', strokeWidth: '5', opacity: '0.5' }} />
+        rows.map(
+          (row) => cols.map(
+            (col) => <rect x={col * CELL_WIDTH} y={row * CELL_HEIGHT} width={CELL_WIDTH} height={CELL_HEIGHT} style={{ stroke: 'pink', strokeWidth: '5', opacity: '0.5' }} />
           )
         )
       }
@@ -27,7 +28,7 @@ const useGrid = ({ cellWidth, cellHeight }: UseGridProps) => {
 }
 
 export function Background({ showGrid = false }) {
-  const Grid = useGrid({ cellWidth: 100, cellHeight: 100 })
+  const Grid = useGridSVG({ CELL_WIDTH: 100, CELL_HEIGHT: 100 })
 
   return (
     <>
