@@ -12,35 +12,47 @@ export function Player(props: React.PropsWithChildren<{}>) {
   const { player } = useGame();
   const ref = React.useRef<SVGRectElement>(null);
   const playerRef = React.useRef<SVGGElement>(null);
+  const [idle, setIdle] = React.useState(true);
 
   React.useEffect(() => {
+    const animation = idle ? [2, 5, 2, 4] : [1, 2, 3, 2];
     let i = 0;
     const interval = setInterval(() => {
+      if (i >= animation.length) i = 0;
+      ref.current?.setAttribute("fill", `url(#frame0${animation[i]})`);
       i++;
-      if (i > 5) i = 1;
-      ref.current?.setAttribute("fill", `url(#frame0${i})`);
-    }, 200);
+    }, idle ? 250 : 150);
 
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [idle]);
 
   useFrame((event) => {
     const player = event.source.world.bodies.find(
       (body) => body.plugin.id === "player"
     );
-    if (player)
-      playerRef.current?.setAttribute(
-        "transform",
-        `translate(${player?.position.x - 50}, ${player?.position.y - 50})`
-      );
+    if (player) {
+      const oldTransform = playerRef.current?.getAttribute("transform")
+      const newTransform = `translate(${player?.position.x - 50}, ${
+        player?.position.y - 50
+      })`;
+
+      if (oldTransform !== newTransform) {
+        if(oldTransform !== "") setIdle(false);
+        playerRef.current?.setAttribute("transform", newTransform);
+
+        setTimeout(() => {
+          setIdle(true);
+        }, 1500);
+      }
+    }
   });
 
   if (!player) return null;
 
   return (
-    <g ref={playerRef} transform={`translate(${0}, ${0})`}>
+    <g ref={playerRef} transform={""}>
       {/* <circle cx={50} cy={50} r={50} fill="black" /> */}
       <rect
         ref={ref}
