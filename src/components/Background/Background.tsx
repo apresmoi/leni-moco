@@ -8,8 +8,9 @@ const useGridSVG = (gridProps: UseGridSVG) => {
   return () => (
     <g>
       {rows.map((row) =>
-        cols.map((col) => (
+        cols.map((col,index) => (
           <rect
+            key={`grid${col}${index}`}
             x={col * CELL_WIDTH}
             y={row * CELL_HEIGHT}
             width={CELL_WIDTH}
