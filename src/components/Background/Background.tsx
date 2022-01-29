@@ -1,4 +1,7 @@
+<<<<<<< HEAD
+=======
 import img from "./imagen.png";
+>>>>>>> 58b4ca79bbe766cd90202ecbda163543da6465fd
 import {
   useGetGrid,
   CANVAS_WIDTH,
@@ -27,7 +30,7 @@ const useGridSVG = (gridProps: UseGridSVG) => {
   )
 }
 
-export function Background({ showGrid = false }) {
+export function Background({ showGrid = false, img, rows, cols }) {
   const Grid = useGridSVG({ CELL_WIDTH: 100, CELL_HEIGHT: 100 })
 
   return (
@@ -39,7 +42,7 @@ export function Background({ showGrid = false }) {
           width={`${CANVAS_WIDTH}`}
           height={`${CANVAS_WIDTH}`}
         >
-          <image href={img} x="0" y="0" width={`${CANVAS_WIDTH}`} height={`${CANVAS_HEIGHT}`} />
+          <image href={img} x="0" y="0" width={`${CELL_WIDTH * cols}`} height={`${CELL_HEIGHT * rows}`} />
         </pattern>
       </defs>
       <rect x={0} y={0} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} fill="url(#img1)" />

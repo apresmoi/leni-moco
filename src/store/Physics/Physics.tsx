@@ -32,8 +32,8 @@ type IPhysicsStoreContext = {
 export const PhysicsStoreContext = React.createContext<IPhysicsStoreContext>({
   engine: undefined,
   world: undefined,
-  subscribeCollision: () => {},
-  subscribeOnFrame: () => {},
+  subscribeCollision: () => { },
+  subscribeOnFrame: () => { },
 });
 
 export function usePhysics() {
