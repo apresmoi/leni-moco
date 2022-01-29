@@ -1,14 +1,13 @@
 import * as React from "react";
-import { useSound } from "../../assets";
 import { useMusic } from "../../hooks/useMusic";
 
 import { Player, Position, Level } from "./types";
 
 type IGameStoreContext = {
   player?: Player;
-  onChangePlayer: (player: Player) => void;
-  onChangePlayerPosition: (position: Position) => void;
-  onChangePlayerSplitState: () => void;
+  changePlayer: React.Dispatch<React.SetStateAction<Player | undefined>>;
+  changePlayerPosition: (position: Position, position2: Position) => void;
+  changePlayerSide: () => void;
   level?: Level;
   setLevel: (level: Level) => void;
   paused?: boolean;
@@ -16,9 +15,9 @@ type IGameStoreContext = {
 };
 
 export const GameStoreContext = React.createContext<IGameStoreContext>({
-  onChangePlayer: () => {},
-  onChangePlayerPosition: () => {},
-  onChangePlayerSplitState: () => {},
+  changePlayer: () => {},
+  changePlayerPosition: () => {},
+  changePlayerSide: () => {},
   setLevel: () => {},
   setPaused: () => {},
 });
@@ -28,30 +27,40 @@ export function useGame() {
 }
 
 export function GameStore(props: React.PropsWithChildren<{}>) {
-  const [player, setPlayer] = React.useState<Player>();
+  const [player, setPlayer] = React.useState<Player>({
+    isSplited: false,
+    active: "left",
+    position: { x: 0, y: 0 },
+    position2: { x: 0, y: 0 },
+  });
   const [paused, setPaused] = React.useState(true);
   const [level, setLevel] = React.useState<Level>();
 
   useMusic();
-
-  const onChangePlayerSplitState = React.useCallback(() => {
-    setPlayer((p) => ({ ...p, isSplited: !p!.isSplited } as Player));
-  }, []);
 
   const contextValue = {
     player,
     level,
     paused,
     setLevel: setLevel,
-    onChangePlayer: setPlayer,
-    onChangePlayerPosition: (position: Position) => {
+    changePlayer: setPlayer,
+    changePlayerSide: () => {
+      setPlayer((p) =>
+        p && p.isSplited ? { ...p, active: p.active === "left" ? "right" : "left" } : p
+      );
+    },
+    changePlayerPosition: (position: Position, position2: Position) => {
       if (
         position.x !== player?.position.x ||
-        position.y !== player?.position.y
-      )
-        setPlayer((p) => ({ ...p, position } as Player));
+        position.y !== player?.position.y ||
+        position2.x !== player?.position2.x ||
+        position2.y !== player?.position2.y
+      ) {
+        setPlayer((p) => {
+          return { ...p, position, position2 } as Player;
+        });
+      }
     },
-    onChangePlayerSplitState,
     setPaused,
   };
 
