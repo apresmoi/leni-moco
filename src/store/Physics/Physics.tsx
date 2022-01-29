@@ -3,17 +3,10 @@ import { Engine, World, Bodies, Events, Body, Runner } from "matter-js";
 import { useGame } from "../Game";
 import { useKeyPress } from "../../hooks";
 import { Position } from "../Game/types";
-import { Size, Vector } from "../../utils/math";
-import { MAP_SIZE } from "../../settings";
+import { Vector } from "../../utils/math";
+import { CELL_SIZE } from "../../settings";
 import debounce from "lodash.debounce";
-import { useKeystrokeSound, useRandomSound } from "../../assets";
-import { getSVGPosByGridPos, CELL_WIDTH, CELL_HEIGHT } from "../../utils/grid";
-
-const STARTING_PLAYER_CELL = getSVGPosByGridPos({ col: 3, row: 1 });
-const STARTING_PLAYER_POS = {
-  x: STARTING_PLAYER_CELL.x + CELL_WIDTH / 2,
-  y: STARTING_PLAYER_CELL.y + CELL_HEIGHT / 2,
-};
+import { useKeystrokeSound } from "../../assets";
 
 export enum CollisionCategories {
   WALL = 1,
@@ -51,7 +44,6 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   const [collisionSubscribers] = React.useState<
     ((bodyA: Body, bodyB: Body) => void)[]
   >([]);
-  const [enginePaused, pauseEngine] = React.useState(false);
 
   const [engine] = React.useState(
     Engine.create({
@@ -69,23 +61,24 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
     return _runner;
   }, [engine]);
 
+  // React.useEffect(() => {
+  //   if (game.paused) Runner.stop(runner);
+  //   else Runner.run(runner, engine);
+
+  //   console.log(game.paused);
+  // }, [game.paused]);
+
   const player = React.useRef<Body>(
-    Bodies.rectangle(
-      STARTING_PLAYER_POS.x,
-      STARTING_PLAYER_POS.y,
-      CELL_WIDTH,
-      CELL_HEIGHT,
-      {
-        mass: 100,
-        frictionAir: 0.2,
-        friction: 0,
-        restitution: 0,
-        plugin: "player",
-        collisionFilter: {
-          category: CollisionCategories.PLAYER,
-        },
-      }
-    )
+    Bodies.rectangle(350, 350, CELL_SIZE.width, CELL_SIZE.height, {
+      mass: 100,
+      frictionAir: 0.2,
+      friction: 0,
+      restitution: 0,
+      plugin: "player",
+      collisionFilter: {
+        category: CollisionCategories.PLAYER,
+      },
+    })
   );
   const onPressPlayerSplitState = React.useCallback(() => {
     game.onChangePlayerSplitState();

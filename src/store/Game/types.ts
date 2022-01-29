@@ -1,3 +1,5 @@
+import { Size } from "../../utils/math";
+
 export interface Position {
   x: number;
   y: number;
@@ -6,4 +8,8 @@ export interface Position {
 export interface Player {
   position: Position;
   isSplited: boolean;
+}
+
+export interface Level {
+  size: Size;
 }
