@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useSound } from "../../assets";
+import { useMusic } from "../../hooks/useMusic";
 
 import { Player, Position, Level } from "./types";
 
@@ -29,6 +31,8 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
   const [player, setPlayer] = React.useState<Player>();
   const [paused, setPaused] = React.useState(true);
   const [level, setLevel] = React.useState<Level>();
+
+  useMusic();
 
   const onChangePlayerSplitState = React.useCallback(() => {
     setPlayer((p) => ({ ...p, isSplited: !p!.isSplited } as Player));

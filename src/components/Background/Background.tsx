@@ -10,6 +10,7 @@ const useGridSVG = (gridProps: UseGridSVG) => {
       {rows.map((row) =>
         cols.map((col) => (
           <rect
+            key={`r-${row}__c-${col}`}
             x={col * CELL_WIDTH}
             y={row * CELL_HEIGHT}
             width={CELL_WIDTH}

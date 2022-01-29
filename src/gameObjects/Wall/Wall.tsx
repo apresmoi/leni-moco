@@ -6,23 +6,23 @@ import { CollisionCategories } from "../../store/Physics";
 
 const LeftBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = (props) => (
     <svg {...props}>
-      <line stroke-width="50" y2="100%" x2="0%" y1="0%" x1="0%" stroke="#000" />
+      <line strokeWidth="50" y2="100%" x2="0%" y1="0%" x1="0%" stroke="#000" />
     </svg>
   )
 const TopBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = (props) => (
     <svg {...props}>
-      <line stroke-width="50" y2="0%" x2="100%" y1="0%" x1="0%" stroke="#000" />
+      <line strokeWidth="50" y2="0%" x2="100%" y1="0%" x1="0%" stroke="#000" />
     </svg>
   )
 
 const RightBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = (props) => (
     <svg {...props}>
-      <line stroke-width="50" y2="100%" x2="100%" y1="0%" x1="100%" stroke="#000" />
+      <line strokeWidth="50" y2="100%" x2="100%" y1="0%" x1="100%" stroke="#000" />
     </svg>
   )
 const BottomBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = (props) => (
     <svg {...props}>
-      <line stroke-width="50" y2="100%" x2="100%" y1="100%" x1="0%" stroke="#000" />
+      <line strokeWidth="50" y2="100%" x2="100%" y1="100%" x1="0%" stroke="#000" />
     </svg>
   )
 

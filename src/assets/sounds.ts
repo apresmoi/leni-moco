@@ -2,7 +2,11 @@ import { useSettings } from "../store";
 import debounce from "lodash.debounce";
 import * as React from "react";
 
-const sounds = {};
+const dungeon = new Audio("sounds/dungeon-placeholder.mp3");
+
+const sounds = {
+  dungeon,
+};
 
 interface AudioHelper {
   play: (...args: any) => Promise<void>;
@@ -35,7 +39,7 @@ export const useSound = (
           sound.pause();
         },
       };
-  }, [name, options, soundActivated]);
+  }, [name, soundActivated]);
 };
 
 export const useRandomSound = (
