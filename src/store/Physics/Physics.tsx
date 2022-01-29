@@ -193,7 +193,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
     Events.on(engine, "afterUpdate", function (event) {
       if (direction.current.x || direction.current.y) {
-        if (event.timestamp - tsStart > 500) {
+        if (event.timestamp - tsStart > 400) {
           tsStart = event.timestamp;
           updatePlayer();
         }
@@ -239,10 +239,6 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
           );
       }
 
-      // handleChangePosition.current?.(
-      //   player.current.position,
-      //   player2.current.position
-      // );
       onFrameSubscribers.forEach((cb) => {
         if (cb) cb(event);
       });

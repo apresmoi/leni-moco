@@ -1,12 +1,11 @@
 import * as React from "react";
 import { useMusic } from "../../hooks/useMusic";
 
-import { Player, Position, Level } from "./types";
+import { Player, Level } from "./types";
 
 type IGameStoreContext = {
   player?: Player;
   changePlayer: React.Dispatch<React.SetStateAction<Player | undefined>>;
-  changePlayerPosition: (position: Position, position2: Position) => void;
   changePlayerSide: () => void;
   level?: Level;
   setLevel: (level: Level) => void;
@@ -16,7 +15,6 @@ type IGameStoreContext = {
 
 export const GameStoreContext = React.createContext<IGameStoreContext>({
   changePlayer: () => {},
-  changePlayerPosition: () => {},
   changePlayerSide: () => {},
   setLevel: () => {},
   setPaused: () => {},
@@ -30,28 +28,11 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
   const [player, setPlayer] = React.useState<Player>({
     isSplited: false,
     active: "left",
-    position: { x: 0, y: 0 },
-    position2: { x: 0, y: 0 },
   });
   const [paused, setPaused] = React.useState(true);
   const [level, setLevel] = React.useState<Level>();
 
-  useMusic();
-
-  const changePlayerPosition = React.useCallback(
-    (position: Position, position2: Position) => {
-      if (
-        position.x !== player.position.x ||
-        position.y !== player.position.y ||
-        position2.x !== player.position2.x ||
-        position2.y !== player.position2.y
-      ) {
-        console.log(player.position, position, player.position2, position2);
-        setPlayer({ ...player, position, position2 });
-      }
-    },
-    [player.position, player.position2]
-  );
+  // useMusic();
 
   const contextValue = {
     player,
@@ -66,7 +47,6 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
           : p
       );
     },
-    changePlayerPosition,
     setPaused,
   };
 

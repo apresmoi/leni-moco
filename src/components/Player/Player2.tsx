@@ -40,12 +40,7 @@ export function Player2(props: React.PropsWithChildren<{}>) {
   if (!player || !player.isSplited) return null;
 
   return (
-    <g
-      ref={playerRef}
-      transform={`translate(${player.position2.x - 50}, ${
-        player.position2.y - 50
-      })`}
-    >
+    <g ref={playerRef} transform={`translate(${0}, ${0})`}>
       <rect
         ref={ref}
         x={0}

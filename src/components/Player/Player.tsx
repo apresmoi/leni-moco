@@ -40,12 +40,7 @@ export function Player(props: React.PropsWithChildren<{}>) {
   if (!player) return null;
 
   return (
-    <g
-      ref={playerRef}
-      transform={`translate(${player.position.x - 50}, ${
-        player.position.y - 50
-      })`}
-    >
+    <g ref={playerRef} transform={`translate(${0}, ${0})`}>
       {/* <circle cx={50} cy={50} r={50} fill="black" /> */}
       <rect
         ref={ref}
