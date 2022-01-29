@@ -11,8 +11,6 @@ export function Player(props: React.PropsWithChildren<{}>) {
   const { player } = useGame();
   const ref = React.useRef<SVGRectElement>(null);
 
-  if (!player) return null;
-
   React.useEffect(() => {
     let i = 0;
     const interval = setInterval(() => {
@@ -25,6 +23,8 @@ export function Player(props: React.PropsWithChildren<{}>) {
       clearInterval(interval);
     };
   }, []);
+
+  if (!player || player?.isSplited) return null;
 
   return (
     <g
