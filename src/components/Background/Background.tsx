@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-import img from "./imagen.png";
->>>>>>> 58b4ca79bbe766cd90202ecbda163543da6465fd
 import {
   useGetGrid,
   CANVAS_WIDTH,
