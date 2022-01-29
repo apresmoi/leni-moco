@@ -6,6 +6,7 @@ import { Position } from "../Game/types";
 import { Size, Vector } from "../../utils/math";
 import { MAP_SIZE } from "../../settings";
 import debounce from "lodash.debounce";
+import { useKeystrokeSound, useRandomSound } from "../../assets";
 
 export enum CollisionCategories {
   WALL = 1,
@@ -72,10 +73,10 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
     })
   );
 
-  const arrowLeft = useKeyPress(["ArrowLeft", "a"]);
-  const arrowRight = useKeyPress(["ArrowRight", "d"]);
-  const arrowUp = useKeyPress(["ArrowUp", "w"]);
-  const arrowDown = useKeyPress(["ArrowDown", "s"]);
+  const arrowLeft = useKeyPress(["ArrowLeft", "a"], useKeystrokeSound(1).play);
+  const arrowRight = useKeyPress(["ArrowRight", "d"], useKeystrokeSound(1).play);
+  const arrowUp = useKeyPress(["ArrowUp", "w"], useKeystrokeSound(1).play);
+  const arrowDown = useKeyPress(["ArrowDown", "s"], useKeystrokeSound(1).play);
   const direction = React.useRef<Vector>(new Vector(0, 0));
 
   React.useEffect(() => {

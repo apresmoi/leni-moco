@@ -70,12 +70,7 @@ export const useRandomSound = (
 export const useKeystrokeSound = (volume: number) => {
   const sounds = React.useMemo(
     () => [
-      new Audio("sounds/keystroke1.mp3"),
-      new Audio("sounds/keystroke2.mp3"),
-      new Audio("sounds/keystroke3.mp3"),
-      new Audio("sounds/keystroke4.mp3"),
-      new Audio("sounds/keystroke5.mp3"),
-      new Audio("sounds/keystroke6.mp3"),
+      new Audio("sounds/slime_move_1.mp3")
     ],
     []
   );
