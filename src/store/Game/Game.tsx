@@ -38,6 +38,21 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
 
   useMusic();
 
+  const changePlayerPosition = React.useCallback(
+    (position: Position, position2: Position) => {
+      if (
+        position.x !== player.position.x ||
+        position.y !== player.position.y ||
+        position2.x !== player.position2.x ||
+        position2.y !== player.position2.y
+      ) {
+        console.log(player.position, position, player.position2, position2);
+        setPlayer({ ...player, position, position2 });
+      }
+    },
+    [player.position, player.position2]
+  );
+
   const contextValue = {
     player,
     level,
@@ -46,21 +61,12 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
     changePlayer: setPlayer,
     changePlayerSide: () => {
       setPlayer((p) =>
-        p && p.isSplited ? { ...p, active: p.active === "left" ? "right" : "left" } : p
+        p && p.isSplited
+          ? { ...p, active: p.active === "left" ? "right" : "left" }
+          : p
       );
     },
-    changePlayerPosition: (position: Position, position2: Position) => {
-      if (
-        position.x !== player?.position.x ||
-        position.y !== player?.position.y ||
-        position2.x !== player?.position2.x ||
-        position2.y !== player?.position2.y
-      ) {
-        setPlayer((p) => {
-          return { ...p, position, position2 } as Player;
-        });
-      }
-    },
+    changePlayerPosition,
     setPaused,
   };
 

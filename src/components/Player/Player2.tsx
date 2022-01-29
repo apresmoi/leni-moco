@@ -6,10 +6,12 @@ import frame02 from "./02.svg";
 import frame03 from "./03.svg";
 import frame04 from "./04.svg";
 import frame05 from "./05.svg";
+import { useFrame } from "../../store/Physics/Physics";
 
 export function Player2(props: React.PropsWithChildren<{}>) {
   const { player } = useGame();
   const ref = React.useRef<SVGRectElement>(null);
+  const playerRef = React.useRef<SVGGElement>(null);
 
   React.useEffect(() => {
     let i = 0;
@@ -24,10 +26,22 @@ export function Player2(props: React.PropsWithChildren<{}>) {
     };
   }, []);
 
+  useFrame((event) => {
+    const player = event.source.world.bodies.find(
+      (body) => body.plugin.id === "player2"
+    );
+    if (player)
+      playerRef.current?.setAttribute(
+        "transform",
+        `translate(${player?.position.x - 50}, ${player?.position.y - 50})`
+      );
+  });
+
   if (!player || !player.isSplited) return null;
 
   return (
     <g
+      ref={playerRef}
       transform={`translate(${player.position2.x - 50}, ${
         player.position2.y - 50
       })`}
