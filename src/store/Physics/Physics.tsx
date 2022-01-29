@@ -39,6 +39,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   const game = useGame();
 
   const invert = React.useRef<number>(1);
+  const splitted = React.useRef<boolean>(false);
 
   const [onFrameSubscribers] = React.useState<
     ((event: Matter.IEventTimestamped<Engine>) => void)[]
@@ -115,17 +116,27 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
   const updatePlayer = React.useCallback(
     debounce(() => {
-      Body.applyForce(player.current, player.current.position, {
-        x: invert.current * direction.current.x * 7.5,
-        y: direction.current.y * 7.5,
-      });
+      const primary = invert.current === 1 ? player.current : player2.current;
+      const secondary =
+        invert.current === -1 ? player.current : player2.current;
 
-      if (
-        Math.abs(player.current.position.x - player2.current.position.x) >
-        CELL_WIDTH
-      ) {
-        Body.applyForce(player2.current, player2.current.position, {
-          x: invert.current * -direction.current.x * 7.5,
+      if (splitted.current) {
+        const d = Math.abs(secondary.position.x - primary.position.x);
+        const sign = Math.sign(secondary.position.x - primary.position.x);
+
+        if (d > CELL_WIDTH || sign === invert.current)
+          Body.applyForce(primary, primary.position, {
+            x: direction.current.x * 7.5,
+            y: direction.current.y * 7.5,
+          });
+        if (d > CELL_WIDTH)
+          Body.applyForce(secondary, secondary.position, {
+            x: -direction.current.x * 7.5,
+            y: direction.current.y * 7.5,
+          });
+      } else {
+        Body.applyForce(primary, primary.position, {
+          x: direction.current.x * 7.5,
           y: direction.current.y * 7.5,
         });
       }
@@ -135,7 +146,8 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
   React.useEffect(() => {
     invert.current = game.player?.active === "left" ? 1 : -1;
-  }, [game.player?.active]);
+    splitted.current = game.player?.isSplited || false;
+  }, [game.player?.active, game.player?.isSplited]);
 
   React.useEffect(() => {
     if (shiftKey) {
@@ -166,7 +178,6 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   React.useEffect(() => {
     World.add(world, player.current);
     World.add(world, player2.current);
-    // walls.current.map((wall) => World.add(world, wall));
 
     let tsStart = 0;
 
