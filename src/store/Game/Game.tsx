@@ -32,7 +32,7 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
   const [paused, setPaused] = React.useState(true);
   const [level, setLevel] = React.useState<Level>();
 
-  // useMusic();
+  useMusic();
 
   const contextValue = {
     player,
