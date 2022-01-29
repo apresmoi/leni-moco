@@ -7,11 +7,13 @@ import { Size, Vector } from "../../utils/math";
 import { MAP_SIZE } from "../../settings";
 import debounce from "lodash.debounce";
 import { useKeystrokeSound, useRandomSound } from "../../assets";
-import { getSVGPosByGridPos, CELL_WIDTH, CELL_HEIGHT } from '../../utils/grid';
+import { getSVGPosByGridPos, CELL_WIDTH, CELL_HEIGHT } from "../../utils/grid";
 
-
-const STARTING_PLAYER_CELL = getSVGPosByGridPos({ col: 3, row: 1 })
-const STARTING_PLAYER_POS = { x: STARTING_PLAYER_CELL.x + (CELL_WIDTH / 2), y: STARTING_PLAYER_CELL.y + (CELL_HEIGHT / 2) }
+const STARTING_PLAYER_CELL = getSVGPosByGridPos({ col: 3, row: 1 });
+const STARTING_PLAYER_POS = {
+  x: STARTING_PLAYER_CELL.x + CELL_WIDTH / 2,
+  y: STARTING_PLAYER_CELL.y + CELL_HEIGHT / 2,
+};
 
 export enum CollisionCategories {
   WALL = 1,
@@ -66,23 +68,32 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   }, [engine]);
 
   const player = React.useRef<Body>(
-    Bodies.rectangle(STARTING_PLAYER_POS.x, STARTING_PLAYER_POS.y, CELL_WIDTH, CELL_HEIGHT, {
-      mass: 100,
-      frictionAir: 0.2,
-      friction: 0,
-      restitution: 0,
-      plugin: "player",
-      collisionFilter: {
-        category: CollisionCategories.PLAYER,
-      },
-    })
+    Bodies.rectangle(
+      STARTING_PLAYER_POS.x,
+      STARTING_PLAYER_POS.y,
+      CELL_WIDTH,
+      CELL_HEIGHT,
+      {
+        mass: 100,
+        frictionAir: 0.2,
+        friction: 0,
+        restitution: 0,
+        plugin: "player",
+        collisionFilter: {
+          category: CollisionCategories.PLAYER,
+        },
+      }
+    )
   );
   const onPressPlayerSplitState = React.useCallback(() => {
     game.onChangePlayerSplitState()
   }, [game.onChangePlayerSplitState])
 
   const arrowLeft = useKeyPress(["ArrowLeft", "a"], useKeystrokeSound(1).play);
-  const arrowRight = useKeyPress(["ArrowRight", "d"], useKeystrokeSound(1).play);
+  const arrowRight = useKeyPress(
+    ["ArrowRight", "d"],
+    useKeystrokeSound(1).play
+  );
   const arrowUp = useKeyPress(["ArrowUp", "w"], useKeystrokeSound(1).play);
   const arrowDown = useKeyPress(["ArrowDown", "s"], useKeystrokeSound(1).play);
   useKeyPress([" "], onPressPlayerSplitState);
@@ -100,8 +111,8 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   const updatePlayer = React.useCallback(
     debounce(() => {
       Body.applyForce(player.current, player.current.position, {
-        x: direction.current.x * 7,
-        y: direction.current.y * 7,
+        x: direction.current.x * 7.5,
+        y: direction.current.y * 7.5,
       });
     }, 0),
     []
@@ -120,6 +131,18 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
           updatePlayer();
         }
       }
+
+      if (player.current.speed === 0) {
+        player.current.position.x =
+          Math.trunc(Math.round((player.current.position.x - 50) / 100)) * 100 +
+          50;
+        player.current.position.y =
+          Math.trunc(Math.round((player.current.position.y - 50) / 100)) * 100 +
+          50;
+      } else if (Math.abs(player.current.speed) < 1) {
+        Body.setVelocity(player.current, { x: 0, y: 0 });
+      }
+
       game.onChangePlayerPosition(player.current.position);
       onFrameSubscribers.forEach((cb) => {
         if (cb) cb(event);
