@@ -6,8 +6,21 @@ import { GameCamera } from "../../components/GameCamera";
 import { GameCanvas } from "../../components/GameCanvas";
 import { Player, Player2 } from "../../components/Player";
 import { useDisableGoBack } from "../../hooks";
-import { GameStore, PhysicsStore } from "../../store";
-import { Tutorial } from "../../levels/Tutorial";
+import { GameStore, PhysicsStore, useGame } from "../../store";
+import { Tutorial, FirstLevel, HardLevel } from '../../levels';
+// import { HardLevel } from '../../levels/HardLevel';
+
+
+const LevelSwitcher = () => {
+  const { level } = useGame();
+  return (
+    <>
+      {level.identifier === 'tutorial' ? <Tutorial /> : null}
+      {level.identifier === 'first' ? <FirstLevel /> : null}
+      {level.identifier === 'hard' ? <HardLevel /> : null}
+    </>
+  )
+}
 
 export function Game() {
   useDisableGoBack();
@@ -18,7 +31,7 @@ export function Game() {
         <Container>
           <GameCanvas>
             <GameCamera>
-              <Tutorial />
+              <LevelSwitcher />
               <Player />
               <Player2 />
             </GameCamera>
