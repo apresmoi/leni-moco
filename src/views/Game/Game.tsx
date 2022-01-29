@@ -4,7 +4,7 @@ import "./styles.scoped.scss";
 import { Container } from "../../layout/Container";
 import { GameCamera } from "../../components/GameCamera";
 import { GameCanvas } from "../../components/GameCanvas";
-import { Player } from "../../components/Player";
+import { Player, Player2 } from "../../components/Player";
 import { useDisableGoBack } from "../../hooks";
 import { GameStore, PhysicsStore } from "../../store";
 import { FirstLevel } from '../../levels/FirstLevel';
@@ -22,6 +22,7 @@ export function Game() {
               <FirstLevel />
               {/* <HardLevel /> */}
               <Player />
+              <Player2 />
             </GameCamera>
           </GameCanvas>
         </Container>

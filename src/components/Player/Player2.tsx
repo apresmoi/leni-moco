@@ -7,7 +7,7 @@ import frame03 from "./03.svg";
 import frame04 from "./04.svg";
 import frame05 from "./05.svg";
 
-export function Player(props: React.PropsWithChildren<{}>) {
+export function Player2(props: React.PropsWithChildren<{}>) {
   const { player } = useGame();
   const ref = React.useRef<SVGRectElement>(null);
 
@@ -24,23 +24,22 @@ export function Player(props: React.PropsWithChildren<{}>) {
     };
   }, []);
 
-  if (!player) return null;
+  if (!player || !player.isSplited) return null;
 
   return (
     <g
-      transform={`translate(${player.position.x - 50}, ${
-        player.position.y - 50
+      transform={`translate(${player.position2.x - 50}, ${
+        player.position2.y - 50
       })`}
     >
-      {/* <circle cx={50} cy={50} r={50} fill="black" /> */}
       <rect
         ref={ref}
         x={0}
         y={0}
         width={100}
         height={100}
-        fill={"red"}
-        stroke={player.active === "left" ? "blue" : "none"}
+        fill={"black"}
+        stroke={player.active === "right" ? "blue" : "none"}
         strokeWidth={10}
         opacity={0.5}
       />
