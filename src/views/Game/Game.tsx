@@ -29,19 +29,19 @@ export function Game() {
             <GameCamera>
               <Background showGrid />
               {
-                <>
-                  {/* these walls are the ones surrounding the level */}
-                  <Wall x={0} y={0} width={MAP_SIZE.width} height={CELL_HEIGHT} type="DOWN_BUMP"
-                    id="level_top_boundary" />
-                  <Wall x={0} y={0} width={CELL_WIDTH} height={MAP_SIZE.height} type="RIGHT_BUMP"
-                    id="level_left_boundary"
-                  />
-                  <Wall x={MAP_SIZE.width - CELL_WIDTH} y={0} width={CELL_WIDTH} height={MAP_SIZE.height} type="LEFT_BUMP"
-                    id="level_right_boundary" />
-                  <Wall x={0} y={MAP_SIZE.height - CELL_HEIGHT} width={MAP_SIZE.width} height={CELL_HEIGHT} type="TOP_BUMP"
-                    id="level_bottom_boundary"
-                  />
-                </>
+                // <>
+                //   {/* these walls are the ones surrounding the level */}
+                //   <Wall x={0} y={0} width={MAP_SIZE.width} height={CELL_HEIGHT} type="DOWN_BUMP"
+                //     id="level_top_boundary" />
+                //   <Wall x={0} y={0} width={CELL_WIDTH} height={MAP_SIZE.height} type="RIGHT_BUMP"
+                //     id="level_left_boundary"
+                //   />
+                //   <Wall x={MAP_SIZE.width - CELL_WIDTH} y={0} width={CELL_WIDTH} height={MAP_SIZE.height} type="LEFT_BUMP"
+                //     id="level_right_boundary" />
+                //   <Wall x={0} y={MAP_SIZE.height - CELL_HEIGHT} width={MAP_SIZE.width} height={CELL_HEIGHT} type="TOP_BUMP"
+                //     id="level_bottom_boundary"
+                //   />
+                // </>
               }
               <Boundaries />
               <Player />

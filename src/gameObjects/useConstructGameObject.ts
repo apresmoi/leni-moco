@@ -21,7 +21,7 @@ export const useConstructGameObject = (props: GameObject) => {
     React.useEffect(() => {
         gameObject.current = Bodies.rectangle(
             size.center.x,
-            size.min.y,
+            size.center.y,
             size.width,
             size.height,
             {
