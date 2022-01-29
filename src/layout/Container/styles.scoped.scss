@@ -1,0 +1,24 @@
+.container {
+  position: relative;
+
+	margin: auto;
+
+	width: 100%;
+	height: 100%;
+
+	background: #073D5F;
+	background: #13354a;
+}
+.container:after {
+	content: '';
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: .7;
+	pointer-events: none;
+	mix-blend-mode: multiply;
+	width: 100%;
+	height: 100%;
+	z-index: 9;
+}
