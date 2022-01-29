@@ -60,7 +60,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   }, [engine]);
 
   const player = React.useRef<Body>(
-    Bodies.circle(350, 150, 10, {
+    Bodies.rectangle(50, 50, 100, 100, {
       mass: 100,
       frictionAir: 0.2,
       friction: 0,
