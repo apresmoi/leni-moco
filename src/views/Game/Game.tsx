@@ -8,7 +8,7 @@ import { Background } from "../../components/Background";
 import { Player } from "../../components/Player";
 import { useDisableGoBack } from "../../hooks";
 import { GameStore, PhysicsStore } from "../../store";
-import { Wall } from "../../components/Wall";
+import { Wall } from "../../gameObjects/Wall";
 import { Size } from "../../utils/math";
 import { MAP_SIZE } from "../../settings";
 
@@ -21,23 +21,25 @@ export function Game() {
         <Container>
           <GameCanvas>
             <GameCamera>
-              <Background />
+              <Background showGrid />
               {
                 <>
                   {/* these walls are the ones surrounding the level */}
-                  <Wall x={0} y={0} width={MAP_SIZE.width} height={50} />
+                  <Wall x={0} y={0} width={MAP_SIZE.width} height={50} type="DOWN_BUMP" />
                   <Wall
                     x={0}
                     y={MAP_SIZE.height - 50}
                     width={MAP_SIZE.width}
                     height={50}
+                    type="RIGHT_BUMP"
                   />
-                  <Wall x={0} y={0} width={50} height={MAP_SIZE.height} />
+                  <Wall x={0} y={0} width={50} height={MAP_SIZE.height} type="LEFT_BUMP" />
                   <Wall
                     x={MAP_SIZE.width - 50}
                     y={0}
                     width={50}
                     height={MAP_SIZE.height}
+                    type="TOP_BUMP"
                   />
                 </>
               }
