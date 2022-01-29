@@ -16,6 +16,6 @@ const NeutralSolidBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> =
 interface NeutralSolidBlockProps extends GameObject { }
 
 export function NeutralSolidBlock(props: NeutralSolidBlockProps) {
-  const { size } = useConstructGameObject({ ...props, collisionFilterCategory: CollisionCategories.ICE_BLOCK });
+  const { size } = useConstructGameObject({ ...props, collisionFilterCategory: CollisionCategories.NEUTRAL_BLOCK });
   return <NeutralSolidBlockSVG x={size.min.x} y={size.min.y} />;
 }

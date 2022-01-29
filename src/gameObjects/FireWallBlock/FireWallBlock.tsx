@@ -16,6 +16,6 @@ const FireWallBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({ 
 interface FireWallBlockProps extends GameObject { }
 
 export function FireWallBlock(props: FireWallBlockProps) {
-  const { size } = useConstructGameObject({ ...props, collisionFilterCategory: CollisionCategories.ICE_BLOCK });
+  const { size } = useConstructGameObject({ ...props, collisionFilterCategory: CollisionCategories.FIRE_BLOCK });
   return <FireWallBlockSVG x={size.min.x} y={size.min.y} />;
 }

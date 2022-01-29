@@ -11,8 +11,12 @@ import { useKeystrokeSound } from "../../assets";
 export enum CollisionCategories {
   WALL = 1,
   PLAYER = 2,
-  ICE_BLOCK = 3,
-  PIT_HOLE = 4,
+  FIRE_BLOCK = 3,
+  ICE_BLOCK = 4,
+  NEUTRAL_BLOCK = 5,
+  PIT_HOLE = 6,
+  SHADOW_BLOCK = 7,
+  WIN_BLOCK = 8,
 }
 
 type IPhysicsStoreContext = {

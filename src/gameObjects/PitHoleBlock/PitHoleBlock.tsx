@@ -16,6 +16,6 @@ const PitHoleBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({ x
 interface PitHoleBlockProps extends GameObject { }
 
 export function PitHoleBlock(props: PitHoleBlockProps) {
-  const { size } = useConstructGameObject({ ...props, collisionFilterCategory: CollisionCategories.ICE_BLOCK });
+  const { size } = useConstructGameObject({ ...props, collisionFilterCategory: CollisionCategories.PIT_HOLE });
   return <PitHoleBlockSVG x={size.min.x} y={size.min.y} />;
 }
