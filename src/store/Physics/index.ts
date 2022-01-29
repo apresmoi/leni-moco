@@ -1,1 +1,1 @@
-export { PhysicsStore, usePhysics } from "./Physics";
+export { PhysicsStore, usePhysics, CollisionCategories } from "./Physics";

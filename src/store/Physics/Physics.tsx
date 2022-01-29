@@ -1,13 +1,13 @@
 import * as React from "react";
-import { Engine, World, Bodies, Events, Body, Runner, Vector } from "matter-js";
+import { Engine, World, Bodies, Events, Body, Runner } from "matter-js";
 import { useGame } from "../Game";
 import { useKeyPress } from "../../hooks";
 import { Position } from "../Game/types";
-import { Size } from "./math";
+import { Size, Vector } from "../../utils/math";
+import { MAP_SIZE } from "../../settings";
+import debounce from "lodash.debounce";
 
-export const MAP_SIZE: Size = new Size(0, 0, 2000, 2000);
-
-enum CollisionCategories {
+export enum CollisionCategories {
   WALL = 1,
   PLAYER = 2,
 }
@@ -15,15 +15,17 @@ enum CollisionCategories {
 type IPhysicsStoreContext = {
   engine?: Engine;
   world?: World;
-  player?: Body;
   subscribeCollision: (callback: (bodyA: Body, bodyB: Body) => void) => void;
+  subscribeOnFrame: (
+    callback: (event: Matter.IEventTimestamped<Engine>) => void
+  ) => void;
 };
 
 export const PhysicsStoreContext = React.createContext<IPhysicsStoreContext>({
   engine: undefined,
   world: undefined,
-  player: undefined,
   subscribeCollision: () => {},
+  subscribeOnFrame: () => {},
 });
 
 export function usePhysics() {
@@ -33,6 +35,9 @@ export function usePhysics() {
 export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   const game = useGame();
 
+  const [onFrameSubscribers] = React.useState<
+    ((event: Matter.IEventTimestamped<Engine>) => void)[]
+  >([]);
   const [collisionSubscribers] = React.useState<
     ((bodyA: Body, bodyB: Body) => void)[]
   >([]);
@@ -54,48 +59,8 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
     return _runner;
   }, [engine]);
 
-  const walls = React.useRef<Body[]>([
-    Bodies.rectangle(MAP_SIZE.width / 2, -25, MAP_SIZE.width, 50, {
-      isStatic: true,
-      collisionFilter: {
-        category: CollisionCategories.WALL,
-      },
-    }),
-    Bodies.rectangle(-25, MAP_SIZE.height / 2, 50, MAP_SIZE.height, {
-      isStatic: true,
-      collisionFilter: {
-        category: CollisionCategories.WALL,
-      },
-    }),
-    Bodies.rectangle(
-      MAP_SIZE.width + 25,
-      MAP_SIZE.height / 2,
-      50,
-      MAP_SIZE.height,
-      {
-        isStatic: true,
-        collisionFilter: {
-          category: CollisionCategories.WALL,
-        },
-      }
-    ),
-
-    Bodies.rectangle(
-      MAP_SIZE.width / 2,
-      MAP_SIZE.height + 25,
-      MAP_SIZE.width,
-      50,
-      {
-        isStatic: true,
-        collisionFilter: {
-          category: CollisionCategories.WALL,
-        },
-      }
-    ),
-  ]);
-
   const player = React.useRef<Body>(
-    Bodies.circle(500, 500, 10, {
+    Bodies.circle(350, 150, 10, {
       mass: 100,
       frictionAir: 0.2,
       friction: 0,
@@ -111,27 +76,42 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   const arrowRight = useKeyPress(["ArrowRight", "d"]);
   const arrowUp = useKeyPress(["ArrowUp", "w"]);
   const arrowDown = useKeyPress(["ArrowDown", "s"]);
-  const direction = React.useRef<Position>({ x: 0, y: 0 });
+  const direction = React.useRef<Vector>(new Vector(0, 0));
 
   React.useEffect(() => {
-    direction.current = {
-      x: -(arrowLeft ? 1 : 0) + (arrowRight ? 1 : 0),
-      y: -(arrowUp ? 1 : 0) + (arrowDown ? 1 : 0),
-    };
+    direction.current = new Vector(
+      arrowLeft || arrowRight ? -(arrowLeft ? 1 : 0) + (arrowRight ? 1 : 0) : 0,
+      arrowLeft || arrowRight ? 0 : -(arrowUp ? 1 : 0) + (arrowDown ? 1 : 0)
+    );
   }, [arrowLeft, arrowRight, arrowUp, arrowDown]);
+
+  const updatePlayer = React.useCallback(
+    debounce(() => {
+      Body.applyForce(player.current, player.current.position, {
+        x: direction.current.x * 7,
+        y: direction.current.y * 7,
+      });
+    }, 0),
+    []
+  );
 
   React.useEffect(() => {
     World.add(world, player.current);
-    walls.current.map((wall) => World.add(world, wall));
+    // walls.current.map((wall) => World.add(world, wall));
+
+    let tsStart = 0;
 
     Events.on(engine, "afterUpdate", function (event) {
       if (direction.current.x || direction.current.y) {
-        Body.applyForce(player.current, player.current.position, {
-          x: direction.current.x,
-          y: direction.current.y,
-        });
+        if (event.timestamp - tsStart > 500) {
+          tsStart = event.timestamp;
+          updatePlayer();
+        }
       }
       game.onChangePlayerPosition(player.current.position);
+      onFrameSubscribers.forEach((cb) => {
+        if (cb) cb(event);
+      });
     });
 
     Events.on(engine, "collisionStart", (e) => {
@@ -150,11 +130,17 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
     collisionSubscribers.push(cb);
   };
 
+  const subscribeOnFrame = (
+    cb: (event: Matter.IEventTimestamped<Engine>) => void
+  ) => {
+    onFrameSubscribers.push(cb);
+  };
+
   const contextValue = {
     engine,
     world,
     subscribeCollision,
-    player,
+    subscribeOnFrame,
   };
 
   return (
