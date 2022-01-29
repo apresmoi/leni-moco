@@ -16,6 +16,6 @@ const ShadowBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({ x,
 interface ShadowBlockProps extends GameObject { }
 
 export function ShadowBlock(props: ShadowBlockProps) {
-  const { size } = useConstructGameObject({ ...props, collisionFilterCategory: CollisionCategories.ICE_BLOCK });
+  const { size } = useConstructGameObject({ ...props, collisionFilterCategory: CollisionCategories.SHADOW_BLOCK });
   return <ShadowBlockSVG x={size.min.x} y={size.min.y} />;
 }
