@@ -7,7 +7,8 @@ import { GameCanvas } from "../../components/GameCanvas";
 import { Player } from "../../components/Player";
 import { useDisableGoBack } from "../../hooks";
 import { GameStore, PhysicsStore } from "../../store";
-import { Tutorial } from '../../levels/Tutorial';
+import { FirstLevel } from '../../levels/FirstLevel';
+// import { HardLevel } from '../../levels/HardLevel';
 
 export function Game() {
   useDisableGoBack();
@@ -18,7 +19,8 @@ export function Game() {
         <Container>
           <GameCanvas>
             <GameCamera>
-              <Tutorial />
+              <FirstLevel />
+              {/* <HardLevel /> */}
               <Player />
             </GameCamera>
           </GameCanvas>

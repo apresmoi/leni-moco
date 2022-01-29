@@ -1,10 +1,10 @@
 import React from "react";
-import { Wall } from "../../gameObjects/Wall";
+import { WallBlock, IceBlock, PitHoleBlock, NeutralSolidBlock,FireWallBlock,ShadowBlock } from "../../gameObjects";
 import { Size, Vector } from "../../utils/math";
 import { CELL_SIZE } from "../../settings";
 import { getSVGPosByGridPos } from "../../utils/grid";
 import { Background } from "../../components/Background";
-import img from "./Tutorial.jpg";
+import img from "./Transparent.png";
 import { useGame, usePhysics } from "../../store";
 
 const cellSizes = { width: CELL_SIZE.width, height: CELL_SIZE.height };
@@ -14,12 +14,12 @@ export const Tutorial = React.memo(() => {
   const game = useGame();
 
   React.useEffect(() => {
-    
-    const position = getSVGPosByGridPos({ col: 6, row: 2 });
-    physics?.setPlayerPosition(new Vector(position.x - 50, position.y - 50));
+
+    const position = getSVGPosByGridPos({ col: 3, row: 6 });
+    physics?.setPlayerPosition(new Vector(position.x - (CELL_SIZE.width / 2), position.y - (CELL_SIZE.height / 2)));
 
     game.setLevel({
-      size: new Size(0, 0, 7 * CELL_SIZE.width, 7 * CELL_SIZE.height),
+      size: new Size(0, 0, 5 * CELL_SIZE.width, 6 * CELL_SIZE.height),
     });
 
   }, []);
@@ -27,134 +27,81 @@ export const Tutorial = React.memo(() => {
 
   return (
     <>
-      <Background showGrid img={img} cols={7} rows={7} />
-      <Wall
+      <Background showGrid img={img} cols={5} rows={6} />
+      {/* TOP BORDER */}
+      <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 0, row: 0 })}
         type="DOWN_BUMP"
       />
-      <Wall
+      <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 1, row: 0 })}
         type="DOWN_BUMP"
       />
-      <Wall
-        {...cellSizes}
-        {...getSVGPosByGridPos({ col: 2, row: 0 })}
-        type="DOWN_BUMP"
-      />
-      <Wall
-        {...cellSizes}
-        {...getSVGPosByGridPos({ col: 4, row: 0 })}
-        type="DOWN_BUMP"
-      />
-      <Wall
-        {...cellSizes}
-        {...getSVGPosByGridPos({ col: 5, row: 0 })}
-        type="DOWN_BUMP"
-      />
-      <Wall
-        {...cellSizes}
-        {...getSVGPosByGridPos({ col: 6, row: 0 })}
-        type="DOWN_BUMP"
-      />
 
-      <Wall
+      {/* LEFT BORDER */}
+      <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: -1, row: 1 })}
         type="RIGHT_BUMP"
       />
-      <Wall
+      <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: -1, row: 2 })}
         type="RIGHT_BUMP"
       />
-      <Wall
-        {...cellSizes}
-        {...getSVGPosByGridPos({ col: -1, row: 3 })}
-        type="RIGHT_BUMP"
-      />
-      <Wall
-        {...cellSizes}
-        {...getSVGPosByGridPos({ col: -1, row: 4 })}
-        type="RIGHT_BUMP"
-      />
-      <Wall
-        {...cellSizes}
-        {...getSVGPosByGridPos({ col: -1, row: 5 })}
-        type="RIGHT_BUMP"
-      />
-      <Wall
-        {...cellSizes}
-        {...getSVGPosByGridPos({ col: -1, row: 6 })}
-        type="RIGHT_BUMP"
-      />
 
-      <Wall
+      {/* RIGHT BORDER */}
+      <WallBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 7, row: 1 })}
+        {...getSVGPosByGridPos({ col: 9, row: 1 })}
         type="LEFT_BUMP"
       />
-      <Wall
+      <WallBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 7, row: 2 })}
-        type="LEFT_BUMP"
-      />
-      <Wall
-        {...cellSizes}
-        {...getSVGPosByGridPos({ col: 7, row: 3 })}
-        type="LEFT_BUMP"
-      />
-      <Wall
-        {...cellSizes}
-        {...getSVGPosByGridPos({ col: 7, row: 4 })}
-        type="LEFT_BUMP"
-      />
-      <Wall
-        {...cellSizes}
-        {...getSVGPosByGridPos({ col: 7, row: 5 })}
-        type="LEFT_BUMP"
-      />
-      <Wall
-        {...cellSizes}
-        {...getSVGPosByGridPos({ col: 7, row: 6 })}
+        {...getSVGPosByGridPos({ col: 9, row: 2 })}
         type="LEFT_BUMP"
       />
 
-      <Wall
+      {/* BOTTOM BORDER */}
+      <WallBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 0, row: 7 })}
+        {...getSVGPosByGridPos({ col: 0, row: 10 })}
         type="TOP_BUMP"
       />
-      <Wall
+      <WallBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 1, row: 7 })}
+        {...getSVGPosByGridPos({ col: 1, row: 10 })}
         type="TOP_BUMP"
       />
-      <Wall
+
+
+      {/* NEUTRAL BLOCKS */}
+      <NeutralSolidBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 2, row: 7 })}
-        type="TOP_BUMP"
+        {...getSVGPosByGridPos({ col: 3, row: 3 })}
       />
-      <Wall
+
+      {/* ICE BLOCKS */}
+      <IceBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 3, row: 7 })}
-        type="TOP_BUMP"
+        {...getSVGPosByGridPos({ col: 6, row: 5 })}
       />
-      <Wall
+      {/* PITHOLE BLOCKS */}
+      <PitHoleBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 4, row: 7 })}
-        type="TOP_BUMP"
+        {...getSVGPosByGridPos({ col: 0, row: 5 })}
       />
-      <Wall
+      {/* FIRE BLOCKS */}
+      <FireWallBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 5, row: 7 })}
-        type="TOP_BUMP"
+        {...getSVGPosByGridPos({ col: 1, row: 5 })}
       />
-      <Wall
+      {/* SHADOW BLOCKS */}
+      <ShadowBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 6, row: 7 })}
-        type="TOP_BUMP"
+        {...getSVGPosByGridPos({ col: 1, row: 9 })}
       />
     </>
   );
