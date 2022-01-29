@@ -7,6 +7,11 @@ import { Size, Vector } from "../../utils/math";
 import { MAP_SIZE } from "../../settings";
 import debounce from "lodash.debounce";
 import { useKeystrokeSound, useRandomSound } from "../../assets";
+import { getSVGPosByGridPos, CELL_WIDTH, CELL_HEIGHT } from '../../utils/grid';
+
+
+const STARTING_PLAYER_CELL = getSVGPosByGridPos({ col: 3, row: 1 })
+const STARTING_PLAYER_POS = { x: STARTING_PLAYER_CELL.x + (CELL_WIDTH / 2), y: STARTING_PLAYER_CELL.y + (CELL_HEIGHT / 2) }
 
 export enum CollisionCategories {
   WALL = 1,
@@ -25,8 +30,8 @@ type IPhysicsStoreContext = {
 export const PhysicsStoreContext = React.createContext<IPhysicsStoreContext>({
   engine: undefined,
   world: undefined,
-  subscribeCollision: () => {},
-  subscribeOnFrame: () => {},
+  subscribeCollision: () => { },
+  subscribeOnFrame: () => { },
 });
 
 export function usePhysics() {
@@ -61,7 +66,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   }, [engine]);
 
   const player = React.useRef<Body>(
-    Bodies.circle(350, 150, 10, {
+    Bodies.rectangle(STARTING_PLAYER_POS.x, STARTING_PLAYER_POS.y, CELL_WIDTH, CELL_HEIGHT, {
       mass: 100,
       frictionAir: 0.2,
       friction: 0,
