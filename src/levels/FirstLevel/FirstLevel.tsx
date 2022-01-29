@@ -19,6 +19,7 @@ export const FirstLevel = React.memo(() => {
     physics?.setPlayerPosition(new Vector(position.x - (CELL_SIZE.width / 2), position.y - (CELL_SIZE.height / 2)));
 
     game.setLevel({
+      identifier:'first',
       size: new Size(0, 0, 9 * CELL_SIZE.width, 10 * CELL_SIZE.height),
     });
 

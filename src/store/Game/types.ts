@@ -14,4 +14,5 @@ export interface Player {
 
 export interface Level {
   size: Size;
+  identifier: 'tutorial' | 'first' | 'hard';
 }

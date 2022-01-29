@@ -21,6 +21,7 @@ export const HardLevel = React.memo(() => {
     physics?.setPlayerPosition(new Vector(position.x - 50, position.y - 50));
 
     game.setLevel({
+      identifier:'hard',
       size: new Size(0, 0, 7 * CELL_SIZE.width, 7 * CELL_SIZE.height),
     });
 

@@ -19,6 +19,7 @@ export const Tutorial = React.memo(() => {
     physics?.setPlayerPosition(new Vector(position.x - (CELL_SIZE.width / 2), position.y - (CELL_SIZE.height / 2)));
 
     game.setLevel({
+      identifier:'tutorial',
       size: new Size(0, 0, 5 * CELL_SIZE.width, 6 * CELL_SIZE.height),
     });
 
@@ -39,6 +40,16 @@ export const Tutorial = React.memo(() => {
         {...getSVGPosByGridPos({ col: 1, row: 0 })}
         type="DOWN_BUMP"
       />
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 3, row: 0 })}
+        type="DOWN_BUMP"
+      />
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 4, row: 0 })}
+        type="DOWN_BUMP"
+      />
 
       {/* LEFT BORDER */}
       <WallBlock
@@ -51,28 +62,73 @@ export const Tutorial = React.memo(() => {
         {...getSVGPosByGridPos({ col: -1, row: 2 })}
         type="RIGHT_BUMP"
       />
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: -1, row: 3 })}
+        type="RIGHT_BUMP"
+      />
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: -1, row: 4 })}
+        type="RIGHT_BUMP"
+      />
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: -1, row: 5 })}
+        type="RIGHT_BUMP"
+      />
 
       {/* RIGHT BORDER */}
       <WallBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 9, row: 1 })}
+        {...getSVGPosByGridPos({ col:5, row: 1 })}
         type="LEFT_BUMP"
       />
       <WallBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 9, row: 2 })}
+        {...getSVGPosByGridPos({ col:5, row: 2 })}
+        type="LEFT_BUMP"
+      />
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col:5, row: 3 })}
+        type="LEFT_BUMP"
+      />
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col:5, row: 4 })}
+        type="LEFT_BUMP"
+      />
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col:5, row: 5 })}
         type="LEFT_BUMP"
       />
 
       {/* BOTTOM BORDER */}
       <WallBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 0, row: 10 })}
+        {...getSVGPosByGridPos({ col: 0, row: 6 })}
         type="TOP_BUMP"
       />
       <WallBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 1, row: 10 })}
+        {...getSVGPosByGridPos({ col: 1, row: 6 })}
+        type="TOP_BUMP"
+      />
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 2, row: 6 })}
+        type="TOP_BUMP"
+      />
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 3, row: 6 })}
+        type="TOP_BUMP"
+      />
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 4, row: 6 })}
         type="TOP_BUMP"
       />
 
@@ -80,28 +136,36 @@ export const Tutorial = React.memo(() => {
       {/* NEUTRAL BLOCKS */}
       <NeutralSolidBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 3, row: 3 })}
+        {...getSVGPosByGridPos({ col: 1, row: 2 })}
+      />
+      <NeutralSolidBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 2, row: 2 })}
+      />
+      <NeutralSolidBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 3, row: 2 })}
       />
 
       {/* ICE BLOCKS */}
       <IceBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 6, row: 5 })}
+        {...getSVGPosByGridPos({ col: 4, row: 2 })}
       />
       {/* PITHOLE BLOCKS */}
-      <PitHoleBlock
+      {/* <PitHoleBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 0, row: 5 })}
-      />
+      /> */}
       {/* FIRE BLOCKS */}
       <FireWallBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 1, row: 5 })}
+        {...getSVGPosByGridPos({ col: 0, row: 2 })}
       />
       {/* SHADOW BLOCKS */}
       <ShadowBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 1, row: 9 })}
+        {...getSVGPosByGridPos({ col: 4, row: 4 })}
       />
     </>
   );
