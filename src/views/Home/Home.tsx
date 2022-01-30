@@ -1,13 +1,13 @@
 import React from "react";
 import "./styles.scoped.scss";
-import { useHistory } from "react-router-dom"
-import { Button } from "../../components/Button";
+import { StartButton } from "../../components/Button";
+import Logo from "../../assets/Logo.svg";
 
 export function Home() {
-  const history = useHistory();
   return (
     <div className="home">
-      <Button label="PLAY" onClick={() => history.push('/play')} />
+      <img className="image-logo" src={Logo} alt="logo" />
+      <StartButton />
     </div>
   )
 }
