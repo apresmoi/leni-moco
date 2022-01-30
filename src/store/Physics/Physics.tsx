@@ -8,6 +8,7 @@ import debounce from "lodash.debounce";
 import { GameObjectBody } from "../../sharedTypes";
 import { useSound } from "../../assets";
 import { sounds } from "../../assets/sounds";
+import { Element } from "../Game/types";
 
 export enum CollisionCategories {
   WALL = 1,
@@ -35,6 +36,9 @@ type IPhysicsStoreContext = {
   subscribeOnFrame: (
     callback: (event: Matter.IEventTimestamped<Engine>) => void
   ) => void;
+  unsubscribeOnFrame: (
+    callback: (event: Matter.IEventTimestamped<Engine>) => void
+  ) => void;
   setPlayerPosition: (position: Vector) => void;
 };
 
@@ -44,6 +48,7 @@ export const PhysicsStoreContext = React.createContext<IPhysicsStoreContext>({
   subscribeCollision: () => {},
   unsubscribeCollision: () => {},
   subscribeOnFrame: () => {},
+  unsubscribeOnFrame: () => {},
   setPlayerPosition: () => {},
 });
 
@@ -56,7 +61,12 @@ export function useFrame(
 ) {
   const physics = usePhysics();
 
-  physics.subscribeOnFrame(callback);
+  React.useEffect(() => {
+    physics.subscribeOnFrame(callback);
+    return () => {
+      physics.unsubscribeOnFrame(callback);
+    };
+  }, [callback]);
 }
 
 export function PhysicsStore(props: React.PropsWithChildren<{}>) {
@@ -64,8 +74,10 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
   const invert = React.useRef<number>(1);
   const splitted = React.useRef<boolean>(false);
+  const leftElement = React.useRef<Element>("fire");
+  const rightElement = React.useRef<Element>("water");
 
-  const [onFrameSubscribers] = React.useState<
+  const frameSubscribers = React.useRef<
     ((event: Matter.IEventTimestamped<Engine>) => void)[]
   >([]);
   const collisionSubscribers = React.useRef<
@@ -99,7 +111,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
         id: "player",
       },
       collisionFilter: {
-        category: CollisionCategories.WATER_PLAYER,
+        category: CollisionCategories.PLAYER,
         group: -CollisionCategories.PLAYER,
       },
     })
@@ -114,7 +126,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
         id: "player2",
       },
       collisionFilter: {
-        category: CollisionCategories.FIRE_PLAYER,
+        category: CollisionCategories.PLAYER,
         group: -CollisionCategories.PLAYER,
       },
     })
@@ -171,7 +183,9 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   React.useEffect(() => {
     invert.current = game.player?.active === "left" ? 1 : -1;
     splitted.current = game.player?.isSplited || false;
-  }, [game.player?.active, game.player?.isSplited]);
+    leftElement.current = game.inventory?.leftSlime || "fire";
+    rightElement.current = game.inventory?.rightSlime || "water";
+  }, [game.player?.active, game.player?.isSplited, game.inventory]);
 
   React.useEffect(() => {
     if (shiftKey) {
@@ -216,15 +230,30 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
         }
       }
 
-      if (!splitted.current) {
-        player.current.collisionFilter.category = CollisionCategories.PLAYER;
-        player2.current.collisionFilter.category = CollisionCategories.PLAYER;
-      } else {
-        player.current.collisionFilter.category =
-          CollisionCategories.WATER_PLAYER;
-        player2.current.collisionFilter.category =
-          CollisionCategories.FIRE_PLAYER;
-      }
+      // if (!splitted.current) {
+      //   player.current.collisionFilter.category = CollisionCategories.PLAYER;
+      //   player2.current.collisionFilter.category = CollisionCategories.PLAYER;
+      // } else {
+      //   const applyElement = (p: Body, element: Element) => {
+      //     switch (element) {
+      //       case "fire":
+      //         p.collisionFilter.category = CollisionCategories.FIRE_PLAYER;
+      //         break;
+      //       case "water":
+      //         p.collisionFilter.category = CollisionCategories.WATER_PLAYER;
+      //         // p.collisionFilter.category = CollisionCategories.ICE_BLOCK;
+      //         break;
+      //       case "darkness":
+      //         p.collisionFilter.category = CollisionCategories.SHADOW_PLAYER;
+      //         break;
+      //       default:
+      //         break;
+      //     }
+      //   };
+
+      //   applyElement(player.current, leftElement.current);
+      //   applyElement(player2.current, rightElement.current);
+      // }
 
       if (player.current.speed === 0) {
         Body.setPosition(player.current, {
@@ -266,7 +295,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
           );
       }
 
-      onFrameSubscribers.forEach((cb) => {
+      frameSubscribers.current.forEach((cb) => {
         if (cb) cb(event);
       });
     });
@@ -305,7 +334,13 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   const subscribeOnFrame = (
     cb: (event: Matter.IEventTimestamped<Engine>) => void
   ) => {
-    onFrameSubscribers.push(cb);
+    frameSubscribers.current.push(cb);
+  };
+
+  const unsubscribeOnFrame = (
+    cb: (event: Matter.IEventTimestamped<Engine>) => void
+  ) => {
+    frameSubscribers.current = frameSubscribers.current.filter((c) => c !== cb);
   };
 
   const setPlayerPosition = React.useCallback((position: Vector) => {
@@ -318,6 +353,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
     subscribeCollision,
     unsubscribeCollision,
     subscribeOnFrame,
+    unsubscribeOnFrame,
     setPlayerPosition,
   };
 
