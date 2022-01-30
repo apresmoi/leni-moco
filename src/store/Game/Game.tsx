@@ -21,12 +21,14 @@ type IGameStoreContext = {
   changeInventory: StatusSetter<Inventory>;
   killLeftPlayer: () => void;
   killRightPlayer: () => void;
+  stepped: () => void;
 };
 
 const defaultLevel = {
   size: new Size(0, 0, 1000, 800),
   identifier: "tutorial",
   nextLevel: "end",
+  movements: 15,
 } as const;
 const defaultPlayer = {
   isSplited: false,
@@ -47,6 +49,7 @@ export const GameStoreContext = React.createContext<IGameStoreContext>({
   setActiveLevel: () => {},
   killLeftPlayer: () => {},
   killRightPlayer: () => {},
+  stepped: () => {},
 });
 
 export function useGame() {
@@ -79,6 +82,19 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
     setPlayer((p) => (p ? { ...p, rightKilled: true } : p));
   }, []);
 
+  const stepped = React.useCallback(() => {
+    if (level) {
+      setLevel((level) => {
+        const movementsLeft = level.movements - 1;
+        if (movementsLeft === 0) {
+          killLeftPlayer();
+          killRightPlayer();
+        }
+        return { ...level, movements: movementsLeft };
+      });
+    }
+  }, []);
+
   const contextValue = {
     player,
     level,
@@ -95,6 +111,7 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
     setShowInventory,
     killLeftPlayer,
     killRightPlayer,
+    stepped,
   };
 
   return (

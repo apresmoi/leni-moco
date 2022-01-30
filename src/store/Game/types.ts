@@ -11,6 +11,7 @@ export interface Level {
   size: Size;
   identifier: "tutorial" | "first" | "hard";
   nextLevel: "first" | "hard" | "end";
+  movements: number;
 }
 
 export type Element = "fire" | "water" | "darkness";

@@ -36,6 +36,7 @@ export const FirstLevel = React.memo(() => {
       identifier: "first",
       size: new Size(0, 0, 9 * CELL_SIZE.width, 10 * CELL_SIZE.height),
       nextLevel: "end",
+      movements: 20
     });
   }, []);
 

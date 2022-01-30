@@ -67,7 +67,7 @@ export function UI() {
   return (
     <g transform={`translate(${size.width / 2 - (1343) / 2})`}
     >      
-    <MovesLeft moves={2} />
+    <MovesLeft moves={game.level.movements} />
       <OpenInventoryButton onClick={handleOpenInventory} />
       <Options
         onReset={onReset}

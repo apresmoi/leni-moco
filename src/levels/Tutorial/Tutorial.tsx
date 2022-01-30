@@ -35,6 +35,7 @@ export const Tutorial = React.memo(() => {
       identifier: "tutorial",
       size: new Size(0, 0, 5 * CELL_SIZE.width, 6 * CELL_SIZE.height),
       nextLevel: "first",
+      movements: 15
     });
   }, []);
 

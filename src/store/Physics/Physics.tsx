@@ -86,6 +86,15 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   const leftElement = React.useRef<Element>("fire");
   const rightElement = React.useRef<Element>("water");
 
+  const leftGridPosition = React.useRef<{ x: Number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+  const rightGridPosition = React.useRef<{ x: Number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+
   const frameSubscribers = React.useRef<
     ((event: Matter.IEventTimestamped<Engine>) => void)[]
   >([]);
@@ -282,34 +291,62 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
         applyElement(player2.current, rightElement.current);
       }
 
+      let newStep = false;
+
       if (player.current.speed === 0) {
+        const gridX = Math.trunc(
+          Math.round((player.current.position.x - 50) / 100)
+        );
+        const gridY = Math.trunc(
+          Math.round((player.current.position.y - 50) / 100)
+        );
+
+        if (
+          leftGridPosition.current.x > 0 &&
+          leftGridPosition.current.y > 0 &&
+          (leftGridPosition.current.x !== gridX ||
+            leftGridPosition.current.y !== gridY)
+        ) {
+          newStep = true;
+        }
+        leftGridPosition.current = { x: gridX, y: gridY };
+
         Body.setPosition(player.current, {
-          x:
-            Math.trunc(Math.round((player.current.position.x - 50) / 100)) *
-              100 +
-            50,
-          y:
-            Math.trunc(Math.round((player.current.position.y - 50) / 100)) *
-              100 +
-            50,
+          x: gridX * 100 + 50,
+          y: gridY * 100 + 50,
         });
       } else if (Math.abs(player.current.speed) <= 1) {
         Body.setVelocity(player.current, { x: 0, y: 0 });
       }
 
       if (player2.current.speed === 0) {
+        const gridX = Math.trunc(
+          Math.round((player2.current.position.x - 50) / 100)
+        );
+        const gridY = Math.trunc(
+          Math.round((player2.current.position.y - 50) / 100)
+        );
+
+        if (
+          rightGridPosition.current.x > 0 &&
+          rightGridPosition.current.y > 0 &&
+          (rightGridPosition.current.x !== gridX ||
+            rightGridPosition.current.y !== gridY)
+        ) {
+          newStep = true;
+        }
+        rightGridPosition.current = { x: gridX, y: gridY };
+
         Body.setPosition(player2.current, {
-          x:
-            Math.trunc(Math.round((player2.current.position.x - 50) / 100)) *
-              100 +
-            50,
-          y:
-            Math.trunc(Math.round((player2.current.position.y - 50) / 100)) *
-              100 +
-            50,
+          x: gridX * 100 + 50,
+          y: gridY * 100 + 50,
         });
       } else if (Math.abs(player2.current.speed) <= 1) {
         Body.setVelocity(player2.current, { x: 0, y: 0 });
+      }
+
+      if (newStep) {
+        game.stepped();
       }
 
       if (player2.current.speed === 0 && player.current.speed === 0) {
