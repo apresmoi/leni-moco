@@ -29,6 +29,7 @@ export const useConstructGameObject = (props: GameObject) => {
         if (physics.world) World.add(physics.world, gameObject.current);
 
         return () => {
+            //@ts-ignore
             if (physics.world) World.remove(physics.world, gameObject.current);
         };
     }, [physics, size]);

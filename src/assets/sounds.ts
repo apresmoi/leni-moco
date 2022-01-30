@@ -100,10 +100,7 @@ export const useRandomSound = (
 };
 
 export const useKeystrokeSound = (volume: number) => {
-  const sounds = React.useMemo(
-    () => [new Audio("sounds/slime_move.mp3")],
-    []
-  );
+  const sounds = React.useMemo(() => [new Audio("sounds/slime_move.mp3")], []);
   return useRandomSound(sounds, { volume });
 };
 
@@ -118,7 +115,7 @@ export const useDebounceSound = (
         return sound.play();
       }
       return null;
-    }, 0) as (id: string) => Promise<void>;
+    }, 0);
     return {
       play,
     };
