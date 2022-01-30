@@ -1,7 +1,11 @@
 import React from "react";
 import { CELL_HEIGHT, CELL_WIDTH } from "../../settings";
 import { useConstructGameObject } from "../useConstructGameObject";
-import type { GameObject, GameObjectBlock } from "../../sharedTypes";
+import type {
+  GameObject,
+  GameObjectBlock,
+  GameObjectBody,
+} from "../../sharedTypes";
 import { CollisionCategories } from "../../store/Physics";
 
 import frame01 from "./finish.svg";
@@ -55,19 +59,20 @@ export function WinConditionBlock(props: WinConditionBlockProps) {
     gameObjectOptions,
   });
   React.useEffect(() => {
-    physics.subscribeCollision((a, b) => {
-      // TODO - JC -check if collision detection is fine
-
+    const fn = (a: GameObjectBody, b: GameObjectBody) => {
       if (
         (a.collisionFilter.category === CollisionCategories.WIN_BLOCK &&
           b.collisionFilter.category === CollisionCategories.PLAYER) ||
         (b.collisionFilter.category === CollisionCategories.WIN_BLOCK &&
           a.collisionFilter.category === CollisionCategories.PLAYER)
       ) {
-        // here be magic
         props.onSolve?.();
       }
-    });
+    };
+    physics.subscribeCollision(fn);
+    return () => {
+      physics.unsubscribeCollision(fn);
+    };
   }, [props.onSolve]);
   return (
     <WinConditionBlockSVG

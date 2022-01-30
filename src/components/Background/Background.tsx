@@ -19,7 +19,7 @@ const useGridSVG = (gridProps: UseGridSVG) => {
         <pattern
           id="floor"
           patternUnits="userSpaceOnUse"
-          width={`${CANVAS_WIDTH}`}
+          width={`${CELL_WIDTH}`}
           height={`${CELL_HEIGHT}`}
         >
           <image
@@ -31,24 +31,13 @@ const useGridSVG = (gridProps: UseGridSVG) => {
           />
         </pattern>
       </defs>
-      {rows.map((row) =>
-        cols.map((col) => (
-          <g
-            transform={`translate(${col * CELL_WIDTH}, ${
-              (row + 1) * CELL_WIDTH
-            })`}
-          >
-            <rect
-              key={`r-${row}__c-${col}`}
-              x={0}
-              y={0}
-              width={CELL_WIDTH}
-              height={CELL_HEIGHT}
-              fill={"url(#floor)"}
-            />
-          </g>
-        ))
-      )}
+      <rect
+        x={0}
+        y={0}
+        width={CELL_WIDTH * (cols.length - 1)}
+        height={CELL_HEIGHT * (rows.length + 1)}
+        fill={"url(#floor)"}
+      />
     </g>
   );
 };
