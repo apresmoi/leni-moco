@@ -17,6 +17,8 @@ export function InventoryModal() {
 
   //@ts-ignore
   const opositeSlime = game?.inventory[ opositeSocket + "Slime" ];
+    //@ts-ignore
+  const storedGlobalSlime = game?.inventory[ selectedSlot + "Slime" ];
 
   if (!game.showInventory) return null;
 
@@ -173,6 +175,7 @@ export function InventoryModal() {
               y={360}
               color={selectedSlime}
               onClick={handleSlimeClick}
+              
             />
             <text x={60} y={440} className="description-text" fill="white">
               {selectedSlime} jam
@@ -188,6 +191,7 @@ export function InventoryModal() {
             color="fire"
             onClick={handleSlimeClick}
             isBlocked={opositeSlime === "fire" }
+            isSelected={storedGlobalSlime === "fire"}
           />
           <Slime
             idx="inv02"
@@ -196,6 +200,7 @@ export function InventoryModal() {
             color="water"
             onClick={handleSlimeClick}
             isBlocked={opositeSlime === "water"}
+            isSelected={storedGlobalSlime ===  "water"}
           />
           <Slime
             idx="inv03"
@@ -204,6 +209,7 @@ export function InventoryModal() {
             color="darkness"
             onClick={handleSlimeClick}
             isBlocked={opositeSlime === "darkness"}
+            isSelected={storedGlobalSlime === "darkness"}
           />
         </g>
 
