@@ -58,6 +58,21 @@ export function InventoryModal() {
                                                           onClick={handleSocketSelection}
                                                       />
                      }
+                      <g>
+                        {/*  selected Slime and Description */}
+                        <Slime x={170} y={360} color="red"  onClick={handleSlimeClick} />
+                          <text   className="description-text" >
+                             
+                              <tspan x={60} y={490}>Lorem Ipsum is simply ho</tspan> 
+                              <tspan x={60} y={515}>Lorem Ipsum is simply ho</tspan>
+                              <tspan x={60} y={540}>Lorem Ipsum is simply ho</tspan> 
+                              <tspan x={60} y={565}>Lorem Ipsum is simply ho</tspan>
+                              <tspan x={60} y={590}>Lorem Ipsum is simply ho</tspan>
+                              <tspan x={60} y={615}>Lorem Ipsum is simply ho</tspan>
+                              <tspan x={60} y={640}>Lorem Ipsum is simply ho</tspan>
+                              <tspan x={60} y={665}>Lorem Ipsum is simply ho</tspan>    
+                          </text>
+                        </g>
                     </g>
                       <g className=".lime-container">
                           <Slime x={365} y={360} color="red"  onClick={handleSlimeClick} />
@@ -66,7 +81,7 @@ export function InventoryModal() {
                       </g> 
 
 
-                     <CloseButton x={760} y={140}  onClick={handleCloseButton}/>
+                     <CloseButton x={740} y={120}  onClick={handleCloseButton}/>
                     </g>
                </>
         
