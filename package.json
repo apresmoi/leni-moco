@@ -1,9 +1,12 @@
 {
+  "homepage": "https://apresmoi.github.io/leni-moco",
   "name": "ggj2022",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -24,6 +27,7 @@
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
     "@vitejs/plugin-react": "^1.0.7",
+    "gh-pages": "^3.2.3",
     "typescript": "^4.4.4",
     "vite": "^2.7.2"
   }

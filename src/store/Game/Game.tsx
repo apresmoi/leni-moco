@@ -64,8 +64,6 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
   const [showInventory, setShowInventory] = React.useState(true);
   const [activeLevel, setActiveLevel] = React.useState<string>("tutorial");
 
-  useMusic();
-
   const changePlayerSide = React.useCallback(() => {
     setPlayer((p) =>
       p && p.isSplited

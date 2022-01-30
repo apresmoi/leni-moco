@@ -1,4 +1,5 @@
 import * as React from "react";
+import { join } from "../../assets/sounds";
 import { useGame } from "../../store";
 
 import { useFrame } from "../../store/Physics/Physics";
@@ -23,27 +24,47 @@ export function Player(props: React.PropsWithChildren<{}>) {
     );
     setGTransform(gValue);
     setwidthHeight(widthHeightValue);
+    if (!player?.isSplited) {
+      join.play()
+    }
   }, [player?.isSplited]);
 
   React.useEffect(() => {
-    const animation = idle ? [2, 5, 2, 4] : [1, 2, 3, 2];
+    const animations = {
+      idle: [1, 4, 1, 3],
+      walking: [0, 1, 2, 1],
+      death: [5, 6, 7, 8],
+    };
+
+    const animation = (() => {
+      if (player?.leftKilled) return animations.death;
+      if (idle) return animations.idle;
+      return animations.walking;
+    })();
+
+    const timeout = (() => {
+      if (player?.leftKilled) return 50;
+      if (idle) return 250;
+      return 150;
+    })();
+
     let i = 0;
-    const interval = setInterval(
-      () => {
-        if (i >= animation.length) i = 0;
-        ref.current?.setAttribute(
-          "fill",
-          `url(#primary_frame0${animation[i]})`
-        );
-        i++;
-      },
-      idle ? 250 : 150
-    );
+    const interval = setInterval(() => {
+      if (i >= animation.length) {
+        if (player?.leftKilled) clearInterval(interval);
+        else i = 0;
+      }
+      ref.current?.setAttribute(
+        "fill",
+        `url(#primary_frame0${animation[i] + 1})`
+      );
+      i++;
+    }, timeout);
 
     return () => {
       clearInterval(interval);
     };
-  }, [idle]);
+  }, [idle, player?.leftKilled]);
   useFrame((event) => {
     const player = event.source.world.bodies.find(
       (body) => body.plugin.id === "player"
@@ -70,7 +91,7 @@ export function Player(props: React.PropsWithChildren<{}>) {
   if (!player) return null;
   return (
     <g ref={playerRef} transform={""} className="moco">
-      {player.leftKilled && <circle cx={50} cy={50} r={50} fill="black" />}
+      {/* {player.leftKilled && <circle cx={50} cy={50} r={50} fill="black" />} */}
       <rect
         ref={ref}
         x={0}
@@ -78,8 +99,9 @@ export function Player(props: React.PropsWithChildren<{}>) {
         width={100}
         height={100}
         fill={"red"}
-        stroke={player.active === "left" ? "blue" : "none"}
+        stroke={player.active === "left" ? "white" : "none"}
         strokeWidth={10}
+        strokeOpacity={0.5}
         fillOpacity={0}
       />
       <g transform={`translate(${gTransform} ${gTransform})`}>

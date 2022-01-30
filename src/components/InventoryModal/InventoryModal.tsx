@@ -14,7 +14,8 @@ export function InventoryModal() {
   const [selectedSlime, setSeletedSlime] = React.useState<string>("basic");
   const game = useGame();
   const opositeSocket = selectedSlot === "right" ? "left": "right";
-    //@ts-ignore
+
+  //@ts-ignore
   const opositeSlime = game?.inventory[ opositeSocket + "Slime" ];
     //@ts-ignore
   const storedGlobalSlime = game?.inventory[ selectedSlot + "Slime" ];

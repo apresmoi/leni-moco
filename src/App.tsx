@@ -3,8 +3,10 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 import { Game, Home, Credits } from "./views";
 import { SettingsStore } from "./store";
+import { useMusic } from "./hooks/useMusic";
 
 function App() {
+
   return (
     <BrowserRouter>
       <SettingsStore>

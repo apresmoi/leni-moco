@@ -2,11 +2,16 @@ import { useSettings } from "../store";
 import debounce from "lodash.debounce";
 import * as React from "react";
 
-const dungeon = new Audio("sounds/dungeon-placeholder.mp3");
+const musicDungeon = new Audio("sounds/music-dungeon.mp3");
+const ambianceDungeon = new Audio("sounds/ambiance-dungeon.mp3");
+const musicCredit = new Audio("sounds/credit-screen.mp3");
+const musicMenu = new Audio("sounds/menu.mp3");
+const startBtnPress = new Audio("sounds/start-btn-press.mp3");
+const btnSound = new Audio("sounds/btn-sound.mp3");
 const movement = new Audio("sounds/slime_move_1.mp3");
 const collision = new Audio("sounds/ouch_1.mp3");
 const split = new Audio("sounds/split_1.mp3");
-const join = new Audio("sounds/join_1_cut.mp3");
+export const join = new Audio("sounds/join_1_cut.mp3");
 const select = new Audio("sounds/select_3.mp3");
 
 // todo: add music tension variations
@@ -17,7 +22,12 @@ const musicTensions = [
 ];
 
 export const sounds = {
-  dungeon,
+  musicDungeon,
+  ambianceDungeon,
+  musicCredit,
+  musicMenu,
+  startBtnPress,
+  btnSound,
   movement,
   collision,
   split,
@@ -63,7 +73,9 @@ export const useSound = (
           if (Array.isArray(sound)) {
             sound.forEach((s) => s?.pause());
           } else {
-            sound?.pause();
+            setTimeout(() => {
+              sound?.pause();
+            }, 0)
           }
         },
       };
