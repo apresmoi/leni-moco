@@ -193,7 +193,7 @@ export const Tutorial = React.memo(() => {
         {...getSVGPosByGridPos({ col: 1, row: 2 })}
         {...{ col: 1, row: 2 }}
       />
-      <NeutralSolidBlock
+      <ShadowBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 2, row: 2 })}
         {...{ col: 2, row: 2 }}

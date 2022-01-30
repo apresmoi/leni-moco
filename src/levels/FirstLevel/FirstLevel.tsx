@@ -357,11 +357,6 @@ export const FirstLevel = React.memo(() => {
       {/* SHADOW BLOCKS */}
       <ShadowBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 1, row: 9 })}
-        {...{ col: 1, row: 9 }}
-      />
-      <ShadowBlock
-        {...cellSizes}
         {...getSVGPosByGridPos({ col: 0, row: 3 })}
         {...{ col: 0, row: 3 }}
       />
@@ -382,9 +377,35 @@ export const FirstLevel = React.memo(() => {
       />
       <ShadowBlock
         {...cellSizes}
+        {...getSVGPosByGridPos({ col: 1, row: 7 })}
+        {...{ col: 1, row: 7 }}
+      />
+      <ShadowBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 5, row: 6 })}
+        {...{ col: 5, row: 6 }}
+      />
+      <ShadowBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 7, row: 7 })}
+        {...{ col: 7, row: 7 }}
+      />
+      <ShadowBlock
+        {...cellSizes}
         {...getSVGPosByGridPos({ col: 7, row: 8 })}
         {...{ col: 7, row: 8 }}
       />
+      <ShadowBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 3, row: 9 })}
+        {...{ col: 3, row: 9 }}
+      />
+      <ShadowBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 5, row: 9 })}
+        {...{ col: 5, row: 9 }}
+      />
+
 
       <WallBlock
         {...cellSizes}
