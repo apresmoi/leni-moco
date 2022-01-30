@@ -11,8 +11,9 @@ import wall03 from "./wall_03.svg";
 const LeftBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
   x,
   y,
+  opacity,
 }) => (
-  <svg x={x} y={y} width={CELL_WIDTH} height={CELL_HEIGHT}>
+  <svg opacity={opacity} x={x} y={y} width={CELL_WIDTH} height={CELL_HEIGHT}>
     <defs>
       <pattern
         id="wall01"
@@ -42,8 +43,9 @@ const LeftBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
 const TopBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
   x,
   y,
+  opacity,
 }) => (
-  <svg x={x} y={y} width={CELL_WIDTH} height={CELL_HEIGHT}>
+  <svg opacity={opacity} x={x} y={y} width={CELL_WIDTH} height={CELL_HEIGHT}>
     <defs>
       <pattern
         id="wall02"
@@ -74,8 +76,9 @@ const TopBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
 const RightBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
   x,
   y,
+  opacity,
 }) => (
-  <svg x={x} y={y} width={CELL_WIDTH} height={CELL_HEIGHT}>
+  <svg opacity={opacity} x={x} y={y} width={CELL_WIDTH} height={CELL_HEIGHT}>
     <defs>
       <pattern
         id="wall03"
@@ -105,8 +108,9 @@ const RightBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
 const BottomBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
   x,
   y,
+  opacity,
 }) => (
-  <svg x={x} y={y} width={CELL_WIDTH} height={CELL_HEIGHT}>
+  <svg opacity={opacity} x={x} y={y} width={CELL_WIDTH} height={CELL_HEIGHT}>
     <defs>
       <pattern
         id="wall04"
@@ -156,7 +160,7 @@ const gameObjectOptions = {
   },
 };
 
-export function WallBlock(props: WallBlockProps) {
+export function WallBlock(props: WallBlockProps & { opacity?: number }) {
   const { size } = useConstructGameObject({ ...props, gameObjectOptions });
   const { type = "TOP_BUMP", ...rest } = props;
   const WallBlockSvg = WALL_TYPE[type];
