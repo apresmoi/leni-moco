@@ -10,7 +10,8 @@ export function InstructionsModal(props: instructionsModalProps) {
     <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
-    viewBox="0 0 860 796"
+    viewBox="120 -200 1200 1200"
+    overflow="visible"
   >
     <defs>
       <radialGradient
@@ -148,7 +149,7 @@ export function InstructionsModal(props: instructionsModalProps) {
       </clipPath>
     </defs>
 
-    <rect x="-1000" width="2500" height="1200" fill="black" opacity="0.5" />
+    <rect x="-1000" y="-200" width="2500" height="1200" fill="black" opacity="0.5" />
     <rect
       width="826"
       height="770"
