@@ -104,7 +104,7 @@ export const shouldSolveBlock = (
   if (hasPossibleSolutions(otherBody)) {
     const [a, b] = getCategories(playerBody, otherBody);
     const solutions = getSolutions(playerBody, otherBody);
-    if (solutions.includes(a) || solutions.includes(b)) return true;
+    if (a && b && (solutions.includes(a) || solutions.includes(b))) return true;
     return false;
   }
   return false;
@@ -117,7 +117,7 @@ export const shouldKillPlayer = (
   if (hasKillables(otherBody)) {
     const [a, b] = getCategories(playerBody, otherBody);
     const killables = getKillables(playerBody, otherBody);
-    if (killables.includes(a) || killables.includes(b)) return true;
+    if (a && b && (killables.includes(a) || killables.includes(b))) return true;
     return false;
   }
   return false;

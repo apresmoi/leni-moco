@@ -53,7 +53,19 @@ const useGridSVG = (gridProps: UseGridSVG) => {
   );
 };
 
-export function Background({ showGrid = false, img, rows, cols }) {
+interface BackgroundProps {
+  showGrid: boolean;
+  img?: string;
+  rows: number;
+  cols: number;
+}
+
+export function Background({
+  showGrid = false,
+  img,
+  rows,
+  cols,
+}: BackgroundProps) {
   const Grid = useGridSVG({ CELL_WIDTH: 100, CELL_HEIGHT: 100 });
   const { level } = useGame();
 

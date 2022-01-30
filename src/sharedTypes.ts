@@ -5,7 +5,8 @@ import { CollisionCategories } from "./store/Physics";
 export interface GameObjectBody extends Partial<Body> {
   isStatic: boolean;
   collisionFilter: {
-    category: CollisionCategories;
+    category?: CollisionCategories;
+    group?: CollisionCategories;
   };
   allowedCollisionsCategories?: CollisionCategories[];
   killCollisionCategories?: CollisionCategories[];
