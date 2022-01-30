@@ -15,6 +15,7 @@ export function OpenInventoryButton(props: openInventoryButtonProps) {
       x={`${1500 / 2 - 200}`}
       y="20"
       onClick={() => props.onClick()}
+      className="clickable"
       width="250"
       height="85"
       viewBox="0 0 190 146"
