@@ -3,10 +3,12 @@ import * as React from "react";
 import { usePhysics } from "../store";
 import { CollisionCategories } from "../store/Physics";
 import { Size } from "../utils/math";
-import type { GameObject } from "../sharedTypes";
+import type { GameObject, GameObjectBody } from "../sharedTypes";
+import { shouldSolveBlock } from "../utils/collisions";
 
 export const useConstructGameObject = (props: GameObject) => {
   const physics = usePhysics();
+  const [isMounted, setIsMounted] = React.useState(true);
   const gameObject = React.useRef<Body>();
   const sensorObject = React.useRef<Body>();
 
@@ -36,8 +38,7 @@ export const useConstructGameObject = (props: GameObject) => {
         size.height,
         {
           ...props.gameObjectOptions,
-          collisionFilter: {
-          },
+          collisionFilter: {},
           isSensor: true,
         }
       );
@@ -48,13 +49,43 @@ export const useConstructGameObject = (props: GameObject) => {
         World.add(physics.world, sensorObject.current);
     }
 
+    const solveCallback = (
+      playerObj: GameObjectBody,
+      otherObj: GameObjectBody
+    ) => {
+      if (
+        otherObj.plugin?.uniqueID ===
+          props.gameObjectOptions?.plugin.uniqueID &&
+        shouldSolveBlock(playerObj, otherObj)
+      ) {
+        setIsMounted(false);
+      }
+    };
+
+    if (props.gameObjectOptions?.solutionCollisionsCategories)
+      physics.subscribeCollision(solveCallback);
+
     return () => {
       //@ts-ignore
       if (physics.world) World.remove(physics.world, gameObject.current);
       if (props.hasSensor && sensorObject.current)
         //@ts-ignore
         World.remove(physics.world, sensorObject.current);
+
+      if (props.gameObjectOptions?.solutionCollisionsCategories)
+        physics.unsubscribeCollision(solveCallback);
     };
   }, [physics, size]);
-  return { size, physics, gameObject };
+
+  React.useEffect(() => {
+    if (!isMounted) {
+      //@ts-ignore
+      if (physics.world) World.remove(physics.world, gameObject.current);
+      if (props.hasSensor && sensorObject.current)
+        //@ts-ignore
+        World.remove(physics.world, sensorObject.current);
+    }
+  }, [physics, isMounted]);
+
+  return { size, physics, gameObject, isMounted };
 };

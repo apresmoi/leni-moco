@@ -23,6 +23,10 @@ export interface GameObject {
   gameObjectOptions?: GameObjectBody;
 
   hasSensor?: boolean;
+  handleCollision?: (
+    playerObj: GameObjectBody,
+    otherObj: GameObjectBody
+  ) => void;
 }
 
 export interface GameObjectBlock extends GameObject {
