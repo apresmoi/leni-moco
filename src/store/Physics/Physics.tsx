@@ -27,11 +27,10 @@ type IPhysicsStoreContext = {
   engine?: Engine;
   world?: World;
   subscribeCollision: (
-    callback: (
-      playerBody: GameObjectBody,
-      otherBody: GameObjectBody,
-      direction: React.MutableRefObject<Vector>
-    ) => void
+    callback: (playerBody: GameObjectBody, otherBody: GameObjectBody) => void
+  ) => void;
+  unsubscribeCollision: (
+    callback: (playerBody: GameObjectBody, otherBody: GameObjectBody) => void
   ) => void;
   subscribeOnFrame: (
     callback: (event: Matter.IEventTimestamped<Engine>) => void
@@ -43,6 +42,7 @@ export const PhysicsStoreContext = React.createContext<IPhysicsStoreContext>({
   engine: undefined,
   world: undefined,
   subscribeCollision: () => {},
+  unsubscribeCollision: () => {},
   subscribeOnFrame: () => {},
   setPlayerPosition: () => {},
 });
@@ -68,7 +68,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   const [onFrameSubscribers] = React.useState<
     ((event: Matter.IEventTimestamped<Engine>) => void)[]
   >([]);
-  const [collisionSubscribers] = React.useState<
+  const collisionSubscribers = React.useRef<
     ((playerBody: GameObjectBody, otherBody: GameObjectBody) => void)[]
   >([]);
 
@@ -176,7 +176,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   React.useEffect(() => {
     if (shiftKey) {
       game.changePlayerSide();
-      if(game.player?.isSplited){
+      if (game.player?.isSplited) {
         sounds.select.play();
       }
     }
@@ -273,7 +273,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
     Events.on(engine, "collisionStart", (e) => {
       e.pairs.forEach(({ bodyA, bodyB }) => {
-        collisionSubscribers.forEach((cb) => {
+        collisionSubscribers.current.forEach((cb) => {
           if (cb) {
             const player = (bodyA.plugin.id === "player"
               ? bodyA
@@ -289,16 +289,16 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   }, [engine]);
 
   const subscribeCollision = (
-    cb: (
-      playerBody: GameObjectBody,
-      otherBody: GameObjectBody,
-      direction: React.MutableRefObject<Vector>
-    ) => void
+    cb: (playerBody: GameObjectBody, otherBody: GameObjectBody) => void
   ) => {
-    collisionSubscribers.push(
-      debounce((playerBody: GameObjectBody, otherBody: GameObjectBody) => {
-        cb(playerBody, otherBody, direction);
-      }, 10)
+    collisionSubscribers.current.push(cb);
+  };
+
+  const unsubscribeCollision = (
+    cb: (playerBody: GameObjectBody, otherBody: GameObjectBody) => void
+  ) => {
+    collisionSubscribers.current = collisionSubscribers.current.filter(
+      (c) => c !== cb
     );
   };
 
@@ -316,6 +316,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
     engine,
     world,
     subscribeCollision,
+    unsubscribeCollision,
     subscribeOnFrame,
     setPlayerPosition,
   };
