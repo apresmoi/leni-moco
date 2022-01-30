@@ -78,8 +78,9 @@ export function Player(props: React.PropsWithChildren<{}>) {
         width={100}
         height={100}
         fill={"red"}
-        stroke={player.active === "left" ? "blue" : "none"}
+        stroke={player.active === "left" ? "white" : "none"}
         strokeWidth={10}
+        strokeOpacity={0.5}
         fillOpacity={0}
       />
       <g transform={`translate(${gTransform} ${gTransform})`}>
