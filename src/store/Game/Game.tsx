@@ -61,7 +61,7 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
     leftSlime: "water",
     rightSlime: "fire",
   });
-  const [showInventory, setShowInventory] = React.useState(false);
+  const [showInventory, setShowInventory] = React.useState(true);
   const [activeLevel, setActiveLevel] = React.useState<string>("tutorial");
 
   const changePlayerSide = React.useCallback(() => {
