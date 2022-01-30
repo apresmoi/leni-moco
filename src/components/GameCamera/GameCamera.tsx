@@ -10,7 +10,7 @@ export function GameCamera(props: React.PropsWithChildren<{}>) {
 
   useFrame((event) => {
     const player = event.source.world.bodies.find(
-      (body) => body.plugin.id === "player2"
+      (body) => body.plugin.id === "player"
     );
     if (player) {
       let x = -player.position.x + size.width / 2;
@@ -21,14 +21,14 @@ export function GameCamera(props: React.PropsWithChildren<{}>) {
         if (x < -(level?.size.width || 0) + size.width)
           x = -(level?.size.width || 0) + size.width;
       } else {
-        x = size.width / 4;
+        x = size.width / 2 - level.size.width / 2;
       }
       if ((level?.size.height || 0) > size.height) {
         if (y > (level?.size.min.y || 0)) y = 0;
         if (y < -(level?.size.height || 0) + size.height)
           y = -(level?.size.height || 0) + size.height;
       } else {
-        y = size.height / 4;
+        y = size.height / 2 - level.size.height / 2 - 50;
       }
       playerRef.current?.setAttribute("transform", `translate(${x}, ${y})`);
     }

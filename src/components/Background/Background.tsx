@@ -1,4 +1,10 @@
-import { CANVAS_HEIGHT, CANVAS_WIDTH, CELL_HEIGHT, CELL_WIDTH } from "../../settings";
+import {
+  CANVAS_HEIGHT,
+  CANVAS_WIDTH,
+  CELL_HEIGHT,
+  CELL_WIDTH,
+} from "../../settings";
+import { useGame } from "../../store";
 import { useGetGrid } from "../../utils/grid";
 
 interface UseGridSVG {}
@@ -12,7 +18,7 @@ const useGridSVG = (gridProps: UseGridSVG) => {
           <rect
             key={`r-${row}__c-${col}`}
             x={col * CELL_WIDTH}
-            y={row * CELL_HEIGHT}
+            y={(row + 1) * CELL_HEIGHT}
             width={CELL_WIDTH}
             height={CELL_HEIGHT}
             style={{ stroke: "pink", strokeWidth: "5", opacity: "0.5" }}
@@ -25,6 +31,7 @@ const useGridSVG = (gridProps: UseGridSVG) => {
 
 export function Background({ showGrid = false, img, rows, cols }) {
   const Grid = useGridSVG({ CELL_WIDTH: 100, CELL_HEIGHT: 100 });
+  const { level } = useGame();
 
   return (
     <>
@@ -47,8 +54,8 @@ export function Background({ showGrid = false, img, rows, cols }) {
       <rect
         x={0}
         y={0}
-        width={CANVAS_WIDTH}
-        height={CANVAS_HEIGHT}
+        width={level.size.width}
+        height={level.size.height}
         fill="url(#img1)"
       />
       {showGrid ? <Grid /> : null}
