@@ -1,11 +1,8 @@
 import * as React from "react";
 import { useGame } from "../../store";
-import { useKeyPress } from "../../hooks";
-import frame01 from "./01.svg";
-import frame02 from "./02.svg";
-import frame03 from "./03.svg";
-import frame04 from "./04.svg";
-import frame05 from "./05.svg";
+
+import * as sprites from "./sprites";
+
 import { useFrame } from "../../store/Physics/Physics";
 import { mocoSize, sizes } from "./utils";
 
@@ -35,7 +32,7 @@ export function Player(props: React.PropsWithChildren<{}>) {
     const interval = setInterval(
       () => {
         if (i >= animation.length) i = 0;
-        ref.current?.setAttribute("fill", `url(#frame0${animation[i]})`);
+        ref.current?.setAttribute("fill", `url(#primary_frame0${animation[i]})`);
         i++;
       },
       idle ? 250 : 150
@@ -68,7 +65,7 @@ export function Player(props: React.PropsWithChildren<{}>) {
 
   if (!player) return null;
   return (
-    <g ref={playerRef} transform={""}>
+    <g ref={playerRef} transform={""} className="moco">
       {/* <circle cx={50} cy={50} r={50} fill="black" /> */}
       <rect
         ref={ref}
@@ -84,13 +81,13 @@ export function Player(props: React.PropsWithChildren<{}>) {
       <g transform={`translate(${gTransform} ${gTransform})`}>
         <defs>
           <pattern
-            id="frame01"
+            id="primary_frame01"
             patternUnits="userSpaceOnUse"
             width={widthHeight}
             height={widthHeight}
           >
             <image
-              href={frame01}
+              href={sprites.basic[0]}
               x="0"
               y="0"
               width={widthHeight}
@@ -98,13 +95,13 @@ export function Player(props: React.PropsWithChildren<{}>) {
             />
           </pattern>
           <pattern
-            id="frame02"
+            id="primary_frame02"
             patternUnits="userSpaceOnUse"
             width={widthHeight}
             height={widthHeight}
           >
             <image
-              href={frame02}
+              href={sprites.basic[1]}
               x="0"
               y="0"
               width={widthHeight}
@@ -112,13 +109,13 @@ export function Player(props: React.PropsWithChildren<{}>) {
             />
           </pattern>
           <pattern
-            id="frame03"
+            id="primary_frame03"
             patternUnits="userSpaceOnUse"
             width={widthHeight}
             height={widthHeight}
           >
             <image
-              href={frame03}
+              href={sprites.basic[2]}
               x="0"
               y="0"
               width={widthHeight}
@@ -126,13 +123,13 @@ export function Player(props: React.PropsWithChildren<{}>) {
             />
           </pattern>
           <pattern
-            id="frame04"
+            id="primary_frame04"
             patternUnits="userSpaceOnUse"
             width={widthHeight}
             height={widthHeight}
           >
             <image
-              href={frame04}
+              href={sprites.basic[3]}
               x="0"
               y="0"
               width={widthHeight}
@@ -140,13 +137,13 @@ export function Player(props: React.PropsWithChildren<{}>) {
             />
           </pattern>
           <pattern
-            id="frame05"
+            id="primary_frame05"
             patternUnits="userSpaceOnUse"
             width={widthHeight}
             height={widthHeight}
           >
             <image
-              href={frame05}
+              href={sprites.basic[4]}
               x="0"
               y="0"
               width={widthHeight}
@@ -160,7 +157,7 @@ export function Player(props: React.PropsWithChildren<{}>) {
           y={0}
           width={widthHeight}
           height={widthHeight}
-          fill="url(#frame01)"
+          fill="url(#primary_frame01)"
         />
       </g>
     </g>

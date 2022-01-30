@@ -4,30 +4,30 @@ import { Slime } from "./Slime";
 import { useGame } from "../../store";
 import { Inventory } from "../../store/Game/types";
 import { CloseButton } from "./CloseButton";
-import InventoryDraw  from "./InventoryDraw.svg";
+import InventoryDraw from "./InventoryDraw.svg";
 import "./inventory.styles.scoped.scss";
 
 export function InventoryModal() {
-    const [selectedSlot , setSelectedSlot] = React.useState<string>("left");
-    const game = useGame();
+  const [selectedSlot, setSelectedSlot] = React.useState<string>("left");
+  const game = useGame();
 
-    if(!game.showInventory) return null;
+  if (!game.showInventory) return null;
 
-    function handleSlimeClick(color: string) {
-        const socket = selectedSlot + "Slime";
-       game.changeInventory( (i) => ( { ...i, [socket]: color } as Inventory ) );
-    }
+  function handleSlimeClick(color: string) {
+    const socket = selectedSlot + "Slime";
+    game.changeInventory((i) => ({ ...i, [socket]: color }));
+  }
 
-    function handleSocketSelection(name: string) {
-      setSelectedSlot(name);
-    }
+  function handleSocketSelection(name: string) {
+    setSelectedSlot(name);
+  }
 
-    function handleCloseButton() {
-      game.setShowInventory(false);
-    }
+  function handleCloseButton() {
+    game.setShowInventory(false);
+  }
 
   return ( <>
-            <g transform={`translate(350,20) scale(0.8)`}>
+            <g transform={`translate(350,20) scale(0.7)`}>
                   <image href={InventoryDraw} x="0" y="0" width="775" height="741" />
                   <g>
                    <SlimeSocket
@@ -42,22 +42,24 @@ export function InventoryModal() {
                             name={"right"}
                             onClick={handleSocketSelection}
                     />
-                     { game?.inventory?.leftSlime && <Slime 
-                                                        x={310}
-                                                        y={215}
-                                                        name="left"
-                                                        color={game?.inventory?.leftSlime}
-                                                        onClick={handleSocketSelection}
-                                                     />
-                      }
-                     { game?.inventory?.rightSlime && <Slime 
-                                                          x={470}
-                                                          y={215}
-                                                          name="right" 
-                                                          color={game?.inventory?.rightSlime}
-                                                          onClick={handleSocketSelection}
-                                                      />
-                     }
+                    {game?.inventory?.leftSlime && (
+                    <Slime
+                      x={310}
+                      y={215}
+                      name="left"
+                      color={game?.inventory?.leftSlime}
+                      onClick={handleSocketSelection}
+                    />
+                  )}
+                  {game?.inventory?.rightSlime && (
+                    <Slime
+                      x={470}
+                      y={215}
+                      name="right"
+                      color={game?.inventory?.rightSlime}
+                      onClick={handleSocketSelection}
+                    />
+                  )}
                       <g>
                         {/*  selected Slime and Description */}
                         <Slime x={170} y={360} color="red"  onClick={handleSlimeClick} />

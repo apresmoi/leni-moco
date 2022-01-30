@@ -18,7 +18,7 @@ type IGameStoreContext = {
   inventory?: Inventory;
   showInventory?: boolean;
   setShowInventory: (showInventory: boolean) => void;
-  changeInventory: (inventory: Inventory) => void;
+  changeInventory: StatusSetter<Inventory>
 };
 
 const defaultLevel = {
@@ -52,7 +52,10 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
   const [player, setPlayer] = React.useState<Player>(defaultPlayer);
   const [paused, setPaused] = React.useState(true);
   const [level, setLevel] = React.useState<Level>(defaultLevel);
-  const [inventory, setInventory] =  React.useState<Inventory>();
+  const [inventory, setInventory] = React.useState<Inventory>({
+    leftSlime: "fire",
+    rightSlime: "water",
+  });
   const [showInventory, setShowInventory] = React.useState(false);
   const [activeLevel, setActiveLevel] = React.useState<string>("tutorial");
 

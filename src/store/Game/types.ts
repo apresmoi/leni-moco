@@ -12,7 +12,7 @@ export interface Level {
   conditions: { [key: string]: boolean };
 }
 
-export interface Inventory{
-  leftSlime:  string;
-  rightSlime: string;
+export interface Inventory {
+  leftSlime: "fire" | "water" | "darkness";
+  rightSlime: "fire" | "water" | "darkness";
 }
