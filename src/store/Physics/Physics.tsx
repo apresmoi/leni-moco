@@ -5,8 +5,8 @@ import { useKeyPress } from "../../hooks";
 import { Vector } from "../../utils/math";
 import { CELL_SIZE, CELL_WIDTH } from "../../settings";
 import debounce from "lodash.debounce";
-import { useKeystrokeSound } from "../../assets";
 import { GameObjectBody } from '../../sharedTypes'
+import { useSound } from "../../assets";
 
 export enum CollisionCategories {
   WALL = 1,
@@ -112,14 +112,16 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
       },
     })
   );
-
-  const arrowLeft = useKeyPress(["ArrowLeft", "a"], useKeystrokeSound(1).play);
+  
+  const movementSound = useSound("movement");
+  
+  const arrowLeft = useKeyPress(["ArrowLeft", "a"], movementSound?.play);
   const arrowRight = useKeyPress(
     ["ArrowRight", "d"],
-    useKeystrokeSound(1).play
+    movementSound?.play
   );
-  const arrowUp = useKeyPress(["ArrowUp", "w"], useKeystrokeSound(1).play);
-  const arrowDown = useKeyPress(["ArrowDown", "s"], useKeystrokeSound(1).play);
+  const arrowUp = useKeyPress(["ArrowUp", "w"], movementSound?.play);
+  const arrowDown = useKeyPress(["ArrowDown", "s"], movementSound?.play);
   const spaceKey = useKeyPress([" "]);
   const shiftKey = useKeyPress(["Shift"]);
 
@@ -191,8 +193,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
           player ? { ...player, isSplited: true } : player
         );
       }
-  }, [game.player, spaceKey]);
-
+  }, [game.player?.isSplited, spaceKey]);
 
   React.useEffect(() => {
     World.add(world, player.current);
@@ -202,7 +203,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
     Events.on(engine, "afterUpdate", function (event) {
       if (direction.current.x || direction.current.y) {
-        if (event.timestamp - tsStart > 400) {
+        if (event.timestamp - tsStart > 380) {
           tsStart = event.timestamp;
           updatePlayer();
         }

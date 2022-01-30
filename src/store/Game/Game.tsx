@@ -23,7 +23,7 @@ export const GameStoreContext = React.createContext<IGameStoreContext>({
   changePlayerSide: () => { },
   setLevel: () => { },
   level: defaultLevel,
-  setPaused: () => { },
+  setPaused: () => {},
 });
 
 export function useGame() {
@@ -37,19 +37,21 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
 
   useMusic();
 
+  const changePlayerSide = React.useCallback(() => {
+    setPlayer((p) =>
+      p && p.isSplited
+        ? { ...p, active: p.active === "left" ? "right" : "left" }
+        : p
+    );
+  }, []);
+
   const contextValue = {
     player,
     level,
     paused,
     setLevel: setLevel,
     changePlayer: setPlayer,
-    changePlayerSide: () => {
-      setPlayer((p) =>
-        p && p.isSplited
-          ? { ...p, active: p.active === "left" ? "right" : "left" }
-          : p
-      );
-    },
+    changePlayerSide,
     setPaused,
   };
 
