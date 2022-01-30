@@ -96,7 +96,6 @@ export function FireWallBlock(props: FireWallBlockProps) {
     };
   }, []);
 
-  console.log({ isSolved });
   return isSolved ? null : (
     <FireWallBlockSVG
       x={size.min.x - 0.25 * props.width}
