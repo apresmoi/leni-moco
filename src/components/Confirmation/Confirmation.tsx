@@ -11,7 +11,7 @@ interface confirmationProps {
   const canvas = useGameCanvas();
 
   return (         
-    <svg width={canvas.width} data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1728 1117">
+    <svg width={canvas.width} data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="200 0 1800 1100">
     <defs>
       <radialGradient id="a" cx="564.19" cy="980.19" r="1" gradientTransform="matrix(312.16 0 0 -105.25 -175517.49 103778.52)" gradientUnits="userSpaceOnUse">
         <stop offset=".28" stop-color="#5ca132"/>
