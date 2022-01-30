@@ -5,8 +5,9 @@ import { MovesLeft } from "./movesLeft";
 import { Options } from "./options";
 import { InstructionsModal } from "../../components/InstructionsModal";
 import { Confirmation } from "../../components/Confirmation";
+import { sounds } from "../../assets/sounds";
 import "./styles.scoped.scss";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 
 export function UI() {
   const game = useGame();
@@ -14,14 +15,25 @@ export function UI() {
   const [openInstructions, setOpenInstructions] = React.useState(false);
   const [openCloseModal, setOpenCloseModal] = React.useState(false);
   const [showDeathModal, setShowDeathModal] = React.useState(false);
+  const [toggleSound, setToggleSound] = React.useState(true);
+
+  React.useEffect(() => {
+    const volume = toggleSound ? 1 : 0;
+
+    Object.values(sounds).forEach(sound => sound.volume = volume);
+  }, [toggleSound]);
 
   function handleOpenInventory() {
     game.setShowInventory(true);
   }
 
-  function onReset() {}
+  function onReset(){
+    window.location.reload();
+  }
 
-  function onSound() {}
+  function onSound(){
+    setToggleSound(!toggleSound);
+  }
 
   function onInstructions() {
     setOpenInstructions(!openInstructions);
