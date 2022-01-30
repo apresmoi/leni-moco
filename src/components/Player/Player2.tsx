@@ -27,24 +27,41 @@ export function Player2(props: React.PropsWithChildren<{}>) {
   }, [player?.isSplited]);
 
   React.useEffect(() => {
-    const animation = idle ? [2, 5, 2, 4] : [1, 2, 3, 2];
+    const animations = {
+      idle: [1, 4, 1, 3],
+      walking: [0, 1, 2, 1],
+      death: [5, 6, 7, 8],
+    };
+
+    const animation = (() => {
+      if (player?.rightKilled) return animations.death;
+      if (idle) return animations.idle;
+      return animations.walking;
+    })();
+
+    const timeout = (() => {
+      if (player?.rightKilled) return 50;
+      if (idle) return 250;
+      return 150;
+    })();
+
     let i = 0;
-    const interval = setInterval(
-      () => {
-        if (i >= animation.length) i = 0;
-        ref.current?.setAttribute(
-          "fill",
-          `url(#secondary_frame0${animation[i]})`
-        );
-        i++;
-      },
-      idle ? 250 : 150
-    );
+    const interval = setInterval(() => {
+      if (i >= animation.length) {
+        if (player?.rightKilled) clearInterval(interval);
+        else i = 0;
+      }
+      ref.current?.setAttribute(
+        "fill",
+        `url(#secondary_frame0${animation[i]})`
+      );
+      i++;
+    }, timeout);
 
     return () => {
       clearInterval(interval);
     };
-  }, [idle]);
+  }, [idle, player?.rightKilled]);
 
   useFrame((event) => {
     const player = event.source.world.bodies.find(
@@ -63,7 +80,7 @@ export function Player2(props: React.PropsWithChildren<{}>) {
 
   return (
     <g className="moco" ref={playerRef} transform={`translate(${0}, ${0})`}>
-      {player.rightKilled && <circle cx={50} cy={50} r={50} fill="black" />}
+      {/* {player.rightKilled && <circle cx={50} cy={50} r={50} fill="black" />} */}
       <rect
         ref={ref}
         x={0}
@@ -71,8 +88,9 @@ export function Player2(props: React.PropsWithChildren<{}>) {
         width={100}
         height={100}
         fill={"black"}
-        stroke={player.active === "right" ? "blue" : "none"}
+        stroke={player.active === "right" ? "white" : "none"}
         strokeWidth={10}
+        strokeOpacity={0.5}
         fillOpacity={0}
       />
       <g transform={`translate(${gTransform} ${gTransform})`}>
