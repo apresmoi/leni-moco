@@ -35,10 +35,6 @@ export const Tutorial = React.memo(() => {
       identifier: "tutorial",
       size: new Size(0, 0, 5 * CELL_SIZE.width, 6 * CELL_SIZE.height),
       nextLevel: "first",
-      conditions: {
-        ice: false,
-        fire: false,
-      },
     });
   }, []);
 
@@ -189,12 +185,6 @@ export const Tutorial = React.memo(() => {
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 4, row: 2 })}
         {...{ col: 4, row: 2 }}
-        onSolve={() => {
-          game.setLevel((level) => ({
-            ...level,
-            conditions: { ...level.conditions, ice: true },
-          }));
-        }}
       />
       {/* PITHOLE BLOCKS */}
       {/* <PitHoleBlock
@@ -207,12 +197,6 @@ export const Tutorial = React.memo(() => {
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 0, row: 2 })}
         {...{ col: 0, row: 2 }}
-        onSolve={() => {
-          game.setLevel((level) => ({
-            ...level,
-            conditions: { ...level.conditions, fire: true },
-          }));
-        }}
       />
       {/* SHADOW BLOCKS */}
       <ShadowBlock
@@ -227,10 +211,7 @@ export const Tutorial = React.memo(() => {
         {...{ col: 2, row: 0 }}
         onSolve={() => {
           setTimeout(() => {
-            const wonLevel = Object.keys(game.level.conditions)
-              .filter((id) => id !== "win")
-              .every((k) => game.level.conditions[k]);
-            if (wonLevel) game.setActiveLevel(game.level.nextLevel);
+            game.setActiveLevel(game.level.nextLevel);
           }, 400);
         }}
       />
