@@ -7,22 +7,46 @@ import {
 import { useGame } from "../../store";
 import { useGetGrid } from "../../utils/grid";
 
+import floorTile from "./floor.svg";
+
 interface UseGridSVG {}
 const useGridSVG = (gridProps: UseGridSVG) => {
   const { rows, cols } = useGetGrid();
 
   return () => (
     <g>
+      <defs>
+        <pattern
+          id="floor"
+          patternUnits="userSpaceOnUse"
+          width={`${CANVAS_WIDTH}`}
+          height={`${CANVAS_WIDTH}`}
+        >
+          <image
+            href={floorTile}
+            x="0"
+            y="0"
+            width={`${CELL_WIDTH}`}
+            height={`${CELL_HEIGHT}`}
+          />
+        </pattern>
+      </defs>
       {rows.map((row) =>
         cols.map((col) => (
-          <rect
-            key={`r-${row}__c-${col}`}
-            x={col * CELL_WIDTH}
-            y={(row + 1) * CELL_HEIGHT}
-            width={CELL_WIDTH}
-            height={CELL_HEIGHT}
-            style={{ stroke: "pink", strokeWidth: "5", opacity: "0.5" }}
-          />
+          <g
+            transform={`translate(${col * CELL_WIDTH}, ${
+              (row + 1) * CELL_WIDTH
+            })`}
+          >
+            <rect
+              key={`r-${row}__c-${col}`}
+              x={0}
+              y={0}
+              width={CELL_WIDTH}
+              height={CELL_HEIGHT}
+              fill={"url(#floor)"}
+            />
+          </g>
         ))
       )}
     </g>
