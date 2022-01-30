@@ -3,6 +3,8 @@ import { Size } from "../../utils/math";
 export interface Player {
   isSplited: boolean;
   active: "left" | "right";
+  leftKilled: boolean;
+  rightKilled: boolean;
 }
 
 export interface Level {

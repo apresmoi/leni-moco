@@ -63,6 +63,7 @@ export function Player2(props: React.PropsWithChildren<{}>) {
 
   return (
     <g className="moco" ref={playerRef} transform={`translate(${0}, ${0})`}>
+      {player.rightKilled && <circle cx={50} cy={50} r={50} fill="black" />}
       <rect
         ref={ref}
         x={0}
@@ -75,7 +76,11 @@ export function Player2(props: React.PropsWithChildren<{}>) {
         fillOpacity={0}
       />
       <g transform={`translate(${gTransform} ${gTransform})`}>
-       <SlimeFrames frameName="secondary" spriteName={spriteName} widthHeight={widthHeight} />
+        <SlimeFrames
+          frameName="secondary"
+          spriteName={spriteName}
+          widthHeight={widthHeight}
+        />
         <rect
           ref={ref}
           x={0}

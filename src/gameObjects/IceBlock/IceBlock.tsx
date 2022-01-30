@@ -54,15 +54,17 @@ const gameObjectOptions = {
     mask: CollisionCategories.PLAYER | CollisionCategories.WATER_PLAYER,
   },
   allowedCollisionsCategories: [CollisionCategories.SHADOW_PLAYER],
-  killCollisionCategories: [CollisionCategories.WATER_PLAYER],
+  killCollisionCategories: [
+    CollisionCategories.PLAYER,
+    CollisionCategories.WATER_PLAYER,
+  ],
   solutionCollisionsCategories: [CollisionCategories.FIRE_PLAYER],
 };
 interface IceBlockProps extends GameObjectBlock {}
 
 export function IceBlock(props: IceBlockProps) {
   const [uniqueID] = React.useState<string>(uuid());
-  const [isSolved, setIsSolved] = React.useState(false);
-  const { size, physics } = useConstructGameObject({
+  const { size, isMounted } = useConstructGameObject({
     ...props,
     width: props.width * 0.5,
     height: props.height * 0.5,
@@ -72,30 +74,16 @@ export function IceBlock(props: IceBlockProps) {
       ...gameObjectOptions,
       plugin: {
         ...props,
-        uniqueID
+        uniqueID,
       },
     },
+    hasSensor: true,
   });
 
-  React.useEffect(() => {
-    const fn = (a: GameObjectBody, b: GameObjectBody) => {
-      if (a.plugin?.uniqueID === uniqueID || b.plugin?.uniqueID === uniqueID)
-        if (shouldSolveBlock(a, b) || shouldSolveBlock(b, a)) {
-          setIsSolved(true);
-          props.onSolve?.();
-        }
-    };
-
-    physics.subscribeCollision(fn);
-    return () => {
-      physics.unsubscribeCollision(fn);
-    };
-  }, []);
-
-  return isSolved ? null : (
+  return isMounted ? (
     <IceBlockSVG
       x={size.min.x - 0.25 * props.width}
       y={size.min.y - 0.25 * props.height}
     />
-  );
+  ) : null;
 }

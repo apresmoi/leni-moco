@@ -4,6 +4,7 @@ import { OpenInventoryButton } from "./openInventoryButton";
 import { MovesLeft } from "./movesLeft";
 import { Options } from "./options";
 import { InstructionsModal } from "../../components/InstructionsModal";
+import { Confirmation } from "../../components/Confirmation";
 import "./styles.scoped.scss";
 import { useHistory } from "react-router";
 
@@ -53,8 +54,8 @@ export function UI() {
     {openInstructions && (
       <InstructionsModal onInstructions={onInstructions} />
     )}
-    {/* {openCloseModal && (
+    {openCloseModal && (
       <Confirmation label="Are you sure you want to exit?" onClickYes={onClickYes} onClickNo={onClickNo} />
-    )} */}
+    )}
   </g>;
 }
