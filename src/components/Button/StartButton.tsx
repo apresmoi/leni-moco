@@ -7,7 +7,7 @@ import { Button } from "./Button";
 export function StartButton() {
   const history = useHistory();
   const btnSound = useSound("btnSound");
-  
+
   return (
     <Button
       label="Start Game"

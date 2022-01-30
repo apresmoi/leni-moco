@@ -1,16 +1,16 @@
 * {
-	font-family: "Mochiy", monospace;
-	background: #30341D;
+  font-family: "Mochiy", monospace;
+  background: #30341d;
 }
 
 body {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 #root {
-	display: flex;
-
-	height: 100vh;
-	width: 100vw;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
 }
