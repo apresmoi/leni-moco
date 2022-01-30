@@ -20,7 +20,7 @@ export function Slime(props: SlimeProps) {
       onClick={() => props.onClick?.(props.name || props.color)}
       transform={`translate(${props.x - 50}, ${props.y - 50}) scale(0.7)`}
     >
-      <g transform="translate(25, 25)">
+      <g cursor="pointer" transform="translate(25, 25)">
         <SlimeFrames frameName={props.idx} spriteName={props.color}  widthHeight="90"/>
         <rect
           ref={ref}
