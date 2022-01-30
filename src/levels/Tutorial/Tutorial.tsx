@@ -7,6 +7,7 @@ import {
   FireWallBlock,
   ShadowBlock,
   WinConditionBlock,
+  StartingBlock,
 } from "../../gameObjects";
 import { Size, Vector } from "../../utils/math";
 import { CELL_SIZE } from "../../settings";
@@ -232,6 +233,12 @@ export const Tutorial = React.memo(() => {
             if (wonLevel) game.setActiveLevel(game.level.nextLevel);
           }, 400);
         }}
+      />
+
+      <StartingBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 2, row: 5 })}
+        {...{ col: 2, row: 5 }}
       />
     </>
   );
