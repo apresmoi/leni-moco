@@ -126,94 +126,97 @@ export function InventoryModal() {
 
   return (
     <>
-      <g
-        transform={`translate(${size.width / 2 - (775 * 0.7) / 2},${
-          size.height / 2 - (741 * 0.7) / 2
-        }) scale(0.7)`}
-      >
-        <image href={InventoryDraw} x="0" y="0" width="775" height="741" />
-        <g>
-          <SlimeSocket
-            x={50}
-            y={50}
-            name={"left"}
-            isSelected={selectedSlot === "left"}
-            onClick={handleSocketSelection}
-          />
-          <SlimeSocket
-            x={215}
-            y={50}
-            name={"right"}
-            isSelected={selectedSlot === "right"}
-            onClick={handleSocketSelection}
-          />
-          {game?.inventory?.leftSlime && (
-            <Slime
-              x={310}
-              y={215}
-              idx="inLeftSocket"
-              name="left"
-              color={game?.inventory?.leftSlime}
-              onClick={handleSocketSelection}
-            />
-          )}
-          {game?.inventory?.rightSlime && (
-            <Slime
-              x={470}
-              y={215}
-              idx="inRightSocket"
-              name="right"
-              color={game?.inventory?.rightSlime}
-              onClick={handleSocketSelection}
-            />
-          )}
+      <g>
+        <rect x="-1000" width="2500" height="1200" fill="black" opacity="0.5" />
+        <g
+          transform={`translate(${size.width / 2 - (775 * 0.7) / 2},${
+            size.height / 2 - (741 * 0.7) / 2
+          }) scale(0.7)`}
+        >
+          <image href={InventoryDraw} x="0" y="0" width="775" height="741" />
           <g>
-            {/*  selected Slime and Description */}
-            <Slime
-              idx="sampleSlime"
-              x={170}
-              y={360}
-              color={selectedSlime}
-              onClick={handleSlimeClick}
-              
+            <SlimeSocket
+              x={50}
+              y={50}
+              name={"left"}
+              isSelected={selectedSlot === "left"}
+              onClick={handleSocketSelection}
             />
-            <text x={60} y={440} className="description-text" fill="white">
-              {selectedSlime} jam
-            </text>
-            {renderSlimeDescription(selectedSlime)}
+            <SlimeSocket
+              x={215}
+              y={50}
+              name={"right"}
+              isSelected={selectedSlot === "right"}
+              onClick={handleSocketSelection}
+            />
+            {game?.inventory?.leftSlime && (
+              <Slime
+                x={310}
+                y={215}
+                idx="inLeftSocket"
+                name="left"
+                color={game?.inventory?.leftSlime}
+                onClick={handleSocketSelection}
+              />
+            )}
+            {game?.inventory?.rightSlime && (
+              <Slime
+                x={470}
+                y={215}
+                idx="inRightSocket"
+                name="right"
+                color={game?.inventory?.rightSlime}
+                onClick={handleSocketSelection}
+              />
+            )}
+            <g>
+              {/*  selected Slime and Description */}
+              <Slime
+                idx="sampleSlime"
+                x={170}
+                y={360}
+                color={selectedSlime}
+                onClick={handleSlimeClick}
+                
+              />
+              <text x={60} y={440} className="description-text" fill="white">
+                {selectedSlime} jam
+              </text>
+              {renderSlimeDescription(selectedSlime)}
+            </g>
           </g>
-        </g>
-        <g className=".lime-container">
-          <Slime
-            idx="inv01"
-            x={365}
-            y={360}
-            color="fire"
-            onClick={handleSlimeClick}
-            isBlocked={opositeSlime === "fire" }
-            isSelected={storedGlobalSlime === "fire"}
-          />
-          <Slime
-            idx="inv02"
-            x={465}
-            y={360}
-            color="water"
-            onClick={handleSlimeClick}
-            isBlocked={opositeSlime === "water"}
-            isSelected={storedGlobalSlime ===  "water"}
-          />
-          <Slime
-            idx="inv03"
-            x={565}
-            y={360}
-            color="darkness"
-            onClick={handleSlimeClick}
-            isBlocked={opositeSlime === "darkness"}
-            isSelected={storedGlobalSlime === "darkness"}
-          />
-        </g>
+          <g className=".lime-container">
+            <Slime
+              idx="inv01"
+              x={365}
+              y={360}
+              color="fire"
+              onClick={handleSlimeClick}
+              isBlocked={opositeSlime === "fire" }
+              isSelected={storedGlobalSlime === "fire"}
+            />
+            <Slime
+              idx="inv02"
+              x={465}
+              y={360}
+              color="water"
+              onClick={handleSlimeClick}
+              isBlocked={opositeSlime === "water"}
+              isSelected={storedGlobalSlime ===  "water"}
+            />
+            <Slime
+              idx="inv03"
+              x={565}
+              y={360}
+              color="darkness"
+              onClick={handleSlimeClick}
+              isBlocked={opositeSlime === "darkness"}
+              isSelected={storedGlobalSlime === "darkness"}
+            />
+          </g>
 
-        <CloseButton x={740} y={120} onClick={handleCloseButton} />
+          <CloseButton x={740} y={120} onClick={handleCloseButton} />
+        </g>
       </g>
     </>
   );
