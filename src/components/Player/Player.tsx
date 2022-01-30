@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useGame } from "../../store";
 
-import * as sprites from "./sprites";
 
 import { useFrame } from "../../store/Physics/Physics";
+import { SlimeFrames } from "./SlimeFrames";
 import { mocoSize, sizes } from "./utils";
 
 export function Player(props: React.PropsWithChildren<{}>) {
@@ -66,7 +66,7 @@ export function Player(props: React.PropsWithChildren<{}>) {
     }
   });
 
-  const sprite = sprites[player?.isSplited ? inventory?.leftSlime : "basic"];
+  const spriteName = player?.isSplited ? inventory?.leftSlime : "basic";
 
   if (!player) return null;
   return (
@@ -84,78 +84,7 @@ export function Player(props: React.PropsWithChildren<{}>) {
         fillOpacity={0}
       />
       <g transform={`translate(${gTransform} ${gTransform})`}>
-        <defs>
-          <pattern
-            id="primary_frame01"
-            patternUnits="userSpaceOnUse"
-            width={widthHeight}
-            height={widthHeight}
-          >
-            <image
-              href={sprite[0]}
-              x="0"
-              y="0"
-              width={widthHeight}
-              height={widthHeight}
-            />
-          </pattern>
-          <pattern
-            id="primary_frame02"
-            patternUnits="userSpaceOnUse"
-            width={widthHeight}
-            height={widthHeight}
-          >
-            <image
-              href={sprite[1]}
-              x="0"
-              y="0"
-              width={widthHeight}
-              height={widthHeight}
-            />
-          </pattern>
-          <pattern
-            id="primary_frame03"
-            patternUnits="userSpaceOnUse"
-            width={widthHeight}
-            height={widthHeight}
-          >
-            <image
-              href={sprite[2]}
-              x="0"
-              y="0"
-              width={widthHeight}
-              height={widthHeight}
-            />
-          </pattern>
-          <pattern
-            id="primary_frame04"
-            patternUnits="userSpaceOnUse"
-            width={widthHeight}
-            height={widthHeight}
-          >
-            <image
-              href={sprite[3]}
-              x="0"
-              y="0"
-              width={widthHeight}
-              height={widthHeight}
-            />
-          </pattern>
-          <pattern
-            id="primary_frame05"
-            patternUnits="userSpaceOnUse"
-            width={widthHeight}
-            height={widthHeight}
-          >
-            <image
-              href={sprite[4]}
-              x="0"
-              y="0"
-              width={widthHeight}
-              height={widthHeight}
-            />
-          </pattern>
-        </defs>
+         <SlimeFrames frameName="primary" spriteName={spriteName}  widthHeight={widthHeight}/>
         <rect
           ref={ref}
           x={0}

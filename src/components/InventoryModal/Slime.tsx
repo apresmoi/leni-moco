@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as sprites from "../Player/sprites";
+import { SlimeFrames } from "../Player/SlimeFrames";
 
 interface SlimeProps {
   x: number;
@@ -17,7 +17,7 @@ export function Slime(props: SlimeProps) {
     const interval = setInterval(() => {
       i++;
       if (i > 5) i = 1;
-      ref.current?.setAttribute("fill", `url(#primary_frame0${i})`);
+      ref.current?.setAttribute("fill", `url(#${props.color}_frame0${i})`);
     }, 200);
 
     return () => {
@@ -31,13 +31,14 @@ export function Slime(props: SlimeProps) {
       transform={`translate(${props.x - 50}, ${props.y - 50}) scale(0.7)`}
     >
       <g transform="translate(25, 25)">
+        <SlimeFrames frameName={props.color} spriteName={props.color}  widthHeight="90"/>
         <rect
           ref={ref}
           x={0}
           y={0}
           width={90}
           height={90}
-          fill="url(#primary_frame01)"
+          fill={`url(#${props.color}_frame01)`}
         />
       </g>
     </g>

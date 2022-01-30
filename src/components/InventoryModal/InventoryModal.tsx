@@ -9,6 +9,7 @@ import "./inventory.styles.scoped.scss";
 
 export function InventoryModal() {
   const [selectedSlot, setSelectedSlot] = React.useState<string>("left");
+  const [ selectedSlime, setSeletedSlime ] = React.useState<string>("none")
   const game = useGame();
 
   if (!game.showInventory) return null;
@@ -62,7 +63,7 @@ export function InventoryModal() {
                   )}
                       <g>
                         {/*  selected Slime and Description */}
-                        <Slime x={170} y={360} color="red"  onClick={handleSlimeClick} />
+                        <Slime x={170} y={360} color="fire"  onClick={handleSlimeClick} />
                           <text   className="description-text" >
                              
                               <tspan x={60} y={490}>Lorem Ipsum is simply ho</tspan> 
@@ -77,9 +78,9 @@ export function InventoryModal() {
                         </g>
                     </g>
                       <g className=".lime-container">
-                          <Slime x={365} y={360} color="red"  onClick={handleSlimeClick} />
-                          <Slime x={465} y={360} color="green" onClick={handleSlimeClick} />
-                          <Slime x={565} y={360} color="blue" onClick={handleSlimeClick} />
+                          <Slime x={365} y={360} color="fire"  onClick={handleSlimeClick} />
+                          <Slime x={465} y={360} color="water" onClick={handleSlimeClick} />
+                          <Slime x={565} y={360} color="darkness" onClick={handleSlimeClick} />
                       </g> 
 
 
