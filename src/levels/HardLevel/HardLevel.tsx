@@ -23,6 +23,7 @@ export const HardLevel = React.memo(() => {
       identifier: "hard",
       size: new Size(0, 0, 7 * CELL_SIZE.width, 7 * CELL_SIZE.height),
       nextLevel: "end",
+      movements: 50,
     });
   }, []);
 
