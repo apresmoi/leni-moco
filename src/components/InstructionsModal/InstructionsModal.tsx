@@ -149,7 +149,7 @@ export function InstructionsModal(props: instructionsModalProps) {
       </clipPath>
     </defs>
 
-    <rect x="-1000" y="-200" width="2500" height="1200" fill="black" opacity="0.5" />
+    <rect x="-700" y="-200" width="4000" height="1200" fill="black" opacity="0.5" />
     <rect
       width="826"
       height="770"
