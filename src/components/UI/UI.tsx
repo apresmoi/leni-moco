@@ -65,8 +65,9 @@ export function UI() {
   }, [youAreDead]);
 
   return (
-    <g>
-      <MovesLeft moves={2} />
+    <g transform={`translate(${size.width / 2 - (1343) / 2})`}
+    >      
+    <MovesLeft moves={2} />
       <OpenInventoryButton onClick={handleOpenInventory} />
       <Options
         onReset={onReset}
