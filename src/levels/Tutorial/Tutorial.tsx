@@ -1,5 +1,14 @@
 import React from "react";
-import { WallBlock, IceBlock, PitHoleBlock, NeutralSolidBlock,FireWallBlock,ShadowBlock } from "../../gameObjects";
+import {
+  WallBlock,
+  IceBlock,
+  PitHoleBlock,
+  NeutralSolidBlock,
+  FireWallBlock,
+  ShadowBlock,
+  WinConditionBlock,
+  StartingBlock,
+} from "../../gameObjects";
 import { Size, Vector } from "../../utils/math";
 import { CELL_SIZE } from "../../settings";
 import { getSVGPosByGridPos } from "../../utils/grid";
@@ -14,17 +23,24 @@ export const Tutorial = React.memo(() => {
   const game = useGame();
 
   React.useEffect(() => {
-
     const position = getSVGPosByGridPos({ col: 3, row: 6 });
-    physics?.setPlayerPosition(new Vector(position.x - (CELL_SIZE.width / 2), position.y - (CELL_SIZE.height / 2)));
+    physics?.setPlayerPosition(
+      new Vector(
+        position.x - CELL_SIZE.width / 2,
+        position.y - CELL_SIZE.height / 2
+      )
+    );
 
     game.setLevel({
-      identifier:'tutorial',
+      identifier: "tutorial",
       size: new Size(0, 0, 5 * CELL_SIZE.width, 6 * CELL_SIZE.height),
+      nextLevel: "first",
+      conditions: {
+        ice: false,
+        fire: false,
+      },
     });
-
   }, []);
-
 
   return (
     <>
@@ -90,32 +106,32 @@ export const Tutorial = React.memo(() => {
       {/* RIGHT BORDER */}
       <WallBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col:5, row: 1 })}
-        {...{ col:5, row: 1 }}
+        {...getSVGPosByGridPos({ col: 5, row: 1 })}
+        {...{ col: 5, row: 1 }}
         type="LEFT_BUMP"
       />
       <WallBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col:5, row: 2 })}
-        {...{ col:5, row: 2 }}
+        {...getSVGPosByGridPos({ col: 5, row: 2 })}
+        {...{ col: 5, row: 2 }}
         type="LEFT_BUMP"
       />
       <WallBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col:5, row: 3 })}
-        {...{ col:5, row: 3 }}
+        {...getSVGPosByGridPos({ col: 5, row: 3 })}
+        {...{ col: 5, row: 3 }}
         type="LEFT_BUMP"
       />
       <WallBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col:5, row: 4 })}
-        {...{ col:5, row: 4 }}
+        {...getSVGPosByGridPos({ col: 5, row: 4 })}
+        {...{ col: 5, row: 4 }}
         type="LEFT_BUMP"
       />
       <WallBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col:5, row: 5 })}
-        {...{ col:5, row: 5 }}
+        {...getSVGPosByGridPos({ col: 5, row: 5 })}
+        {...{ col: 5, row: 5 }}
         type="LEFT_BUMP"
       />
 
@@ -151,7 +167,6 @@ export const Tutorial = React.memo(() => {
         type="TOP_BUMP"
       />
 
-
       {/* NEUTRAL BLOCKS */}
       <NeutralSolidBlock
         {...cellSizes}
@@ -174,6 +189,12 @@ export const Tutorial = React.memo(() => {
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 4, row: 2 })}
         {...{ col: 4, row: 2 }}
+        onSolve={() => {
+          game.setLevel((level) => ({
+            ...level,
+            conditions: { ...level.conditions, ice: true },
+          }));
+        }}
       />
       {/* PITHOLE BLOCKS */}
       {/* <PitHoleBlock
@@ -186,12 +207,38 @@ export const Tutorial = React.memo(() => {
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 0, row: 2 })}
         {...{ col: 0, row: 2 }}
+        onSolve={() => {
+          game.setLevel((level) => ({
+            ...level,
+            conditions: { ...level.conditions, fire: true },
+          }));
+        }}
       />
       {/* SHADOW BLOCKS */}
       <ShadowBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 4, row: 4 })}
         {...{ col: 4, row: 4 }}
+      />
+
+      <WinConditionBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 2, row: 0 })}
+        {...{ col: 2, row: 0 }}
+        onSolve={() => {
+          setTimeout(() => {
+            const wonLevel = Object.keys(game.level.conditions)
+              .filter((id) => id !== "win")
+              .every((k) => game.level.conditions[k]);
+            if (wonLevel) game.setActiveLevel(game.level.nextLevel);
+          }, 400);
+        }}
+      />
+
+      <StartingBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 2, row: 5 })}
+        {...{ col: 2, row: 5 }}
       />
     </>
   );

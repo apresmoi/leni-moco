@@ -4,16 +4,16 @@ import { useConstructGameObject } from "../useConstructGameObject";
 import type { GameObject } from "../../sharedTypes";
 import { CollisionCategories } from "../../store/Physics";
 
-import frame01 from "./pit_hole.svg";
+import frame01 from "./start.svg";
 
-const PitHoleBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
+const StartingBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
   x,
   y,
 }) => (
   <svg x={x} y={y} width={CELL_WIDTH} height={CELL_HEIGHT}>
     <defs>
       <pattern
-        id="pitHole01"
+        id="start01"
         patternUnits="userSpaceOnUse"
         width={CELL_WIDTH}
         height={CELL_HEIGHT}
@@ -27,20 +27,20 @@ const PitHoleBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
         />
       </pattern>
     </defs>
-    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="#A020F0" />
-    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="url(#pitHole01)" />
+    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="#FFF" />
+    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="url(#start01)" />
   </svg>
 );
 const gameObjectOptions = {
   isStatic: true,
   isSensor: true,
   collisionFilter: {
-    category: CollisionCategories.PIT_HOLE,
+    group: -CollisionCategories.PLAYER,
   },
 };
-interface PitHoleBlockProps extends GameObject {}
+interface StartingBlockProps extends GameObject {}
 
-export function PitHoleBlock(props: PitHoleBlockProps) {
+export function StartingBlock(props: StartingBlockProps) {
   const { size } = useConstructGameObject({ ...props, gameObjectOptions });
-  return <PitHoleBlockSVG x={size.min.x} y={size.min.y} />;
+  return <StartingBlockSVG x={size.min.x} y={size.min.y} />;
 }

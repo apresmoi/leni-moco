@@ -16,17 +16,15 @@ export const HardLevel = React.memo(() => {
   const game = useGame();
 
   React.useEffect(() => {
-    
     const position = getSVGPosByGridPos({ col: 3, row: 7 });
     physics?.setPlayerPosition(new Vector(position.x - 50, position.y - 50));
 
     game.setLevel({
-      identifier:'hard',
+      identifier: "hard",
       size: new Size(0, 0, 7 * CELL_SIZE.width, 7 * CELL_SIZE.height),
+      nextLevel: "end",
     });
-
   }, []);
-
 
   return (
     <>
