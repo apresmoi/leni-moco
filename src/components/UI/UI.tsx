@@ -7,8 +7,10 @@ import { InstructionsModal } from "../../components/InstructionsModal";
 import { Confirmation } from "../../components/Confirmation";
 import "./styles.scoped.scss";
 import { useHistory } from "react-router";
+import { useGameCanvas } from "../GameCanvas";
 
 export function UI() {
+  const size = useGameCanvas();
   const game = useGame();
   const history = useHistory();
   const [openInstructions, setOpenInstructions] = useState(false);
@@ -42,7 +44,8 @@ export function UI() {
     setOpenCloseModal(false);
   }
 
-  return <g transform={`translate(${0}, ${0})`}>
+  return <g transform={`translate(${size.width / 2 - (1343) / 2})`}
+  >
     <MovesLeft moves={2}/>
     <OpenInventoryButton onClick={handleOpenInventory}/>
     <Options
