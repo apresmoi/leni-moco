@@ -9,7 +9,7 @@ interface SlimeProps {
   idx: string;
   isBlocked?: boolean;
   isSelected?: boolean;
-  onClick: (color: string) => void;
+  onClick?: (color: string) => void;
 }
 
 export function Slime(props: SlimeProps) {
@@ -17,7 +17,7 @@ export function Slime(props: SlimeProps) {
 
   return (
     <g
-      onClick={() => props.onClick(props.name || props.color)}
+      onClick={() => props.onClick?.(props.name || props.color)}
       transform={`translate(${props.x - 50}, ${props.y - 50}) scale(0.7)`}
     >
       <g transform="translate(25, 25)">
