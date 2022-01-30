@@ -4,6 +4,7 @@ import { Slime } from "./Slime";
 import { useGame } from "../../store";
 import { Inventory } from "../../store/Game/types";
 import { CloseButton } from "./CloseButton";
+import { StartButton } from "./StartButton";
 import InventoryDraw from "./InventoryDraw.svg";
 import "./inventory.styles.scoped.scss";
 import { useGameCanvas } from "../GameCanvas";
@@ -214,6 +215,7 @@ export function InventoryModal() {
         </g>
 
         <CloseButton x={740} y={120} onClick={handleCloseButton} />
+        <StartButton x={370} y={680} onClick={handleCloseButton} />
       </g>
     </>
   );
