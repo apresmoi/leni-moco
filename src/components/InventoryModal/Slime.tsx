@@ -28,26 +28,15 @@ export function Slime(props: SlimeProps) {
   return (
     <g
       onClick={() => props.onClick(props.name || props.color)}
-      transform={`translate(${props.x - 50}, ${props.y - 50})`}
+      transform={`translate(${props.x - 50}, ${props.y - 50}) scale(0.7)`}
     >
-      <rect
-        // ref={ref}
-        x={0}
-        y={0}
-        width={100}
-        height={100}
-        fill={"red"}
-        stroke={"none"}
-        strokeWidth={10}
-        opacity={0.5}
-      />
       <g transform="translate(25, 25)">
         <rect
           ref={ref}
           x={0}
           y={0}
-          width={50}
-          height={50}
+          width={90}
+          height={90}
           fill="url(#primary_frame01)"
         />
       </g>
