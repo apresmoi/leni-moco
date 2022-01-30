@@ -10,9 +10,9 @@ export function InstructionsModal(props: instructionsModalProps) {
 
   return (
     <g
-      transform={`translate(${1343 / 2 - 826 / 2}, ${
-        canvas.height / 2 - 770 / 2
-      })`}
+      transform={`translate(${1343 / 2 - (826 * 0.8) / 2 - 10}, ${
+        canvas.height / 2 - (770 * 0.8) / 2 - 10
+      }) scale(0.8)`}
     >
       <defs>
         <radialGradient
@@ -149,7 +149,14 @@ export function InstructionsModal(props: instructionsModalProps) {
           <path fill="none" d="M161 409h21v18h-21z"></path>
         </clipPath>
       </defs>
-
+      <rect
+        x={-canvas.width / 2}
+        width={canvas.width * 2}
+        y={-canvas.height / 2}
+        height={canvas.height * 2}
+        fill="black"
+        opacity={0.5}
+      />
       <rect
         width="826"
         height="770"
