@@ -2,6 +2,7 @@ import React from 'react';
 import { CELL_HEIGHT, CELL_WIDTH } from "../../settings";
 import { useConstructGameObject } from '../useConstructGameObject'
 import type { GameObject } from '../../sharedTypes'
+import { shouldSolveBlock } from '../../utils/collisions'
 import { CollisionCategories } from "../../store/Physics";
 
 
@@ -13,9 +14,39 @@ const IceBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({ x, y 
   </svg>
 )
 
+const gameObjectOptions = {
+  isStatic: true,
+  collisionFilter: {
+    category: CollisionCategories.ICE_BLOCK,
+  },
+  allowedCollisionsCategories: [
+    CollisionCategories.SHADOW_PLAYER,
+  ],
+  killCollisionCategories: [
+    CollisionCategories.WATER_PLAYER,
+  ],
+  solutionCollisionsCategories: [
+    CollisionCategories.FIRE_PLAYER,
+  ]
+}
 interface IceBlockProps extends GameObject { }
 
 export function IceBlock(props: IceBlockProps) {
-  const { size } = useConstructGameObject({ ...props, collisionFilterCategory: CollisionCategories.ICE_BLOCK });
-  return <IceBlockSVG x={size.min.x} y={size.min.y} />;
+  const [isSolved, setIsSolved] = React.useState(false);
+  const { size, physics } = useConstructGameObject({
+    ...props, gameObjectOptions: {
+      ...gameObjectOptions,
+      plugin: {
+        ...props
+      }
+    }
+  });
+  React.useEffect(() => {
+    physics.subscribeCollision((a, b) => {
+      // TODO - JC -check if collision detection is fine 
+      if (shouldSolveBlock(a, b, props.col, props.row))
+        setIsSolved(true)
+    })
+  }, [])
+  return isSolved ? null : <IceBlockSVG x={size.min.x} y={size.min.y} />;
 }

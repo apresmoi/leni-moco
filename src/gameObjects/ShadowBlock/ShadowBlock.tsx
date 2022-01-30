@@ -2,6 +2,7 @@ import React from 'react';
 import { CELL_HEIGHT, CELL_WIDTH } from "../../settings";
 import { useConstructGameObject } from '../useConstructGameObject'
 import type { GameObject } from '../../sharedTypes'
+import { isThisBlock } from '../../utils/collisions'
 import { CollisionCategories } from "../../store/Physics";
 
 
@@ -12,10 +13,35 @@ const ShadowBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({ x,
     <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill='none' />
   </svg>
 )
-
+const gameObjectOptions = {
+  isStatic: true,
+  collisionFilter: {
+    category: CollisionCategories.SHADOW_BLOCK,
+  },
+  allowedCollisionsCategories: [
+    CollisionCategories.SHADOW_PLAYER,
+  ],
+  killCollisionCategories: [],
+  solutionCollisionsCategories: []
+}
 interface ShadowBlockProps extends GameObject { }
 
 export function ShadowBlock(props: ShadowBlockProps) {
-  const { size } = useConstructGameObject({ ...props, collisionFilterCategory: CollisionCategories.SHADOW_BLOCK });
+  const { size, physics } = useConstructGameObject({
+    ...props, gameObjectOptions: {
+      ...gameObjectOptions,
+      plugin: {
+        ...props
+      }
+    }
+  });
+  React.useEffect(() => {
+    physics.subscribeCollision((a, b) => {
+      // TODO - JC -check if collision detection is fine 
+      if (isThisBlock(b, props.col, props.row)) {
+        // here be magic
+      }
+    })
+  }, [])
   return <ShadowBlockSVG x={size.min.x} y={size.min.y} />;
 }

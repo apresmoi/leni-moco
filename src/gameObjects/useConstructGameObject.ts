@@ -24,12 +24,7 @@ export const useConstructGameObject = (props: GameObject) => {
             size.center.y,
             size.width,
             size.height,
-            {
-                isStatic: true,
-                collisionFilter: {
-                    category: props.collisionFilterCategory,
-                },
-            }
+            props.gameObjectOptions
         );
         if (physics.world) World.add(physics.world, gameObject.current);
 

@@ -2,11 +2,11 @@ import * as React from "react";
 import { Engine, World, Bodies, Events, Body, Runner } from "matter-js";
 import { useGame } from "../Game";
 import { useKeyPress } from "../../hooks";
-import { Position } from "../Game/types";
 import { Vector } from "../../utils/math";
 import { CELL_SIZE, CELL_WIDTH } from "../../settings";
 import debounce from "lodash.debounce";
 import { useKeystrokeSound } from "../../assets";
+import { GameObjectBody } from '../../sharedTypes'
 
 export enum CollisionCategories {
   WALL = 1,
@@ -17,12 +17,15 @@ export enum CollisionCategories {
   PIT_HOLE = 6,
   SHADOW_BLOCK = 7,
   WIN_BLOCK = 8,
+  FIRE_PLAYER = 9,
+  WATER_PLAYER = 10,
+  SHADOW_PLAYER = 11
 }
 
 type IPhysicsStoreContext = {
   engine?: Engine;
   world?: World;
-  subscribeCollision: (callback: (bodyA: Body, bodyB: Body) => void) => void;
+  subscribeCollision: (callback: (playerBody: GameObjectBody, otherBody: GameObjectBody, direction: React.MutableRefObject<Vector>) => void) => void;
   subscribeOnFrame: (
     callback: (event: Matter.IEventTimestamped<Engine>) => void
   ) => void;
@@ -32,9 +35,9 @@ type IPhysicsStoreContext = {
 export const PhysicsStoreContext = React.createContext<IPhysicsStoreContext>({
   engine: undefined,
   world: undefined,
-  subscribeCollision: () => {},
-  subscribeOnFrame: () => {},
-  setPlayerPosition: () => {},
+  subscribeCollision: () => { },
+  subscribeOnFrame: () => { },
+  setPlayerPosition: () => { },
 });
 
 export function usePhysics() {
@@ -59,7 +62,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
     ((event: Matter.IEventTimestamped<Engine>) => void)[]
   >([]);
   const [collisionSubscribers] = React.useState<
-    ((bodyA: Body, bodyB: Body) => void)[]
+    ((playerBody: GameObjectBody, otherBody: GameObjectBody) => void)[]
   >([]);
 
   const [engine] = React.useState(
@@ -209,11 +212,11 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
         Body.setPosition(player.current, {
           x:
             Math.trunc(Math.round((player.current.position.x - 50) / 100)) *
-              100 +
+            100 +
             50,
           y:
             Math.trunc(Math.round((player.current.position.y - 50) / 100)) *
-              100 +
+            100 +
             50,
         });
       } else if (Math.abs(player.current.speed) <= 1) {
@@ -224,11 +227,11 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
         Body.setPosition(player2.current, {
           x:
             Math.trunc(Math.round((player2.current.position.x - 50) / 100)) *
-              100 +
+            100 +
             50,
           y:
             Math.trunc(Math.round((player2.current.position.y - 50) / 100)) *
-              100 +
+            100 +
             50,
         });
       } else if (Math.abs(player2.current.speed) <= 1) {
@@ -254,16 +257,19 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
       e.pairs.forEach(({ bodyA, bodyB }) => {
         collisionSubscribers.forEach((cb) => {
           if (cb) {
-            cb(bodyA, bodyB);
-            cb(bodyB, bodyA);
+            const player = (bodyA.plugin.id === 'player' ? bodyA : bodyB) as unknown as GameObjectBody;
+            const other = (bodyA.plugin.id === 'player' ? bodyB : bodyA) as unknown as GameObjectBody;
+            cb(player, other);
           }
         });
       });
     });
   }, [engine]);
 
-  const subscribeCollision = (cb: (bodyA: Body, bodyB: Body) => void) => {
-    collisionSubscribers.push(cb);
+  const subscribeCollision = (cb: (playerBody: GameObjectBody, otherBody: GameObjectBody, direction: React.MutableRefObject<Vector>) => void) => {
+    collisionSubscribers.push(
+      debounce((playerBody: GameObjectBody, otherBody: GameObjectBody) => { cb(playerBody, otherBody, direction) }, 10)
+    );
   };
 
   const subscribeOnFrame = (
@@ -272,7 +278,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
     onFrameSubscribers.push(cb);
   };
 
-  const setPlayerPosition = React.useCallback((position: Position) => {
+  const setPlayerPosition = React.useCallback((position: Vector) => {
     Body.setPosition(player.current, position);
   }, []);
 

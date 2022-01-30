@@ -12,10 +12,15 @@ const NeutralSolidBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> =
     <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill='none' />
   </svg>
 )
-
+const gameObjectOptions = {
+  isStatic: true,
+  collisionFilter: {
+    category: CollisionCategories.NEUTRAL_BLOCK,
+  },
+}
 interface NeutralSolidBlockProps extends GameObject { }
 
 export function NeutralSolidBlock(props: NeutralSolidBlockProps) {
-  const { size } = useConstructGameObject({ ...props, collisionFilterCategory: CollisionCategories.NEUTRAL_BLOCK });
+  const { size } = useConstructGameObject({ ...props, gameObjectOptions });
   return <NeutralSolidBlockSVG x={size.min.x} y={size.min.y} />;
 }

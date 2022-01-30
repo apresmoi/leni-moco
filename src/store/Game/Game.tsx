@@ -1,24 +1,25 @@
 import * as React from "react";
 import { Size } from "../../utils/math";
 import { useMusic } from "../../hooks/useMusic";
+import { StatusSetter } from '../../sharedTypes';
 
 import { Player, Level } from "./types";
 
 type IGameStoreContext = {
   player?: Player;
-  changePlayer: React.Dispatch<React.SetStateAction<Player | undefined>>;
+  changePlayer: React.Dispatch<React.SetStateAction<Player>>;
   changePlayerSide: () => void;
   level: Level;
-  setLevel: (level: Level) => void;
+  setLevel: StatusSetter<Level>;
   paused?: boolean;
-  setPaused: (paused: boolean) => void;
+  setPaused: StatusSetter<boolean>;
 };
 
 const defaultLevel = { size: new Size(0, 0, 1000, 800), identifier: 'tutorial' } as const;
+const defaultPlayer = { isSplited: false, active: "left" } as const;
 
 export const GameStoreContext = React.createContext<IGameStoreContext>({
   changePlayer: () => { },
-  changePlayerPosition: () => { },
   changePlayerSide: () => { },
   setLevel: () => { },
   level: defaultLevel,
@@ -30,10 +31,7 @@ export function useGame() {
 }
 
 export function GameStore(props: React.PropsWithChildren<{}>) {
-  const [player, setPlayer] = React.useState<Player>({
-    isSplited: false,
-    active: "left",
-  });
+  const [player, setPlayer] = React.useState<Player>(defaultPlayer);
   const [paused, setPaused] = React.useState(true);
   const [level, setLevel] = React.useState<Level>(defaultLevel);
 
