@@ -64,8 +64,7 @@ interface IceBlockProps extends GameObjectBlock {}
 
 export function IceBlock(props: IceBlockProps) {
   const [uniqueID] = React.useState<string>(uuid());
-  const [isSolved, setIsSolved] = React.useState(false);
-  const { size, physics } = useConstructGameObject({
+  const { size, isMounted } = useConstructGameObject({
     ...props,
     width: props.width * 0.5,
     height: props.height * 0.5,
@@ -81,27 +80,10 @@ export function IceBlock(props: IceBlockProps) {
     hasSensor: true,
   });
 
-  React.useEffect(() => {
-    const fn = (playerObj: GameObjectBody, otherObj: GameObjectBody) => {
-      if (
-        otherObj.plugin?.uniqueID === uniqueID &&
-        shouldSolveBlock(playerObj, otherObj)
-      ) {
-        setIsSolved(true);
-        props.onSolve?.();
-      }
-    };
-
-    physics.subscribeCollision(fn);
-    return () => {
-      physics.unsubscribeCollision(fn);
-    };
-  }, []);
-
-  return isSolved ? null : (
+  return isMounted ? (
     <IceBlockSVG
       x={size.min.x - 0.25 * props.width}
       y={size.min.y - 0.25 * props.height}
     />
-  );
+  ) : null;
 }

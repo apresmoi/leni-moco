@@ -66,8 +66,7 @@ interface FireWallBlockProps extends GameObjectBlock {}
 
 export function FireWallBlock(props: FireWallBlockProps) {
   const [uniqueID] = React.useState<string>(uuid());
-  const [isSolved, setIsSolved] = React.useState(false);
-  const { size, physics, gameObject } = useConstructGameObject({
+  const { size, isMounted } = useConstructGameObject({
     ...props,
     width: props.width * 0.5,
     height: props.height * 0.5,
@@ -83,26 +82,10 @@ export function FireWallBlock(props: FireWallBlockProps) {
     hasSensor: true,
   });
 
-  React.useEffect(() => {
-    const fn = (playerObj: GameObjectBody, otherObj: GameObjectBody) => {
-      if (
-        otherObj.plugin?.uniqueID === uniqueID &&
-        shouldSolveBlock(playerObj, otherObj)
-      ) {
-        setIsSolved(true);
-        props.onSolve?.();
-      }
-    };
-    physics.subscribeCollision(fn);
-    return () => {
-      physics.unsubscribeCollision(fn);
-    };
-  }, []);
-
-  return isSolved ? null : (
+  return isMounted ? (
     <FireWallBlockSVG
       x={size.min.x - 0.25 * props.width}
       y={size.min.y - 0.25 * props.height}
     />
-  );
+  ) : null;
 }

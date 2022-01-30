@@ -50,7 +50,6 @@ const gameObjectOptions = {
   },
   allowedCollisionsCategories: [CollisionCategories.SHADOW_PLAYER],
   killCollisionCategories: [],
-  solutionCollisionsCategories: [],
 };
 interface ShadowBlockProps extends GameObject {}
 
