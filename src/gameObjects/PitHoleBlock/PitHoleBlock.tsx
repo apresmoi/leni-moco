@@ -12,10 +12,15 @@ const PitHoleBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({ x
     <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill='none' />
   </svg>
 )
-
+const gameObjectOptions = {
+  isStatic: true,
+  collisionFilter: {
+    category: CollisionCategories.PIT_HOLE,
+  },
+}
 interface PitHoleBlockProps extends GameObject { }
 
 export function PitHoleBlock(props: PitHoleBlockProps) {
-  const { size } = useConstructGameObject({ ...props, collisionFilterCategory: CollisionCategories.PIT_HOLE });
+  const { size } = useConstructGameObject({ ...props, gameObjectOptions });
   return <PitHoleBlockSVG x={size.min.x} y={size.min.y} />;
 }

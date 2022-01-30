@@ -2,6 +2,7 @@ import React from 'react';
 import { CELL_HEIGHT, CELL_WIDTH } from "../../settings";
 import { useConstructGameObject } from '../useConstructGameObject'
 import type { GameObject } from '../../sharedTypes'
+import { shouldSolveBlock, isThisBlock } from '../../utils/collisions'
 import { CollisionCategories } from "../../store/Physics";
 
 
@@ -13,9 +14,39 @@ const FireWallBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({ 
   </svg>
 )
 
+const gameObjectOptions = {
+  isStatic: true,
+  collisionFilter: {
+    category: CollisionCategories.FIRE_BLOCK,
+  },
+  allowedCollisionsCategories: [
+    CollisionCategories.FIRE_PLAYER,
+  ],
+  killCollisionCategories: [
+    CollisionCategories.SHADOW_PLAYER,
+  ],
+  solutionCollisionsCategories: [
+    CollisionCategories.WATER_PLAYER,
+  ]
+}
 interface FireWallBlockProps extends GameObject { }
 
 export function FireWallBlock(props: FireWallBlockProps) {
-  const { size } = useConstructGameObject({ ...props, collisionFilterCategory: CollisionCategories.FIRE_BLOCK });
-  return <FireWallBlockSVG x={size.min.x} y={size.min.y} />;
+  const [isSolved, setIsSolved] = React.useState(false);
+  const { size, physics } = useConstructGameObject({
+    ...props, gameObjectOptions: {
+      ...gameObjectOptions,
+      plugin: {
+        ...props
+      }
+    }
+  });
+  React.useEffect(() => {
+    physics.subscribeCollision((a, b) => {
+      // TODO - JC -check if collision detection is fine 
+      if (shouldSolveBlock(a, b, props.col, props.row))
+        setIsSolved(true)
+    })
+  }, [])
+  return isSolved ? null : <FireWallBlockSVG x={size.min.x} y={size.min.y} />;
 }

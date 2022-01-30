@@ -8,7 +8,6 @@ import { Player, Player2 } from "../../components/Player";
 import { useDisableGoBack } from "../../hooks";
 import { GameStore, PhysicsStore, useGame } from "../../store";
 import { Tutorial, FirstLevel, HardLevel } from '../../levels';
-// import { HardLevel } from '../../levels/HardLevel';
 
 
 const LevelSwitcher = () => {
