@@ -1,17 +1,51 @@
 .home {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.header {
+  position: absolute;
+  top: 0;
+  left: 30px;
+}
+
+.home-side {
+  width: 20%;
+  height: auto;
+}
+
+.image-wall-left {
+  width: 60px;
+  margin-top: 130px;
+  margin-left: 130px;
+}
+
+.image-wall-right {
+  width: 180px;
+  margin-top: 130px;
+}
+
+.home-center {
   display: flex;
   flex-direction: column;
   align-items: center;
   align-self: center;
-  width: 100%;
-  height: 100%;
   justify-content: space-evenly;
+  height: 100%;
+  width: 60%;
 }
 
 .green-button {
-  width: 405px;
-  height: 121px;
+  width: 300px;
+  height: auto;
   background-color: transparent;
   border: none;
   cursor: pointer;
+}
+
+.image-logo {
+  width: 550px;
+  height: auto;
 }
