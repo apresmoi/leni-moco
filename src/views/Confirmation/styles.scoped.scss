@@ -1,0 +1,30 @@
+.confirmation {
+  width: 100%;
+  height: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 150px 0;
+
+  .label {
+    color: #FFFFFF;
+    font-size: 36px;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 0 150px;
+
+    .yes {
+
+    }
+
+    .no {
+
+    }
+  }
+
+}
