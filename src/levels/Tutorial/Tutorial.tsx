@@ -33,21 +33,25 @@ export const Tutorial = React.memo(() => {
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 0, row: 0 })}
+        {...{ col: 0, row: 0 }}
         type="DOWN_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 1, row: 0 })}
+        {...{ col: 1, row: 0 }}
         type="DOWN_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 3, row: 0 })}
+        {...{ col: 3, row: 0 }}
         type="DOWN_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 4, row: 0 })}
+        {...{ col: 4, row: 0 }}
         type="DOWN_BUMP"
       />
 
@@ -55,26 +59,31 @@ export const Tutorial = React.memo(() => {
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: -1, row: 1 })}
+        {...{ col: -1, row: 1 }}
         type="RIGHT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: -1, row: 2 })}
+        {...{ col: -1, row: 2 }}
         type="RIGHT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: -1, row: 3 })}
+        {...{ col: -1, row: 3 }}
         type="RIGHT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: -1, row: 4 })}
+        {...{ col: -1, row: 4 }}
         type="RIGHT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: -1, row: 5 })}
+        {...{ col: -1, row: 5 }}
         type="RIGHT_BUMP"
       />
 
@@ -82,26 +91,31 @@ export const Tutorial = React.memo(() => {
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col:5, row: 1 })}
+        {...{ col:5, row: 1 }}
         type="LEFT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col:5, row: 2 })}
+        {...{ col:5, row: 2 }}
         type="LEFT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col:5, row: 3 })}
+        {...{ col:5, row: 3 }}
         type="LEFT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col:5, row: 4 })}
+        {...{ col:5, row: 4 }}
         type="LEFT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col:5, row: 5 })}
+        {...{ col:5, row: 5 }}
         type="LEFT_BUMP"
       />
 
@@ -109,26 +123,31 @@ export const Tutorial = React.memo(() => {
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 0, row: 6 })}
+        {...{ col: 0, row: 6 }}
         type="TOP_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 1, row: 6 })}
+        {...{ col: 1, row: 6 }}
         type="TOP_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 2, row: 6 })}
+        {...{ col: 2, row: 6 }}
         type="TOP_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 3, row: 6 })}
+        {...{ col: 3, row: 6 }}
         type="TOP_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 4, row: 6 })}
+        {...{ col: 4, row: 6 }}
         type="TOP_BUMP"
       />
 
@@ -137,35 +156,42 @@ export const Tutorial = React.memo(() => {
       <NeutralSolidBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 1, row: 2 })}
+        {...{ col: 1, row: 2 }}
       />
       <NeutralSolidBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 2, row: 2 })}
+        {...{ col: 2, row: 2 }}
       />
       <NeutralSolidBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 3, row: 2 })}
+        {...{ col: 3, row: 2 }}
       />
 
       {/* ICE BLOCKS */}
       <IceBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 4, row: 2 })}
+        {...{ col: 4, row: 2 }}
       />
       {/* PITHOLE BLOCKS */}
       {/* <PitHoleBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 0, row: 5 })}
+        {...{ col: 0, row: 5 }}
       /> */}
       {/* FIRE BLOCKS */}
       <FireWallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 0, row: 2 })}
+        {...{ col: 0, row: 2 }}
       />
       {/* SHADOW BLOCKS */}
       <ShadowBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 4, row: 4 })}
+        {...{ col: 4, row: 4 }}
       />
     </>
   );

@@ -34,142 +34,170 @@ export const HardLevel = React.memo(() => {
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 0, row: 0 })}
+        {...{ col: 0, row: 0 }}
         type="DOWN_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 1, row: 0 })}
+        {...{ col: 1, row: 0 }}
         type="DOWN_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 2, row: 0 })}
+        {...{ col: 2, row: 0 }}
         type="DOWN_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 4, row: 0 })}
+        {...{ col: 4, row: 0 }}
         type="DOWN_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 5, row: 0 })}
+        {...{ col: 5, row: 0 }}
         type="DOWN_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 6, row: 0 })}
+        {...{ col: 6, row: 0 }}
         type="DOWN_BUMP"
       />
 
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: -1, row: 1 })}
+        {...{ col: -1, row: 1 }}
         type="RIGHT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: -1, row: 2 })}
+        {...{ col: -1, row: 2 }}
         type="RIGHT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: -1, row: 3 })}
+        {...{ col: -1, row: 3 }}
         type="RIGHT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: -1, row: 4 })}
+        {...{ col: -1, row: 4 }}
         type="RIGHT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: -1, row: 5 })}
+        {...{ col: -1, row: 5 }}
         type="RIGHT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: -1, row: 6 })}
+        {...{ col: -1, row: 6 }}
         type="RIGHT_BUMP"
       />
 
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 7, row: 1 })}
+        {...{ col: 7, row: 1 }}
         type="LEFT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 7, row: 2 })}
+        {...{ col: 7, row: 2 }}
         type="LEFT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 7, row: 3 })}
+        {...{ col: 7, row: 3 }}
         type="LEFT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 7, row: 4 })}
+        {...{ col: 7, row: 4 }}
         type="LEFT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 7, row: 5 })}
+        {...{ col: 7, row: 5 }}
         type="LEFT_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 7, row: 6 })}
+        {...{ col: 7, row: 6 }}
         type="LEFT_BUMP"
       />
 
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 0, row: 7 })}
+        {...{ col: 0, row: 7 }}
         type="TOP_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 1, row: 7 })}
+        {...{ col: 1, row: 7 }}
         type="TOP_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 2, row: 7 })}
+        {...{ col: 2, row: 7 }}
         type="TOP_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 3, row: 7 })}
+        {...{ col: 3, row: 7 }}
         type="TOP_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 4, row: 7 })}
+        {...{ col: 4, row: 7 }}
         type="TOP_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 5, row: 7 })}
+        {...{ col: 5, row: 7 }}
         type="TOP_BUMP"
       />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 6, row: 7 })}
+        {...{ col: 6, row: 7 }}
         type="TOP_BUMP"
       />
       <IceBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 4, row: 4 })}
+        {...{ col: 4, row: 4 }}
       />
       <PitHoleBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 4, row: 3 })}
+        {...{ col: 4, row: 3 }}
       />
       <PitHoleBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 6, row: 3 })}
+        {...{ col: 6, row: 3 }}
       />
     </>
   );
