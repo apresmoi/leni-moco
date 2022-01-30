@@ -8,6 +8,7 @@ interface SlimeProps {
   name?: string;
   idx: string;
   isBlocked?: boolean;
+  isSelected?: boolean;
   onClick: (color: string) => void;
 }
 
@@ -24,11 +25,15 @@ export function Slime(props: SlimeProps) {
         <rect
           ref={ref}
           x={0}
-          y={0}
+          y={10}
           width={90}
           height={90}
           fill={`url(#${props.idx}_frame02)`}
           opacity={props.isBlocked ? "0.4": "1"}
+          stroke={props.isSelected ? "#43D608": ""}
+          rx="40"
+          ry="60"
+          strokeWidth={4}
         />
       </g>
     </g>
