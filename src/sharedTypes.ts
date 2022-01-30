@@ -21,6 +21,8 @@ export interface GameObject {
   width: number;
   height: number;
   gameObjectOptions?: GameObjectBody;
+
+  hasSensor?: boolean;
 }
 
 export interface GameObjectBlock extends GameObject {

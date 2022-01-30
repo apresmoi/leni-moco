@@ -5,10 +5,13 @@ import { MovesLeft } from "./movesLeft";
 import { Options } from "./options";
 import { InstructionsModal } from "../../components/InstructionsModal";
 import "./styles.scoped.scss";
+import { useHistory } from "react-router";
 
 export function UI() {
   const game = useGame();
+  const history = useHistory();
   const [openInstructions, setOpenInstructions] = useState(false);
+  const [openCloseModal, setOpenCloseModal] = useState(false);
 
   function handleOpenInventory(){
     game.setShowInventory(true)
@@ -27,7 +30,15 @@ export function UI() {
   }
 
   function onClose(){
-    
+    setOpenCloseModal(true);
+  }
+
+  function onClickYes() {
+    history.push('/');
+  }
+
+  function onClickNo() {
+    setOpenCloseModal(false);
   }
 
   return <g transform={`translate(${0}, ${0})`}>
@@ -42,5 +53,8 @@ export function UI() {
     {openInstructions && (
       <InstructionsModal onInstructions={onInstructions} />
     )}
+    {/* {openCloseModal && (
+      <Confirmation label="Are you sure you want to exit?" onClickYes={onClickYes} onClickNo={onClickNo} />
+    )} */}
   </g>;
 }

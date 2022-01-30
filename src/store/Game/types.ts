@@ -3,6 +3,8 @@ import { Size } from "../../utils/math";
 export interface Player {
   isSplited: boolean;
   active: "left" | "right";
+  leftKilled: boolean;
+  rightKilled: boolean;
 }
 
 export interface Level {
@@ -11,7 +13,9 @@ export interface Level {
   nextLevel: "first" | "hard" | "end";
 }
 
+export type Element = "fire" | "water" | "darkness";
+
 export interface Inventory {
-  leftSlime: "fire" | "water" | "darkness";
-  rightSlime: "fire" | "water" | "darkness";
+  leftSlime: Element;
+  rightSlime: Element;
 }

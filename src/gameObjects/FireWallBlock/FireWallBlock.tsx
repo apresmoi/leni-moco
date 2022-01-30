@@ -1,7 +1,11 @@
 import React from "react";
 import { CELL_HEIGHT, CELL_WIDTH } from "../../settings";
 import { useConstructGameObject } from "../useConstructGameObject";
-import type { GameObject, GameObjectBlock, GameObjectBody } from "../../sharedTypes";
+import type {
+  GameObject,
+  GameObjectBlock,
+  GameObjectBody,
+} from "../../sharedTypes";
 import { shouldSolveBlock } from "../../utils/collisions";
 import { CollisionCategories } from "../../store/Physics";
 import { v4 as uuid } from "uuid";
@@ -44,20 +48,26 @@ const FireWallBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
 
 const gameObjectOptions = {
   isStatic: true,
-  isSensor: true,
   collisionFilter: {
     category: CollisionCategories.FIRE_BLOCK,
+    mask: CollisionCategories.PLAYER | CollisionCategories.SHADOW_PLAYER,
   },
-  allowedCollisionsCategories: [CollisionCategories.FIRE_PLAYER],
-  killCollisionCategories: [CollisionCategories.SHADOW_PLAYER],
-  solutionCollisionsCategories: [CollisionCategories.WATER_PLAYER],
+  allowedCollisionsCategories: [],
+  killCollisionCategories: [
+    CollisionCategories.PLAYER,
+    CollisionCategories.SHADOW_PLAYER,
+  ],
+  solutionCollisionsCategories: [
+    CollisionCategories.WATER_PLAYER,
+    CollisionCategories.FIRE_PLAYER,
+  ],
 };
 interface FireWallBlockProps extends GameObjectBlock {}
 
 export function FireWallBlock(props: FireWallBlockProps) {
   const [uniqueID] = React.useState<string>(uuid());
   const [isSolved, setIsSolved] = React.useState(false);
-  const { size, physics } = useConstructGameObject({
+  const { size, physics, gameObject } = useConstructGameObject({
     ...props,
     width: props.width * 0.5,
     height: props.height * 0.5,
@@ -70,21 +80,25 @@ export function FireWallBlock(props: FireWallBlockProps) {
         uniqueID,
       },
     },
+    hasSensor: true,
   });
 
   React.useEffect(() => {
-    const fn = (a: GameObjectBody, b: GameObjectBody) => {
-      if (a.plugin?.uniqueID === uniqueID || b.plugin?.uniqueID === uniqueID)
-        if (shouldSolveBlock(a, b) || shouldSolveBlock(b, a)) {
-          setIsSolved(true);
-          props.onSolve?.();
-        }
+    const fn = (playerObj: GameObjectBody, otherObj: GameObjectBody) => {
+      if (
+        otherObj.plugin?.uniqueID === uniqueID &&
+        shouldSolveBlock(playerObj, otherObj)
+      ) {
+        setIsSolved(true);
+        props.onSolve?.();
+      }
     };
     physics.subscribeCollision(fn);
     return () => {
       physics.unsubscribeCollision(fn);
     };
   }, []);
+
   return isSolved ? null : (
     <FireWallBlockSVG
       x={size.min.x - 0.25 * props.width}

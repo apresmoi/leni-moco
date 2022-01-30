@@ -3,12 +3,13 @@ import { Engine, World, Bodies, Events, Body, Runner } from "matter-js";
 import { useGame } from "../Game";
 import { useKeyPress } from "../../hooks";
 import { Vector } from "../../utils/math";
-import { CELL_SIZE, CELL_WIDTH } from "../../settings";
+import { CELL_HEIGHT, CELL_SIZE, CELL_WIDTH } from "../../settings";
 import debounce from "lodash.debounce";
 import { GameObjectBody } from "../../sharedTypes";
 import { useSound } from "../../assets";
 import { sounds } from "../../assets/sounds";
 import { Element } from "../Game/types";
+import { shouldKillPlayer } from "../../utils/collisions";
 
 export enum CollisionCategories {
   WALL = 1,
@@ -23,6 +24,14 @@ export enum CollisionCategories {
   WATER_PLAYER = 512,
   SHADOW_PLAYER = 1024,
 }
+
+const defaultPlayerMask =
+  CollisionCategories.ICE_BLOCK |
+  CollisionCategories.FIRE_BLOCK |
+  CollisionCategories.SHADOW_BLOCK |
+  CollisionCategories.WALL |
+  CollisionCategories.NEUTRAL_BLOCK |
+  CollisionCategories.WIN_BLOCK;
 
 type IPhysicsStoreContext = {
   engine?: Engine;
@@ -157,15 +166,16 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
         invert.current === -1 ? player.current : player2.current;
 
       if (splitted.current) {
-        const d = Math.abs(secondary.position.x - primary.position.x);
+        const dx = Math.abs(secondary.position.x - primary.position.x);
+        const dy = Math.abs(secondary.position.y - primary.position.y);
         const sign = Math.sign(secondary.position.x - primary.position.x);
 
-        if (d > CELL_WIDTH || sign === invert.current)
+        if (dy > 0 || dx > CELL_WIDTH || sign === invert.current)
           Body.applyForce(primary, primary.position, {
             x: direction.current.x * 75,
             y: direction.current.y * 75,
           });
-        if (d > CELL_WIDTH)
+        if (dy > 0 || dx > CELL_WIDTH)
           Body.applyForce(secondary, secondary.position, {
             x: -direction.current.x * 75,
             y: direction.current.y * 75,
@@ -230,30 +240,47 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
         }
       }
 
-      // if (!splitted.current) {
-      //   player.current.collisionFilter.category = CollisionCategories.PLAYER;
-      //   player2.current.collisionFilter.category = CollisionCategories.PLAYER;
-      // } else {
-      //   const applyElement = (p: Body, element: Element) => {
-      //     switch (element) {
-      //       case "fire":
-      //         p.collisionFilter.category = CollisionCategories.FIRE_PLAYER;
-      //         break;
-      //       case "water":
-      //         p.collisionFilter.category = CollisionCategories.WATER_PLAYER;
-      //         // p.collisionFilter.category = CollisionCategories.ICE_BLOCK;
-      //         break;
-      //       case "darkness":
-      //         p.collisionFilter.category = CollisionCategories.SHADOW_PLAYER;
-      //         break;
-      //       default:
-      //         break;
-      //     }
-      //   };
+      if (!splitted.current) {
+        player.current.collisionFilter.category = CollisionCategories.PLAYER;
+        player2.current.collisionFilter.category = CollisionCategories.PLAYER;
 
-      //   applyElement(player.current, leftElement.current);
-      //   applyElement(player2.current, rightElement.current);
-      // }
+        player.current.collisionFilter.mask = defaultPlayerMask;
+        player2.current.collisionFilter.mask = defaultPlayerMask;
+      } else {
+        const applyElement = (p: Body, element: Element) => {
+          switch (element) {
+            case "fire":
+              p.collisionFilter.category = CollisionCategories.FIRE_PLAYER;
+              p.collisionFilter.mask =
+                CollisionCategories.WALL |
+                CollisionCategories.NEUTRAL_BLOCK |
+                CollisionCategories.SHADOW_BLOCK |
+                CollisionCategories.ICE_BLOCK;
+              break;
+            case "water":
+              p.collisionFilter.category = CollisionCategories.WATER_PLAYER;
+              p.collisionFilter.mask =
+                CollisionCategories.WALL |
+                CollisionCategories.NEUTRAL_BLOCK |
+                CollisionCategories.SHADOW_BLOCK |
+                CollisionCategories.ICE_BLOCK;
+              break;
+            case "darkness":
+              p.collisionFilter.category = CollisionCategories.SHADOW_PLAYER;
+              p.collisionFilter.mask =
+                CollisionCategories.WALL |
+                CollisionCategories.NEUTRAL_BLOCK |
+                CollisionCategories.ICE_BLOCK |
+                CollisionCategories.FIRE_BLOCK;
+              break;
+            default:
+              break;
+          }
+        };
+
+        applyElement(player.current, leftElement.current);
+        applyElement(player2.current, rightElement.current);
+      }
 
       if (player.current.speed === 0) {
         Body.setPosition(player.current, {
@@ -287,8 +314,10 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
       if (player2.current.speed === 0 && player.current.speed === 0) {
         if (
-          player2.current.position.x - player.current.position.x <
-          CELL_WIDTH / 2
+          Math.abs(player2.current.position.x - player.current.position.x) <
+            CELL_WIDTH / 2 &&
+          Math.abs(player2.current.position.y - player.current.position.y) <
+            CELL_HEIGHT / 2
         )
           game.changePlayer((player) =>
             player ? { ...player, isSplited: false, active: "left" } : player
@@ -302,14 +331,20 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
     Events.on(engine, "collisionStart", (e) => {
       e.pairs.forEach(({ bodyA, bodyB }) => {
+        const player = (["player", "player2"].includes(bodyA.plugin.id)
+          ? bodyA
+          : bodyB) as unknown as GameObjectBody;
+        const other = (["player", "player2"].includes(bodyA.plugin.id)
+          ? bodyB
+          : bodyA) as unknown as GameObjectBody;
+
+        if (shouldKillPlayer(player, other)) {
+          if (player.plugin.id === "player") game.killLeftPlayer();
+          if (player.plugin.id === "player2") game.killRightPlayer();
+        }
+
         collisionSubscribers.current.forEach((cb) => {
           if (cb) {
-            const player = (bodyA.plugin.id === "player"
-              ? bodyA
-              : bodyB) as unknown as GameObjectBody;
-            const other = (bodyA.plugin.id === "player"
-              ? bodyB
-              : bodyA) as unknown as GameObjectBody;
             cb(player, other);
           }
         });

@@ -48,12 +48,16 @@ const IceBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
 
 const gameObjectOptions = {
   isStatic: true,
-  isSensor: true,
+  // isSensor: true,
   collisionFilter: {
     category: CollisionCategories.ICE_BLOCK,
+    mask: CollisionCategories.PLAYER | CollisionCategories.WATER_PLAYER,
   },
   allowedCollisionsCategories: [CollisionCategories.SHADOW_PLAYER],
-  killCollisionCategories: [CollisionCategories.WATER_PLAYER],
+  killCollisionCategories: [
+    CollisionCategories.PLAYER,
+    CollisionCategories.WATER_PLAYER,
+  ],
   solutionCollisionsCategories: [CollisionCategories.FIRE_PLAYER],
 };
 interface IceBlockProps extends GameObjectBlock {}
@@ -71,18 +75,21 @@ export function IceBlock(props: IceBlockProps) {
       ...gameObjectOptions,
       plugin: {
         ...props,
-        uniqueID
+        uniqueID,
       },
     },
+    hasSensor: true,
   });
 
   React.useEffect(() => {
-    const fn = (a: GameObjectBody, b: GameObjectBody) => {
-      if (a.plugin?.uniqueID === uniqueID || b.plugin?.uniqueID === uniqueID)
-        if (shouldSolveBlock(a, b) || shouldSolveBlock(b, a)) {
-          setIsSolved(true);
-          props.onSolve?.();
-        }
+    const fn = (playerObj: GameObjectBody, otherObj: GameObjectBody) => {
+      if (
+        otherObj.plugin?.uniqueID === uniqueID &&
+        shouldSolveBlock(playerObj, otherObj)
+      ) {
+        setIsSolved(true);
+        props.onSolve?.();
+      }
     };
 
     physics.subscribeCollision(fn);
