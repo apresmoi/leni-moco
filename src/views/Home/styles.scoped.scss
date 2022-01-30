@@ -54,3 +54,12 @@
   width: 550px;
   height: auto;
 }
+
+.instructions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+  padding: 40px 0;
+}

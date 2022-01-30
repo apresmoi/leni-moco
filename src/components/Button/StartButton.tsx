@@ -6,6 +6,6 @@ import { Button } from "./Button";
 export function StartButton() {
   const history = useHistory();
   return (
-    <Button label="Start Game" onClick={() => history.push('/play')} />
+    <Button label="Start Game" onClick={() => history.push('/instructions')} />
   );
 }
