@@ -8,6 +8,7 @@ import { Confirmation } from "../../components/Confirmation";
 import { sounds } from "../../assets/sounds";
 import "./styles.scoped.scss";
 import { useGameCanvas } from "../GameCanvas";
+import { useHistory } from "react-router-dom";
 
 export function UI() {
   const size = useGameCanvas();
