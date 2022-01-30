@@ -7,7 +7,7 @@ interface SlimeProps {
   color: string;
   name?: string;
   idx: string;
-  isBlocked: boolean;
+  isBlocked?: boolean;
   onClick: (color: string) => void;
 }
 

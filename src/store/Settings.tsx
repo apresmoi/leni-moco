@@ -4,13 +4,13 @@ import { useMusic } from "../hooks/useMusic";
 type ISettingsContext = {
   sound: boolean;
   toggleSound: () => void;
-  music: {[k: musicKey]: any};
+  music: { [k: string]: any };
 };
 
 export const SettingsStoreContext = React.createContext<ISettingsContext>({
   sound: true,
   toggleSound: () => null,
-  music: {}
+  music: {},
 });
 
 export function useSettings() {
@@ -28,17 +28,17 @@ export function SettingsStore(props: React.PropsWithChildren<{}>) {
     });
   }, []);
 
-  const { menuMusic,  creditsMusic, stopAll} = useMusic();
+  const { menuMusic, creditsMusic, stopAll } = useMusic();
 
   const contextValue = React.useMemo(() => {
     return {
       sound,
       toggleSound,
-	  music: {
-		  menuMusic,
-      creditsMusic,
-      stopAll
-	  }
+      music: {
+        menuMusic,
+        creditsMusic,
+        stopAll,
+      },
     };
   }, [sound, toggleSound, menuMusic, stopAll]);
 
