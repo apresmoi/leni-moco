@@ -4,8 +4,8 @@ import type { GameObject } from "../../sharedTypes";
 import { CollisionCategories } from "../../store/Physics";
 import { CELL_HEIGHT, CELL_WIDTH } from "../../settings";
 
-import wall01 from "./wall_01.svg";
-import wall02 from "./wall_02.svg";
+import bottomWall from "./wall_01.svg";
+import horizontalWall from "./wall_02.svg";
 import wall03 from "./wall_03.svg";
 
 const LeftBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
@@ -21,7 +21,7 @@ const LeftBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
         height={CELL_HEIGHT}
       >
         <image
-          href={wall01}
+          href={horizontalWall}
           x="0"
           y="0"
           width={CELL_WIDTH}
@@ -30,7 +30,13 @@ const LeftBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
       </pattern>
     </defs>
     <line strokeWidth="50" y2="100%" x2="0" y1="0" x1="0" stroke="#000" />
-    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="url(#wall01)" />
+    <rect
+      x={0}
+      y={0}
+      width={CELL_WIDTH}
+      height={CELL_HEIGHT}
+      fill="url(#wall01)"
+    />
   </svg>
 );
 const TopBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
@@ -46,7 +52,7 @@ const TopBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
         height={CELL_HEIGHT}
       >
         <image
-          href={wall02}
+          href={bottomWall}
           x="0"
           y="0"
           width={CELL_WIDTH}
@@ -55,7 +61,13 @@ const TopBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
       </pattern>
     </defs>
     <line strokeWidth="50" y2="0" x2="100%" y1="0" x1="0" stroke="#000" />
-    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="url(#wall02)" />
+    <rect
+      x={0}
+      y={0}
+      width={CELL_WIDTH}
+      height={CELL_HEIGHT}
+      fill="url(#wall02)"
+    />
   </svg>
 );
 
@@ -72,7 +84,7 @@ const RightBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
         height={CELL_HEIGHT}
       >
         <image
-          href={wall03}
+          href={horizontalWall}
           x="0"
           y="0"
           width={CELL_WIDTH}
@@ -81,7 +93,13 @@ const RightBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
       </pattern>
     </defs>
     <line strokeWidth="50" y2="100%" x2="100%" y1="0" x1="100%" stroke="#000" />
-    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="url(#wall03)" />
+    <rect
+      x={0}
+      y={0}
+      width={CELL_WIDTH}
+      height={CELL_HEIGHT}
+      fill="url(#wall03)"
+    />
   </svg>
 );
 const BottomBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
@@ -97,7 +115,7 @@ const BottomBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
         height={CELL_HEIGHT}
       >
         <image
-          href={wall03}
+          href={bottomWall}
           x="0"
           y="0"
           width={CELL_WIDTH}
@@ -106,7 +124,13 @@ const BottomBump: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
       </pattern>
     </defs>
     <line strokeWidth="50" y2="100%" x2="100%" y1="100%" x1="0" stroke="#000" />
-    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="url(#wall04)" />
+    <rect
+      x={0}
+      y={0}
+      width={CELL_WIDTH}
+      height={CELL_HEIGHT}
+      fill="url(#wall04)"
+    />
   </svg>
 );
 

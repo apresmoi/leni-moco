@@ -57,10 +57,10 @@ export function IceBlock(props: IceBlockProps) {
   const [isSolved, setIsSolved] = React.useState(false);
   const { size, physics } = useConstructGameObject({
     ...props,
-    width: props.width * 0.8,
-    height: props.height * 0.8,
-    x: props.x + props.width * 0.1,
-    y: props.y + props.height * 0.1,
+    width: props.width * 0.5,
+    height: props.height * 0.5,
+    x: props.x + props.width * 0.25,
+    y: props.y + props.height * 0.25,
     gameObjectOptions: {
       ...gameObjectOptions,
       plugin: {
@@ -79,8 +79,8 @@ export function IceBlock(props: IceBlockProps) {
   }, []);
   return isSolved ? null : (
     <IceBlockSVG
-      x={size.min.x - 0.1 * props.width}
-      y={size.min.y - 0.1 * props.height}
+      x={size.min.x - 0.25 * props.width}
+      y={size.min.y - 0.25 * props.height}
     />
   );
 }
