@@ -22,7 +22,7 @@ import redFrame03 from "./red/03.svg";
 import redFrame04 from "./red/04.svg";
 import redFrame05 from "./red/05.svg";
 
-const shadow = [
+const darkness = [
   blackFrame01,
   blackFrame02,
   blackFrame03,
@@ -30,7 +30,7 @@ const shadow = [
   blackFrame05,
 ];
 const water = [blueFrame01, blueFrame02, blueFrame03, blueFrame04, blueFrame05];
-const red = [redFrame01, redFrame02, redFrame03, redFrame04, redFrame05];
+const fire = [redFrame01, redFrame02, redFrame03, redFrame04, redFrame05];
 const basic = [
   greenFrame01,
   greenFrame02,
@@ -39,4 +39,4 @@ const basic = [
   greenFrame05,
 ];
 
-export { shadow, water, basic, red };
+export { darkness, water, basic, fire };

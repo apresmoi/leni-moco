@@ -7,7 +7,7 @@ import { mocoSize, sizes } from "./utils";
 import * as sprites from "./sprites";
 
 export function Player2(props: React.PropsWithChildren<{}>) {
-  const { player } = useGame();
+  const { player, inventory } = useGame();
   const ref = React.useRef<SVGRectElement>(null);
   const playerRef = React.useRef<SVGGElement>(null);
   const [idle, setIdle] = React.useState(true);
@@ -32,7 +32,10 @@ export function Player2(props: React.PropsWithChildren<{}>) {
     const interval = setInterval(
       () => {
         if (i >= animation.length) i = 0;
-        ref.current?.setAttribute("fill", `url(#secondary_frame0${animation[i]})`);
+        ref.current?.setAttribute(
+          "fill",
+          `url(#secondary_frame0${animation[i]})`
+        );
         i++;
       },
       idle ? 250 : 150
@@ -53,6 +56,8 @@ export function Player2(props: React.PropsWithChildren<{}>) {
         `translate(${player?.position.x - 50}, ${player?.position.y - 50})`
       );
   });
+
+  const sprite = sprites[player?.isSplited ? inventory?.rightSlime : "basic"];
 
   if (!player || !player.isSplited) return null;
 
@@ -78,7 +83,7 @@ export function Player2(props: React.PropsWithChildren<{}>) {
             height={widthHeight}
           >
             <image
-              href={sprites.basic[0]}
+              href={sprite[0]}
               x="0"
               y="0"
               width={widthHeight}
@@ -92,7 +97,7 @@ export function Player2(props: React.PropsWithChildren<{}>) {
             height={widthHeight}
           >
             <image
-              href={sprites.basic[1]}
+              href={sprite[1]}
               x="0"
               y="0"
               width={widthHeight}
@@ -106,7 +111,7 @@ export function Player2(props: React.PropsWithChildren<{}>) {
             height={widthHeight}
           >
             <image
-              href={sprites.basic[2]}
+              href={sprite[2]}
               x="0"
               y="0"
               width={widthHeight}
@@ -120,7 +125,7 @@ export function Player2(props: React.PropsWithChildren<{}>) {
             height={widthHeight}
           >
             <image
-              href={sprites.basic[3]}
+              href={sprite[3]}
               x="0"
               y="0"
               width={widthHeight}
@@ -134,7 +139,7 @@ export function Player2(props: React.PropsWithChildren<{}>) {
             height={widthHeight}
           >
             <image
-              href={sprites.basic[4]}
+              href={sprite[4]}
               x="0"
               y="0"
               width={widthHeight}

@@ -18,14 +18,13 @@ type IGameStoreContext = {
   inventory?: Inventory;
   showInventory?: boolean;
   setShowInventory: (showInventory: boolean) => void;
-  changeInventory: StatusSetter<Inventory>
+  changeInventory: StatusSetter<Inventory>;
 };
 
 const defaultLevel = {
   size: new Size(0, 0, 1000, 800),
   identifier: "tutorial",
   nextLevel: "end",
-  conditions: {},
 } as const;
 const defaultPlayer = {
   isSplited: false,
