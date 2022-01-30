@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useGame } from "../../store";
 import { OpenInventoryButton } from "./openInventoryButton";
+import { MovesLeft } from "./movesLeft";
 import "./styles.scoped.scss";
 
 export function UI() {
@@ -10,7 +11,8 @@ export function UI() {
     game.setShowInventory(true)
   }
 
-  return <g>
-    <OpenInventoryButton x="380" y="50" onClick={handleOpenInventory}/>
+  return <g transform={`translate(${0}, ${0})`}>
+    <MovesLeft moves={2}/>
+    <OpenInventoryButton onClick={handleOpenInventory}/>
   </g>;
 }
