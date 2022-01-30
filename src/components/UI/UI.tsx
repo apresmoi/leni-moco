@@ -7,9 +7,11 @@ import { InstructionsModal } from "../../components/InstructionsModal";
 import { Confirmation } from "../../components/Confirmation";
 import { sounds } from "../../assets/sounds";
 import "./styles.scoped.scss";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router";
+import { useGameCanvas } from "../GameCanvas";
 
 export function UI() {
+  const size = useGameCanvas();
   const game = useGame();
   const history = useHistory();
   const [openInstructions, setOpenInstructions] = React.useState(false);
@@ -20,18 +22,18 @@ export function UI() {
   React.useEffect(() => {
     const volume = toggleSound ? 1 : 0;
 
-    Object.values(sounds).forEach(sound => sound.volume = volume);
+    Object.values(sounds).forEach((sound) => (sound.volume = volume));
   }, [toggleSound]);
 
   function handleOpenInventory() {
     game.setShowInventory(true);
   }
 
-  function onReset(){
+  function onReset() {
     window.location.reload();
   }
 
-  function onSound(){
+  function onSound() {
     setToggleSound(!toggleSound);
   }
 
@@ -63,7 +65,7 @@ export function UI() {
   }, [youAreDead]);
 
   return (
-    <g transform={`translate(${0}, ${0})`}>
+    <g>
       <MovesLeft moves={2} />
       <OpenInventoryButton onClick={handleOpenInventory} />
       <Options
@@ -82,6 +84,7 @@ export function UI() {
           onClickNo={onClickNo}
         />
       )}
+
       {showDeathModal && (
         <Confirmation
           label="You are dead, do you want to play again?"
