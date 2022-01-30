@@ -72,18 +72,21 @@ export function IceBlock(props: IceBlockProps) {
       ...gameObjectOptions,
       plugin: {
         ...props,
-        uniqueID
+        uniqueID,
       },
     },
+    hasSensor: true,
   });
 
   React.useEffect(() => {
-    const fn = (a: GameObjectBody, b: GameObjectBody) => {
-      if (a.plugin?.uniqueID === uniqueID || b.plugin?.uniqueID === uniqueID)
-        if (shouldSolveBlock(a, b) || shouldSolveBlock(b, a)) {
-          setIsSolved(true);
-          props.onSolve?.();
-        }
+    const fn = (playerObj: GameObjectBody, otherObj: GameObjectBody) => {
+      if (
+        otherObj.plugin?.uniqueID === uniqueID &&
+        shouldSolveBlock(playerObj, otherObj)
+      ) {
+        setIsSolved(true);
+        props.onSolve?.();
+      }
     };
 
     physics.subscribeCollision(fn);

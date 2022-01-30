@@ -52,16 +52,19 @@ const gameObjectOptions = {
     category: CollisionCategories.FIRE_BLOCK,
     mask: CollisionCategories.PLAYER | CollisionCategories.SHADOW_PLAYER,
   },
-  allowedCollisionsCategories: [CollisionCategories.FIRE_PLAYER],
+  allowedCollisionsCategories: [],
   killCollisionCategories: [CollisionCategories.SHADOW_PLAYER],
-  solutionCollisionsCategories: [CollisionCategories.WATER_PLAYER],
+  solutionCollisionsCategories: [
+    CollisionCategories.WATER_PLAYER,
+    CollisionCategories.FIRE_PLAYER,
+  ],
 };
 interface FireWallBlockProps extends GameObjectBlock {}
 
 export function FireWallBlock(props: FireWallBlockProps) {
   const [uniqueID] = React.useState<string>(uuid());
   const [isSolved, setIsSolved] = React.useState(false);
-  const { size, physics } = useConstructGameObject({
+  const { size, physics, gameObject } = useConstructGameObject({
     ...props,
     width: props.width * 0.5,
     height: props.height * 0.5,
@@ -74,21 +77,26 @@ export function FireWallBlock(props: FireWallBlockProps) {
         uniqueID,
       },
     },
+    hasSensor: true,
   });
 
   React.useEffect(() => {
-    const fn = (a: GameObjectBody, b: GameObjectBody) => {
-      if (a.plugin?.uniqueID === uniqueID || b.plugin?.uniqueID === uniqueID)
-        if (shouldSolveBlock(a, b) || shouldSolveBlock(b, a)) {
-          setIsSolved(true);
-          props.onSolve?.();
-        }
+    const fn = (playerObj: GameObjectBody, otherObj: GameObjectBody) => {
+      if (
+        otherObj.plugin?.uniqueID === uniqueID &&
+        shouldSolveBlock(playerObj, otherObj)
+      ) {
+        setIsSolved(true);
+        props.onSolve?.();
+      }
     };
     physics.subscribeCollision(fn);
     return () => {
       physics.unsubscribeCollision(fn);
     };
   }, []);
+
+  console.log({ isSolved });
   return isSolved ? null : (
     <FireWallBlockSVG
       x={size.min.x - 0.25 * props.width}
