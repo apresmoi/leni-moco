@@ -20,7 +20,7 @@ const useGridSVG = (gridProps: UseGridSVG) => {
           id="floor"
           patternUnits="userSpaceOnUse"
           width={`${CANVAS_WIDTH}`}
-          height={`${CANVAS_WIDTH}`}
+          height={`${CELL_HEIGHT}`}
         >
           <image
             href={floorTile}
