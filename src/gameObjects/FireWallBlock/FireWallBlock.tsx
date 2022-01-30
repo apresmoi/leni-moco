@@ -53,7 +53,10 @@ const gameObjectOptions = {
     mask: CollisionCategories.PLAYER | CollisionCategories.SHADOW_PLAYER,
   },
   allowedCollisionsCategories: [],
-  killCollisionCategories: [CollisionCategories.SHADOW_PLAYER],
+  killCollisionCategories: [
+    CollisionCategories.PLAYER,
+    CollisionCategories.SHADOW_PLAYER,
+  ],
   solutionCollisionsCategories: [
     CollisionCategories.WATER_PLAYER,
     CollisionCategories.FIRE_PLAYER,
