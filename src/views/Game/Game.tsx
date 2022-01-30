@@ -9,10 +9,17 @@ import { Player, Player2 } from "../../components/Player";
 import { useDisableGoBack } from "../../hooks";
 import { GameStore, PhysicsStore, useGame } from "../../store";
 import { Tutorial, FirstLevel, HardLevel } from "../../levels";
-import { UI } from "../../components/UI"; 
+import { UI } from "../../components/UI";
+import { useHistory } from "react-router-dom";
 
 const LevelSwitcher = () => {
   const { activeLevel } = useGame();
+  const history = useHistory();
+
+  React.useEffect(() => {
+    if (activeLevel === "end") history.push("/credits");
+  }, [activeLevel]);
+
   return (
     <>
       {activeLevel === "tutorial" ? <Tutorial /> : null}
