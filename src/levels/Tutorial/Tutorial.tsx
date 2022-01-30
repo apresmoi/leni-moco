@@ -225,11 +225,12 @@ export const Tutorial = React.memo(() => {
         {...getSVGPosByGridPos({ col: 2, row: 0 })}
         {...{ col: 2, row: 0 }}
         onSolve={() => {
-          const wonLevel = Object.keys(game.level.conditions)
-            .filter((id) => id !== "win")
-            .every((k) => game.level.conditions[k]);
-          console.log(wonLevel);
-          if (wonLevel) game.setActiveLevel(game.level.nextLevel);
+          setTimeout(() => {
+            const wonLevel = Object.keys(game.level.conditions)
+              .filter((id) => id !== "win")
+              .every((k) => game.level.conditions[k]);
+            if (wonLevel) game.setActiveLevel(game.level.nextLevel);
+          }, 400);
         }}
       />
     </>

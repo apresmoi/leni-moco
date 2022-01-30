@@ -3,7 +3,6 @@ import { CELL_HEIGHT, CELL_WIDTH } from "../../settings";
 import { useConstructGameObject } from "../useConstructGameObject";
 import type { GameObject, GameObjectBlock } from "../../sharedTypes";
 import { CollisionCategories } from "../../store/Physics";
-import { isPlayer, isThisBlock, isWinBlock } from "../../utils/collisions";
 
 const WinConditionBlockSVG: React.ComponentType<
   React.SVGProps<SVGSVGElement>

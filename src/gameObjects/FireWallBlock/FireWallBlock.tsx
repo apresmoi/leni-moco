@@ -2,16 +2,42 @@ import React from "react";
 import { CELL_HEIGHT, CELL_WIDTH } from "../../settings";
 import { useConstructGameObject } from "../useConstructGameObject";
 import type { GameObject, GameObjectBlock } from "../../sharedTypes";
-import { shouldSolveBlock, isThisBlock } from "../../utils/collisions";
+import { shouldSolveBlock } from "../../utils/collisions";
 import { CollisionCategories } from "../../store/Physics";
+
+import frame01 from "./lava_floor_01.svg";
+import frame02 from "./lava_floor_02.svg";
+import frame03 from "./lava_floor_03.svg";
 
 const FireWallBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
   x,
   y,
 }) => (
   <svg x={x} y={y} width={CELL_WIDTH} height={CELL_HEIGHT}>
+    <defs>
+      <pattern
+        id="lavaFrame01"
+        patternUnits="userSpaceOnUse"
+        width={CELL_WIDTH}
+        height={CELL_HEIGHT}
+      >
+        <image
+          href={frame01}
+          x="0"
+          y="0"
+          width={CELL_WIDTH}
+          height={CELL_HEIGHT}
+        />
+      </pattern>
+    </defs>
     <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="#F00" />
-    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="none" />
+    <rect
+      x={0}
+      y={0}
+      width={CELL_WIDTH}
+      height={CELL_HEIGHT}
+      fill="url(#lavaFrame01)"
+    />
   </svg>
 );
 
@@ -31,10 +57,10 @@ export function FireWallBlock(props: FireWallBlockProps) {
   const [isSolved, setIsSolved] = React.useState(false);
   const { size, physics } = useConstructGameObject({
     ...props,
-    width: props.width / 2,
-    height: props.height / 2,
-    x: props.x + props.width / 4,
-    y: props.y + props.height / 4,
+    width: props.width * 0.8,
+    height: props.height * 0.8,
+    x: props.x + props.width * 0.1,
+    y: props.y + props.height * 0.1,
 
     gameObjectOptions: {
       ...gameObjectOptions,
@@ -46,10 +72,7 @@ export function FireWallBlock(props: FireWallBlockProps) {
   React.useEffect(() => {
     physics.subscribeCollision((a, b) => {
       // TODO - JC -check if collision detection is fine
-      if (
-        shouldSolveBlock(a, b, props.col, props.row) ||
-        shouldSolveBlock(b, a, props.col, props.row)
-      ) {
+      if (shouldSolveBlock(a, b) || shouldSolveBlock(b, a)) {
         setIsSolved(true);
         props.onSolve?.();
       }
@@ -57,8 +80,8 @@ export function FireWallBlock(props: FireWallBlockProps) {
   }, []);
   return isSolved ? null : (
     <FireWallBlockSVG
-      x={size.min.x - props.width / 4}
-      y={size.min.y - props.width / 4}
+      x={size.min.x - 0.1 * props.width}
+      y={size.min.y - 0.1 * props.height}
     />
   );
 }

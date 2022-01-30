@@ -5,13 +5,39 @@ import type { GameObject, GameObjectBlock } from "../../sharedTypes";
 import { shouldSolveBlock } from "../../utils/collisions";
 import { CollisionCategories } from "../../store/Physics";
 
+import frame01 from "./ice_wall_01_01.svg";
+import frame02 from "./ice_wall_01_01.svg";
+import frame03 from "./ice_wall_01_01.svg";
+
 const IceBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
   x,
   y,
 }) => (
   <svg x={x} y={y} width={CELL_WIDTH} height={CELL_HEIGHT}>
+    <defs>
+      <pattern
+        id="iceFrame01"
+        patternUnits="userSpaceOnUse"
+        width={CELL_WIDTH}
+        height={CELL_HEIGHT}
+      >
+        <image
+          href={frame01}
+          x="0"
+          y="0"
+          width={CELL_WIDTH}
+          height={CELL_HEIGHT}
+        />
+      </pattern>
+    </defs>
     <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="#DBF1FD" />
-    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="none" />
+    <rect
+      x={0}
+      y={0}
+      width={CELL_WIDTH}
+      height={CELL_HEIGHT}
+      fill="url(#iceFrame01)"
+    />
   </svg>
 );
 
@@ -31,6 +57,10 @@ export function IceBlock(props: IceBlockProps) {
   const [isSolved, setIsSolved] = React.useState(false);
   const { size, physics } = useConstructGameObject({
     ...props,
+    width: props.width * 0.8,
+    height: props.height * 0.8,
+    x: props.x + props.width * 0.1,
+    y: props.y + props.height * 0.1,
     gameObjectOptions: {
       ...gameObjectOptions,
       plugin: {
@@ -41,14 +71,16 @@ export function IceBlock(props: IceBlockProps) {
   React.useEffect(() => {
     physics.subscribeCollision((a, b) => {
       // TODO - JC -check if collision detection is fine
-      if (
-        shouldSolveBlock(a, b, props.col, props.row) ||
-        shouldSolveBlock(b, a, props.col, props.row)
-      ) {
+      if (shouldSolveBlock(a, b) || shouldSolveBlock(b, a)) {
         setIsSolved(true);
         props.onSolve?.();
       }
     });
   }, []);
-  return isSolved ? null : <IceBlockSVG x={size.min.x} y={size.min.y} />;
+  return isSolved ? null : (
+    <IceBlockSVG
+      x={size.min.x - 0.1 * props.width}
+      y={size.min.y - 0.1 * props.height}
+    />
+  );
 }
