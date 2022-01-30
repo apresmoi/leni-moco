@@ -1,4 +1,5 @@
 import * as React from "react";
+import { join } from "../../assets/sounds";
 import { useGame } from "../../store";
 
 import { useFrame } from "../../store/Physics/Physics";
@@ -23,6 +24,9 @@ export function Player(props: React.PropsWithChildren<{}>) {
     );
     setGTransform(gValue);
     setwidthHeight(widthHeightValue);
+    if (!player?.isSplited) {
+      join.play()
+    }
   }, [player?.isSplited]);
 
   React.useEffect(() => {
