@@ -28,7 +28,13 @@ const PitHoleBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
       </pattern>
     </defs>
     <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="#A020F0" />
-    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="url(#pitHole01)" />
+    <rect
+      x={0}
+      y={0}
+      width={CELL_WIDTH}
+      height={CELL_HEIGHT}
+      fill="url(#pitHole01)"
+    />
   </svg>
 );
 const gameObjectOptions = {
@@ -36,11 +42,36 @@ const gameObjectOptions = {
   isSensor: true,
   collisionFilter: {
     category: CollisionCategories.PIT_HOLE,
+    mask:
+      CollisionCategories.PLAYER |
+      CollisionCategories.SHADOW_PLAYER |
+      CollisionCategories.WATER_PLAYER |
+      CollisionCategories.FIRE_PLAYER,
   },
+  killCollisionCategories: [
+    CollisionCategories.PLAYER,
+    CollisionCategories.FIRE_PLAYER,
+    CollisionCategories.WATER_PLAYER,
+    CollisionCategories.SHADOW_PLAYER,
+  ],
 };
 interface PitHoleBlockProps extends GameObject {}
 
 export function PitHoleBlock(props: PitHoleBlockProps) {
-  const { size } = useConstructGameObject({ ...props, gameObjectOptions });
-  return <PitHoleBlockSVG x={size.min.x} y={size.min.y} />;
+  const { size } = useConstructGameObject({
+    ...props,
+    width: props.width * 0.5,
+    height: props.height * 0.5,
+    x: props.x + props.width * 0.25,
+    y: props.y + props.height * 0.25,
+
+    gameObjectOptions,
+    hasSensor: true,
+  });
+  return (
+    <PitHoleBlockSVG
+      x={size.min.x - 0.25 * props.width}
+      y={size.min.y - 0.25 * props.height}
+    />
+  );
 }
