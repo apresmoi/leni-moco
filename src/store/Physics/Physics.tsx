@@ -192,7 +192,6 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
       }
   }, [game.player?.isSplited, spaceKey]);
 
-
   React.useEffect(() => {
     World.add(world, player.current);
     World.add(world, player2.current);
@@ -201,7 +200,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
     Events.on(engine, "afterUpdate", function (event) {
       if (direction.current.x || direction.current.y) {
-        if (event.timestamp - tsStart > 400) {
+        if (event.timestamp - tsStart > 380) {
           tsStart = event.timestamp;
           updatePlayer();
         }
