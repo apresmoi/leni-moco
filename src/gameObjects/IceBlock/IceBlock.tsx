@@ -54,7 +54,10 @@ const gameObjectOptions = {
     mask: CollisionCategories.PLAYER | CollisionCategories.WATER_PLAYER,
   },
   allowedCollisionsCategories: [CollisionCategories.SHADOW_PLAYER],
-  killCollisionCategories: [CollisionCategories.WATER_PLAYER],
+  killCollisionCategories: [
+    CollisionCategories.PLAYER,
+    CollisionCategories.WATER_PLAYER,
+  ],
   solutionCollisionsCategories: [CollisionCategories.FIRE_PLAYER],
 };
 interface IceBlockProps extends GameObjectBlock {}

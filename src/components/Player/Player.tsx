@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useGame } from "../../store";
 
-
 import { useFrame } from "../../store/Physics/Physics";
 import { SlimeFrames } from "./SlimeFrames";
 import { mocoSize, sizes } from "./utils";
@@ -71,7 +70,7 @@ export function Player(props: React.PropsWithChildren<{}>) {
   if (!player) return null;
   return (
     <g ref={playerRef} transform={""} className="moco">
-      {/* <circle cx={50} cy={50} r={50} fill="black" /> */}
+      {player.leftKilled && <circle cx={50} cy={50} r={50} fill="black" />}
       <rect
         ref={ref}
         x={0}
@@ -84,7 +83,11 @@ export function Player(props: React.PropsWithChildren<{}>) {
         fillOpacity={0}
       />
       <g transform={`translate(${gTransform} ${gTransform})`}>
-         <SlimeFrames frameName="primary" spriteName={spriteName}  widthHeight={widthHeight}/>
+        <SlimeFrames
+          frameName="primary"
+          spriteName={spriteName}
+          widthHeight={widthHeight}
+        />
         <rect
           ref={ref}
           x={0}

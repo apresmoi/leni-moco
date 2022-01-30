@@ -9,6 +9,7 @@ import { GameObjectBody } from "../../sharedTypes";
 import { useSound } from "../../assets";
 import { sounds } from "../../assets/sounds";
 import { Element } from "../Game/types";
+import { shouldKillPlayer } from "../../utils/collisions";
 
 export enum CollisionCategories {
   WALL = 1,
@@ -330,14 +331,20 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
     Events.on(engine, "collisionStart", (e) => {
       e.pairs.forEach(({ bodyA, bodyB }) => {
+        const player = (["player", "player2"].includes(bodyA.plugin.id)
+          ? bodyA
+          : bodyB) as unknown as GameObjectBody;
+        const other = (["player", "player2"].includes(bodyA.plugin.id)
+          ? bodyB
+          : bodyA) as unknown as GameObjectBody;
+
+        if (shouldKillPlayer(player, other)) {
+          if (player.plugin.id === "player") game.killLeftPlayer();
+          if (player.plugin.id === "player2") game.killRightPlayer();
+        }
+
         collisionSubscribers.current.forEach((cb) => {
           if (cb) {
-            const player = (["player", "player2"].includes(bodyA.plugin.id)
-              ? bodyA
-              : bodyB) as unknown as GameObjectBody;
-            const other = (["player", "player2"].includes(bodyA.plugin.id)
-              ? bodyB
-              : bodyA) as unknown as GameObjectBody;
             cb(player, other);
           }
         });
