@@ -7,6 +7,7 @@ interface SlimeProps {
   color: string;
   name?: string;
   idx: string;
+  isBlocked: boolean;
   onClick: (color: string) => void;
 }
 
@@ -27,6 +28,7 @@ export function Slime(props: SlimeProps) {
           width={90}
           height={90}
           fill={`url(#${props.idx}_frame02)`}
+          opacity={props.isBlocked ? "0.4": "1"}
         />
       </g>
     </g>

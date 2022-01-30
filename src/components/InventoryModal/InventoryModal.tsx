@@ -13,13 +13,17 @@ export function InventoryModal() {
   const [selectedSlot, setSelectedSlot] = React.useState<string>("left");
   const [selectedSlime, setSeletedSlime] = React.useState<string>("basic");
   const game = useGame();
+  const opositeSocket = selectedSlot === "right" ? "left": "right";
+  const opositeSlime = game?.inventory[ opositeSocket + "Slime" ];
 
   if (!game.showInventory) return null;
 
   function handleSlimeClick(color: string) {
     const socket = selectedSlot + "Slime";
-    game.changeInventory((i) => ({ ...i, [socket]: color }));
-    setSeletedSlime(color);
+      if(game.inventory &&  opositeSlime !== color){
+        game.changeInventory((i) => ({ ...i, [socket]: color }));
+      }
+      setSeletedSlime(color);
   }
 
   function handleSocketSelection(name: string) {
@@ -31,18 +35,6 @@ export function InventoryModal() {
   }
 
   function renderSlimeDescription(element: string) {
-    /*  
-
-Shadow Jam
-
-Description: A solid round piece of shady shadow, born from oblivion and always on the watch.
-Skill: Merges with Shadow walls and pass through them.
-Immune to: Smoke and naive super heroes who can't deal with his shadiness.
-Vulnerable against: Lava pools.
-
-Note: "The other day I heard him say something really edgy: Oh, you think darkness is your ally. But you merely adopted the dark; I was born in it, moulded by it. I didn't see the light until I was already an adult Jam, by then it was nothing to me but BLINDING!"
-
-" */
     switch (element) {
       case "fire":
         return (
@@ -193,6 +185,7 @@ Note: "The other day I heard him say something really edgy: Oh, you think darkne
             y={360}
             color="fire"
             onClick={handleSlimeClick}
+            isBlocked={opositeSlime === "fire" }
           />
           <Slime
             idx="inv02"
@@ -200,6 +193,7 @@ Note: "The other day I heard him say something really edgy: Oh, you think darkne
             y={360}
             color="water"
             onClick={handleSlimeClick}
+            isBlocked={opositeSlime === "water"}
           />
           <Slime
             idx="inv03"
@@ -207,6 +201,7 @@ Note: "The other day I heard him say something really edgy: Oh, you think darkne
             y={360}
             color="darkness"
             onClick={handleSlimeClick}
+            isBlocked={opositeSlime === "darkness"}
           />
         </g>
 
