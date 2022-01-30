@@ -13,6 +13,7 @@ import { getSVGPosByGridPos } from "../../utils/grid";
 import { Background } from "../../components/Background";
 import img from "./Transparent.png";
 import { useGame, usePhysics } from "../../store";
+import { Level } from "../../store/Game/types";
 
 const cellSizes = { width: CELL_SIZE.width, height: CELL_SIZE.height };
 
@@ -33,7 +34,7 @@ export const FirstLevel = React.memo(() => {
       identifier: "first",
       size: new Size(0, 0, 9 * CELL_SIZE.width, 10 * CELL_SIZE.height),
       nextLevel: "hard",
-    });
+    } as Level);
   }, []);
 
   return (
