@@ -83,6 +83,63 @@ export function SlimeFrames(props: FrameProps) {
           height={props.widthHeight}
         />
       </pattern>
+
+      <pattern
+        id={props.frameName + "_frame06"}
+        patternUnits="userSpaceOnUse"
+        width={props.widthHeight}
+        height={props.widthHeight}
+      >
+        <image
+          href={sprite[5]}
+          x="0"
+          y="0"
+          width={props.widthHeight}
+          height={props.widthHeight}
+        />
+      </pattern>
+      <pattern
+        id={props.frameName + "_frame07"}
+        patternUnits="userSpaceOnUse"
+        width={props.widthHeight}
+        height={props.widthHeight}
+      >
+        <image
+          href={sprite[6]}
+          x="0"
+          y="0"
+          width={props.widthHeight}
+          height={props.widthHeight}
+        />
+      </pattern>
+      <pattern
+        id={props.frameName + "_frame08"}
+        patternUnits="userSpaceOnUse"
+        width={props.widthHeight}
+        height={props.widthHeight}
+      >
+        <image
+          href={sprite[7]}
+          x="0"
+          y="0"
+          width={props.widthHeight}
+          height={props.widthHeight}
+        />
+      </pattern>
+      <pattern
+        id={props.frameName + "_frame09"}
+        patternUnits="userSpaceOnUse"
+        width={props.widthHeight}
+        height={props.widthHeight}
+      >
+        <image
+          href={sprite[8]}
+          x="0"
+          y="0"
+          width={props.widthHeight}
+          height={props.widthHeight}
+        />
+      </pattern>
     </defs>
   );
 }

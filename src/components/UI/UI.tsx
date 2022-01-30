@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useHistory } from "react-router";
 import { useGame } from "../../store";
 import { OpenInventoryButton } from "./openInventoryButton";
 import { MovesLeft } from "./movesLeft";
 import { Options } from "./options";
 import { InstructionsModal } from "../../components/InstructionsModal";
 import { Confirmation } from "../../components/Confirmation";
+import { sounds } from "../../assets/sounds";
 import "./styles.scoped.scss";
 import { useHistory } from "react-router";
 import { useGameCanvas } from "../GameCanvas";
@@ -15,17 +17,24 @@ export function UI() {
   const history = useHistory();
   const [openInstructions, setOpenInstructions] = useState(false);
   const [openCloseModal, setOpenCloseModal] = useState(false);
+  const [toggleSound, setToggleSound] = useState(true);
+
+  useEffect(() => {
+    const volume = toggleSound ? 1 : 0;
+
+    Object.values(sounds).forEach(sound => sound.volume = volume);
+  }, [toggleSound]);
 
   function handleOpenInventory(){
     game.setShowInventory(true)
   }
 
   function onReset(){
-    
+    window.location.reload();
   }
 
   function onSound(){
-    
+    setToggleSound(!toggleSound);
   }
 
   function onInstructions(){
