@@ -190,7 +190,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
           player ? { ...player, isSplited: true } : player
         );
       }
-  }, [game.player, spaceKey]);
+  }, [game.player?.isSplited, spaceKey]);
 
 
   React.useEffect(() => {

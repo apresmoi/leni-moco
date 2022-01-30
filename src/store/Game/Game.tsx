@@ -14,15 +14,18 @@ type IGameStoreContext = {
   setPaused: (paused: boolean) => void;
 };
 
-const defaultLevel = { size: new Size(0, 0, 1000, 800), identifier: 'tutorial' } as const;
+const defaultLevel = {
+  size: new Size(0, 0, 1000, 800),
+  identifier: "tutorial",
+} as const;
 
 export const GameStoreContext = React.createContext<IGameStoreContext>({
-  changePlayer: () => { },
-  changePlayerPosition: () => { },
-  changePlayerSide: () => { },
-  setLevel: () => { },
+  changePlayer: () => {},
+  changePlayerPosition: () => {},
+  changePlayerSide: () => {},
+  setLevel: () => {},
   level: defaultLevel,
-  setPaused: () => { },
+  setPaused: () => {},
 });
 
 export function useGame() {
@@ -39,19 +42,21 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
 
   useMusic();
 
+  const changePlayerSide = React.useCallback(() => {
+    setPlayer((p) =>
+      p && p.isSplited
+        ? { ...p, active: p.active === "left" ? "right" : "left" }
+        : p
+    );
+  }, []);
+
   const contextValue = {
     player,
     level,
     paused,
     setLevel: setLevel,
     changePlayer: setPlayer,
-    changePlayerSide: () => {
-      setPlayer((p) =>
-        p && p.isSplited
-          ? { ...p, active: p.active === "left" ? "right" : "left" }
-          : p
-      );
-    },
+    changePlayerSide,
     setPaused,
   };
 
