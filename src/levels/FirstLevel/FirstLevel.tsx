@@ -14,6 +14,7 @@ import { getSVGPosByGridPos } from "../../utils/grid";
 import { Background } from "../../components/Background";
 import img from "./Transparent.png";
 import { useGame, usePhysics } from "../../store";
+import { Level } from "../../store/Game/types";
 
 const cellSizes = { width: CELL_SIZE.width, height: CELL_SIZE.height };
 

@@ -11,3 +11,8 @@ export interface Level {
   nextLevel: "first" | "hard" | "end";
   conditions: { [key: string]: boolean };
 }
+
+export interface Inventory{
+  leftSlime:  string;
+  rightSlime: string;
+}

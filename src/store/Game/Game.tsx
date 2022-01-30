@@ -3,7 +3,7 @@ import { Size } from "../../utils/math";
 import { useMusic } from "../../hooks/useMusic";
 import { StatusSetter } from "../../sharedTypes";
 
-import { Player, Level } from "./types";
+import { Player, Level, Inventory } from "./types";
 
 type IGameStoreContext = {
   player?: Player;
@@ -15,6 +15,10 @@ type IGameStoreContext = {
   setPaused: StatusSetter<boolean>;
   activeLevel: string;
   setActiveLevel: StatusSetter<string>;
+  inventory?: Inventory;
+  showInventory?: boolean;
+  setShowInventory: (showInventory: boolean) => void;
+  changeInventory: (inventory: Inventory) => void;
 };
 
 const defaultLevel = {
@@ -34,6 +38,8 @@ export const GameStoreContext = React.createContext<IGameStoreContext>({
   setLevel: () => {},
   level: defaultLevel,
   setPaused: () => {},
+  changeInventory: () => {},
+  setShowInventory: () => {},
   activeLevel: "tutorial",
   setActiveLevel: () => {},
 });
@@ -46,6 +52,8 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
   const [player, setPlayer] = React.useState<Player>(defaultPlayer);
   const [paused, setPaused] = React.useState(true);
   const [level, setLevel] = React.useState<Level>(defaultLevel);
+  const [inventory, setInventory] =  React.useState<Inventory>();
+  const [showInventory, setShowInventory] = React.useState(false);
   const [activeLevel, setActiveLevel] = React.useState<string>("tutorial");
 
   useMusic();
@@ -62,12 +70,16 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
     player,
     level,
     paused,
+    inventory,
+    showInventory,
     setLevel: setLevel,
     changePlayer: setPlayer,
     changePlayerSide,
     setPaused,
     activeLevel,
     setActiveLevel,
+    changeInventory: setInventory,
+    setShowInventory,
   };
 
   return (
