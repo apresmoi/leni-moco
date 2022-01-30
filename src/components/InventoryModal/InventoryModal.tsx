@@ -128,7 +128,7 @@ export function InventoryModal() {
   return (
     <>
       <g>
-        <rect x="-1000" width="2500" height="1200" fill="black" opacity="0.5" />
+        <rect x="-1000" width="5000" height="1200" fill="black" opacity="0.5" />
         <g
           transform={`translate(${size.width / 2 - (775 * 0.7) / 2},${
             size.height / 2 - (741 * 0.7) / 2
