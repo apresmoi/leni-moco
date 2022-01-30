@@ -58,10 +58,10 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
   const [paused, setPaused] = React.useState(true);
   const [level, setLevel] = React.useState<Level>(defaultLevel);
   const [inventory, setInventory] = React.useState<Inventory>({
-    leftSlime: "fire",
-    rightSlime: "water",
+    leftSlime: "water",
+    rightSlime: "fire",
   });
-  const [showInventory, setShowInventory] = React.useState(false);
+  const [showInventory, setShowInventory] = React.useState(true);
   const [activeLevel, setActiveLevel] = React.useState<string>("tutorial");
 
   useMusic();
