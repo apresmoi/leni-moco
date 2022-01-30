@@ -61,7 +61,7 @@ export function UI() {
     if (youAreDead)
       setTimeout(() => {
         setShowDeathModal(true);
-      }, 500);
+      }, 750);
   }, [youAreDead]);
 
   return (
