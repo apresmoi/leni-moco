@@ -48,9 +48,10 @@ const IceBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
 
 const gameObjectOptions = {
   isStatic: true,
-  isSensor: true,
+  // isSensor: true,
   collisionFilter: {
     category: CollisionCategories.ICE_BLOCK,
+    mask: CollisionCategories.PLAYER | CollisionCategories.WATER_PLAYER,
   },
   allowedCollisionsCategories: [CollisionCategories.SHADOW_PLAYER],
   killCollisionCategories: [CollisionCategories.WATER_PLAYER],

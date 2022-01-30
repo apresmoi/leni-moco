@@ -45,6 +45,7 @@ const gameObjectOptions = {
   isSensor: true,
   collisionFilter: {
     category: CollisionCategories.WIN_BLOCK,
+    mask: CollisionCategories.PLAYER
   },
 };
 interface WinConditionBlockProps extends GameObjectBlock {}

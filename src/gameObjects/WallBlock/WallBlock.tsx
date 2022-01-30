@@ -148,6 +148,11 @@ const gameObjectOptions = {
   isStatic: true,
   collisionFilter: {
     category: CollisionCategories.WALL,
+    mask:
+      CollisionCategories.PLAYER |
+      CollisionCategories.WATER_PLAYER |
+      CollisionCategories.FIRE_PLAYER |
+      CollisionCategories.SHADOW_PLAYER,
   },
 };
 

@@ -11,7 +11,9 @@ export interface Level {
   nextLevel: "first" | "hard" | "end";
 }
 
+export type Element = "fire" | "water" | "darkness";
+
 export interface Inventory {
-  leftSlime: "fire" | "water" | "darkness";
-  rightSlime: "fire" | "water" | "darkness";
+  leftSlime: Element;
+  rightSlime: Element;
 }
