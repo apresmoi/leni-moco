@@ -1,4 +1,5 @@
 import * as React from "react";
+import closeIcon  from "./icon-close-modal.svg";
 
 interface CloseButtonProps {
     x: number;
@@ -13,7 +14,7 @@ interface CloseButtonProps {
      onClick={ () =>props.onClick() }
       transform={`translate(${props.x - 50}, ${props.y - 50})`}
     >
-        <circle cx="0" cy="0" r="10" />
+        <image href={closeIcon} x="0" y="0" width={40}  height={40}/>
     </g>
  );
  }
