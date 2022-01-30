@@ -4,10 +4,12 @@ import {
   CELL_HEIGHT,
   CELL_WIDTH,
 } from "../settings";
+import { useGame } from "../store";
 
 export const useGetGrid = () => {
-  const rowsN = Math.floor(CANVAS_HEIGHT / CELL_HEIGHT);
-  const columnsN = Math.floor(CANVAS_WIDTH / CELL_WIDTH);
+  const { level } = useGame();
+  const rowsN = Math.floor(level.size.width / CELL_HEIGHT);
+  const columnsN = Math.floor(level.size.height / CELL_WIDTH);
   return {
     rows: new Array(rowsN).fill("").map((_, row) => row),
     cols: new Array(columnsN).fill("").map((_, col) => col),

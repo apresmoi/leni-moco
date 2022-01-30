@@ -2,21 +2,37 @@ import * as React from "react";
 import { Engine, World, Bodies, Events, Body, Runner } from "matter-js";
 import { useGame } from "../Game";
 import { useKeyPress } from "../../hooks";
-import { Position } from "../Game/types";
 import { Vector } from "../../utils/math";
 import { CELL_SIZE, CELL_WIDTH } from "../../settings";
 import debounce from "lodash.debounce";
-import { useKeystrokeSound } from "../../assets";
+import { GameObjectBody } from "../../sharedTypes";
+import { useSound } from "../../assets";
+import { sounds } from "../../assets/sounds";
 
 export enum CollisionCategories {
   WALL = 1,
   PLAYER = 2,
+  FIRE_BLOCK = 4,
+  ICE_BLOCK = 8,
+  NEUTRAL_BLOCK = 16,
+  PIT_HOLE = 32,
+  SHADOW_BLOCK = 64,
+  WIN_BLOCK = 128,
+  FIRE_PLAYER = 256,
+  WATER_PLAYER = 512,
+  SHADOW_PLAYER = 1024,
 }
 
 type IPhysicsStoreContext = {
   engine?: Engine;
   world?: World;
-  subscribeCollision: (callback: (bodyA: Body, bodyB: Body) => void) => void;
+  subscribeCollision: (
+    callback: (
+      playerBody: GameObjectBody,
+      otherBody: GameObjectBody,
+      direction: React.MutableRefObject<Vector>
+    ) => void
+  ) => void;
   subscribeOnFrame: (
     callback: (event: Matter.IEventTimestamped<Engine>) => void
   ) => void;
@@ -35,21 +51,31 @@ export function usePhysics() {
   return React.useContext(PhysicsStoreContext);
 }
 
+export function useFrame(
+  callback: (event: Matter.IEventTimestamped<Engine>) => void
+) {
+  const physics = usePhysics();
+
+  physics.subscribeOnFrame(callback);
+}
+
 export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   const game = useGame();
 
   const invert = React.useRef<number>(1);
+  const splitted = React.useRef<boolean>(false);
 
   const [onFrameSubscribers] = React.useState<
     ((event: Matter.IEventTimestamped<Engine>) => void)[]
   >([]);
   const [collisionSubscribers] = React.useState<
-    ((bodyA: Body, bodyB: Body) => void)[]
+    ((playerBody: GameObjectBody, otherBody: GameObjectBody) => void)[]
   >([]);
 
   const [engine] = React.useState(
     Engine.create({
       gravity: { x: 0, y: 0 },
+      enableSleeping: true,
     })
   );
   const world = React.useMemo(() => {
@@ -65,7 +91,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
   const player = React.useRef<Body>(
     Bodies.rectangle(350, 350, CELL_SIZE.width, CELL_SIZE.height, {
-      mass: 100,
+      mass: 1000,
       frictionAir: 0.2,
       friction: 0,
       restitution: 0,
@@ -73,14 +99,14 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
         id: "player",
       },
       collisionFilter: {
-        // category: CollisionCategories.PLAYER,
+        category: CollisionCategories.WATER_PLAYER,
         group: -CollisionCategories.PLAYER,
       },
     })
   );
   const player2 = React.useRef<Body>(
     Bodies.rectangle(350, 350, CELL_SIZE.width, CELL_SIZE.height, {
-      mass: 100,
+      mass: 1000,
       frictionAir: 0.2,
       friction: 0,
       restitution: 0,
@@ -88,19 +114,18 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
         id: "player2",
       },
       collisionFilter: {
-        // category: CollisionCategories.PLAYER,
+        category: CollisionCategories.FIRE_PLAYER,
         group: -CollisionCategories.PLAYER,
       },
     })
   );
 
-  const arrowLeft = useKeyPress(["ArrowLeft", "a"], useKeystrokeSound(1).play);
-  const arrowRight = useKeyPress(
-    ["ArrowRight", "d"],
-    useKeystrokeSound(1).play
-  );
-  const arrowUp = useKeyPress(["ArrowUp", "w"], useKeystrokeSound(1).play);
-  const arrowDown = useKeyPress(["ArrowDown", "s"], useKeystrokeSound(1).play);
+  const movementSound = useSound("movement");
+
+  const arrowLeft = useKeyPress(["ArrowLeft", "a"], movementSound?.play);
+  const arrowRight = useKeyPress(["ArrowRight", "d"], movementSound?.play);
+  const arrowUp = useKeyPress(["ArrowUp", "w"], movementSound?.play);
+  const arrowDown = useKeyPress(["ArrowDown", "s"], movementSound?.play);
   const spaceKey = useKeyPress([" "]);
   const shiftKey = useKeyPress(["Shift"]);
 
@@ -115,18 +140,28 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
   const updatePlayer = React.useCallback(
     debounce(() => {
-      Body.applyForce(player.current, player.current.position, {
-        x: invert.current * direction.current.x * 7.5,
-        y: direction.current.y * 7.5,
-      });
+      const primary = invert.current === 1 ? player.current : player2.current;
+      const secondary =
+        invert.current === -1 ? player.current : player2.current;
 
-      if (
-        Math.abs(player.current.position.x - player2.current.position.x) >
-        CELL_WIDTH
-      ) {
-        Body.applyForce(player2.current, player2.current.position, {
-          x: invert.current * -direction.current.x * 7.5,
-          y: direction.current.y * 7.5,
+      if (splitted.current) {
+        const d = Math.abs(secondary.position.x - primary.position.x);
+        const sign = Math.sign(secondary.position.x - primary.position.x);
+
+        if (d > CELL_WIDTH || sign === invert.current)
+          Body.applyForce(primary, primary.position, {
+            x: direction.current.x * 75,
+            y: direction.current.y * 75,
+          });
+        if (d > CELL_WIDTH)
+          Body.applyForce(secondary, secondary.position, {
+            x: -direction.current.x * 75,
+            y: direction.current.y * 75,
+          });
+      } else {
+        Body.applyForce(primary, primary.position, {
+          x: direction.current.x * 75,
+          y: direction.current.y * 75,
         });
       }
     }, 0),
@@ -135,25 +170,29 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
 
   React.useEffect(() => {
     invert.current = game.player?.active === "left" ? 1 : -1;
-  }, [game.player?.active]);
+    splitted.current = game.player?.isSplited || false;
+  }, [game.player?.active, game.player?.isSplited]);
 
   React.useEffect(() => {
     if (shiftKey) {
       game.changePlayerSide();
+      if(game.player?.isSplited){
+        sounds.select.play();
+      }
     }
-  }, [shiftKey]);
+  }, [game.player?.isSplited, shiftKey]);
 
   React.useEffect(() => {
     if (spaceKey)
       if (!game.player?.isSplited) {
         Body.setPosition(player2.current, player.current.position);
-
+        sounds.split.play();
         Body.applyForce(player.current, player.current.position, {
-          x: -1 * 7.5,
+          x: -1 * 75,
           y: 0,
         });
         Body.applyForce(player2.current, player2.current.position, {
-          x: 1 * 7.5,
+          x: 1 * 75,
           y: 0,
         });
 
@@ -161,44 +200,59 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
           player ? { ...player, isSplited: true } : player
         );
       }
-  }, [game.player, spaceKey]);
+  }, [game.player?.isSplited, spaceKey]);
 
   React.useEffect(() => {
     World.add(world, player.current);
     World.add(world, player2.current);
-    // walls.current.map((wall) => World.add(world, wall));
 
     let tsStart = 0;
 
     Events.on(engine, "afterUpdate", function (event) {
       if (direction.current.x || direction.current.y) {
-        if (event.timestamp - tsStart > 500) {
+        if (event.timestamp - tsStart > 380) {
           tsStart = event.timestamp;
           updatePlayer();
         }
       }
 
+      if (!splitted.current) {
+        player.current.collisionFilter.category = CollisionCategories.PLAYER;
+        player2.current.collisionFilter.category = CollisionCategories.PLAYER;
+      } else {
+        player.current.collisionFilter.category =
+          CollisionCategories.WATER_PLAYER;
+        player2.current.collisionFilter.category =
+          CollisionCategories.FIRE_PLAYER;
+      }
+
       if (player.current.speed === 0) {
-        player.current.position.x =
-          Math.trunc(Math.round((player.current.position.x - 50) / 100)) * 100 +
-          50;
-        player.current.position.y =
-          Math.trunc(Math.round((player.current.position.y - 50) / 100)) * 100 +
-          50;
-      } else if (Math.abs(player.current.speed) < 1) {
+        Body.setPosition(player.current, {
+          x:
+            Math.trunc(Math.round((player.current.position.x - 50) / 100)) *
+              100 +
+            50,
+          y:
+            Math.trunc(Math.round((player.current.position.y - 50) / 100)) *
+              100 +
+            50,
+        });
+      } else if (Math.abs(player.current.speed) <= 1) {
         Body.setVelocity(player.current, { x: 0, y: 0 });
       }
 
       if (player2.current.speed === 0) {
-        player2.current.position.x =
-          Math.trunc(Math.round((player2.current.position.x - 50) / 100)) *
-            100 +
-          50;
-        player2.current.position.y =
-          Math.trunc(Math.round((player2.current.position.y - 50) / 100)) *
-            100 +
-          50;
-      } else if (Math.abs(player2.current.speed) < 1) {
+        Body.setPosition(player2.current, {
+          x:
+            Math.trunc(Math.round((player2.current.position.x - 50) / 100)) *
+              100 +
+            50,
+          y:
+            Math.trunc(Math.round((player2.current.position.y - 50) / 100)) *
+              100 +
+            50,
+        });
+      } else if (Math.abs(player2.current.speed) <= 1) {
         Body.setVelocity(player2.current, { x: 0, y: 0 });
       }
 
@@ -212,10 +266,6 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
           );
       }
 
-      game.changePlayerPosition(
-        player.current.position,
-        player2.current.position
-      );
       onFrameSubscribers.forEach((cb) => {
         if (cb) cb(event);
       });
@@ -225,16 +275,31 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
       e.pairs.forEach(({ bodyA, bodyB }) => {
         collisionSubscribers.forEach((cb) => {
           if (cb) {
-            cb(bodyA, bodyB);
-            cb(bodyB, bodyA);
+            const player = (bodyA.plugin.id === "player"
+              ? bodyA
+              : bodyB) as unknown as GameObjectBody;
+            const other = (bodyA.plugin.id === "player"
+              ? bodyB
+              : bodyA) as unknown as GameObjectBody;
+            cb(player, other);
           }
         });
       });
     });
   }, [engine]);
 
-  const subscribeCollision = (cb: (bodyA: Body, bodyB: Body) => void) => {
-    collisionSubscribers.push(cb);
+  const subscribeCollision = (
+    cb: (
+      playerBody: GameObjectBody,
+      otherBody: GameObjectBody,
+      direction: React.MutableRefObject<Vector>
+    ) => void
+  ) => {
+    collisionSubscribers.push(
+      debounce((playerBody: GameObjectBody, otherBody: GameObjectBody) => {
+        cb(playerBody, otherBody, direction);
+      }, 10)
+    );
   };
 
   const subscribeOnFrame = (
@@ -243,7 +308,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
     onFrameSubscribers.push(cb);
   };
 
-  const setPlayerPosition = React.useCallback((position: Position) => {
+  const setPlayerPosition = React.useCallback((position: Vector) => {
     Body.setPosition(player.current, position);
   }, []);
 

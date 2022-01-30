@@ -3,6 +3,11 @@ import debounce from "lodash.debounce";
 import * as React from "react";
 
 const dungeon = new Audio("sounds/dungeon-placeholder.mp3");
+const movement = new Audio("sounds/slime_move_1.mp3");
+const collision = new Audio("sounds/ouch_1.mp3");
+const split = new Audio("sounds/split_1.mp3");
+const join = new Audio("sounds/join_1_cut.mp3");
+const select = new Audio("sounds/select_3.mp3");
 
 // todo: add music tension variations
 const musicTensions = [
@@ -11,9 +16,13 @@ const musicTensions = [
   new Audio("sounds/keystroke3.mp3"),
 ];
 
-const sounds = {
+export const sounds = {
   dungeon,
-  musicTensions,
+  movement,
+  collision,
+  split,
+  join,
+  select,
 };
 
 interface AudioHelper {
@@ -58,7 +67,7 @@ export const useSound = (
           }
         },
       };
-  }, [name, soundActivated]);
+  }, [name, options, soundActivated]);
 };
 
 export const useRandomSound = (
@@ -92,7 +101,7 @@ export const useRandomSound = (
 
 export const useKeystrokeSound = (volume: number) => {
   const sounds = React.useMemo(
-    () => [new Audio("sounds/slime_move_1_cut.mp3")],
+    () => [new Audio("sounds/slime_move.mp3")],
     []
   );
   return useRandomSound(sounds, { volume });

@@ -1,1 +1,1 @@
-export { useSound, useRandomSound, useKeystrokeSound } from "./sounds";
+export { useSound, useRandomSound, useKeystrokeSound, sounds } from "./sounds";
