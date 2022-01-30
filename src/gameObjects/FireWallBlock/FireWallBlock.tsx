@@ -1,52 +1,64 @@
-import React from 'react';
+import React from "react";
 import { CELL_HEIGHT, CELL_WIDTH } from "../../settings";
-import { useConstructGameObject } from '../useConstructGameObject'
-import type { GameObject } from '../../sharedTypes'
-import { shouldSolveBlock, isThisBlock } from '../../utils/collisions'
+import { useConstructGameObject } from "../useConstructGameObject";
+import type { GameObject, GameObjectBlock } from "../../sharedTypes";
+import { shouldSolveBlock, isThisBlock } from "../../utils/collisions";
 import { CollisionCategories } from "../../store/Physics";
 
-
-
-const FireWallBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({ x, y }) => (
+const FireWallBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
+  x,
+  y,
+}) => (
   <svg x={x} y={y} width={CELL_WIDTH} height={CELL_HEIGHT}>
-    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill='#F00' />
-    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill='none' />
+    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="#F00" />
+    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="none" />
   </svg>
-)
+);
 
 const gameObjectOptions = {
   isStatic: true,
+  isSensor: true,
   collisionFilter: {
     category: CollisionCategories.FIRE_BLOCK,
   },
-  allowedCollisionsCategories: [
-    CollisionCategories.FIRE_PLAYER,
-  ],
-  killCollisionCategories: [
-    CollisionCategories.SHADOW_PLAYER,
-  ],
-  solutionCollisionsCategories: [
-    CollisionCategories.WATER_PLAYER,
-  ]
-}
-interface FireWallBlockProps extends GameObject { }
+  allowedCollisionsCategories: [CollisionCategories.FIRE_PLAYER],
+  killCollisionCategories: [CollisionCategories.SHADOW_PLAYER],
+  solutionCollisionsCategories: [CollisionCategories.WATER_PLAYER],
+};
+interface FireWallBlockProps extends GameObjectBlock {}
 
 export function FireWallBlock(props: FireWallBlockProps) {
   const [isSolved, setIsSolved] = React.useState(false);
   const { size, physics } = useConstructGameObject({
-    ...props, gameObjectOptions: {
+    ...props,
+    width: props.width / 2,
+    height: props.height / 2,
+    x: props.x + props.width / 4,
+    y: props.y + props.height / 4,
+
+    gameObjectOptions: {
       ...gameObjectOptions,
       plugin: {
-        ...props
-      }
-    }
+        ...props,
+      },
+    },
   });
   React.useEffect(() => {
     physics.subscribeCollision((a, b) => {
-      // TODO - JC -check if collision detection is fine 
-      if (shouldSolveBlock(a, b, props.col, props.row))
-        setIsSolved(true)
-    })
-  }, [])
-  return isSolved ? null : <FireWallBlockSVG x={size.min.x} y={size.min.y} />;
+      // TODO - JC -check if collision detection is fine
+      if (
+        shouldSolveBlock(a, b, props.col, props.row) ||
+        shouldSolveBlock(b, a, props.col, props.row)
+      ) {
+        setIsSolved(true);
+        props.onSolve?.();
+      }
+    });
+  }, []);
+  return isSolved ? null : (
+    <FireWallBlockSVG
+      x={size.min.x - props.width / 4}
+      y={size.min.y - props.width / 4}
+    />
+  );
 }

@@ -1,5 +1,12 @@
 import React from "react";
-import { WallBlock, IceBlock, PitHoleBlock, NeutralSolidBlock,FireWallBlock,ShadowBlock } from "../../gameObjects";
+import {
+  WallBlock,
+  IceBlock,
+  PitHoleBlock,
+  NeutralSolidBlock,
+  FireWallBlock,
+  ShadowBlock,
+} from "../../gameObjects";
 import { Size, Vector } from "../../utils/math";
 import { CELL_SIZE } from "../../settings";
 import { getSVGPosByGridPos } from "../../utils/grid";
@@ -14,17 +21,20 @@ export const FirstLevel = React.memo(() => {
   const game = useGame();
 
   React.useEffect(() => {
-
     const position = getSVGPosByGridPos({ col: 3, row: 7 });
-    physics?.setPlayerPosition(new Vector(position.x - (CELL_SIZE.width / 2), position.y - (CELL_SIZE.height / 2)));
+    physics?.setPlayerPosition(
+      new Vector(
+        position.x - CELL_SIZE.width / 2,
+        position.y - CELL_SIZE.height / 2
+      )
+    );
 
     game.setLevel({
-      identifier:'first',
+      identifier: "first",
       size: new Size(0, 0, 9 * CELL_SIZE.width, 10 * CELL_SIZE.height),
+      nextLevel: "hard",
     });
-
   }, []);
-
 
   return (
     <>
@@ -246,7 +256,6 @@ export const FirstLevel = React.memo(() => {
         {...{ col: 8, row: 10 }}
         type="TOP_BUMP"
       />
-
 
       {/* NEUTRAL BLOCKS */}
       <NeutralSolidBlock

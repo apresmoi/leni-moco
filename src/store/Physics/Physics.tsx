@@ -5,27 +5,33 @@ import { useKeyPress } from "../../hooks";
 import { Vector } from "../../utils/math";
 import { CELL_SIZE, CELL_WIDTH } from "../../settings";
 import debounce from "lodash.debounce";
-import { GameObjectBody } from '../../sharedTypes'
+import { GameObjectBody } from "../../sharedTypes";
 import { useSound } from "../../assets";
 
 export enum CollisionCategories {
   WALL = 1,
   PLAYER = 2,
-  FIRE_BLOCK = 3,
-  ICE_BLOCK = 4,
-  NEUTRAL_BLOCK = 5,
-  PIT_HOLE = 6,
-  SHADOW_BLOCK = 7,
-  WIN_BLOCK = 8,
-  FIRE_PLAYER = 9,
-  WATER_PLAYER = 10,
-  SHADOW_PLAYER = 11
+  FIRE_BLOCK = 4,
+  ICE_BLOCK = 8,
+  NEUTRAL_BLOCK = 16,
+  PIT_HOLE = 32,
+  SHADOW_BLOCK = 64,
+  WIN_BLOCK = 128,
+  FIRE_PLAYER = 256,
+  WATER_PLAYER = 512,
+  SHADOW_PLAYER = 1024,
 }
 
 type IPhysicsStoreContext = {
   engine?: Engine;
   world?: World;
-  subscribeCollision: (callback: (playerBody: GameObjectBody, otherBody: GameObjectBody, direction: React.MutableRefObject<Vector>) => void) => void;
+  subscribeCollision: (
+    callback: (
+      playerBody: GameObjectBody,
+      otherBody: GameObjectBody,
+      direction: React.MutableRefObject<Vector>
+    ) => void
+  ) => void;
   subscribeOnFrame: (
     callback: (event: Matter.IEventTimestamped<Engine>) => void
   ) => void;
@@ -35,9 +41,9 @@ type IPhysicsStoreContext = {
 export const PhysicsStoreContext = React.createContext<IPhysicsStoreContext>({
   engine: undefined,
   world: undefined,
-  subscribeCollision: () => { },
-  subscribeOnFrame: () => { },
-  setPlayerPosition: () => { },
+  subscribeCollision: () => {},
+  subscribeOnFrame: () => {},
+  setPlayerPosition: () => {},
 });
 
 export function usePhysics() {
@@ -92,7 +98,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
         id: "player",
       },
       collisionFilter: {
-        // category: CollisionCategories.PLAYER,
+        category: CollisionCategories.WATER_PLAYER,
         group: -CollisionCategories.PLAYER,
       },
     })
@@ -107,19 +113,16 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
         id: "player2",
       },
       collisionFilter: {
-        // category: CollisionCategories.PLAYER,
+        category: CollisionCategories.FIRE_PLAYER,
         group: -CollisionCategories.PLAYER,
       },
     })
   );
-  
+
   const movementSound = useSound("movement");
-  
+
   const arrowLeft = useKeyPress(["ArrowLeft", "a"], movementSound?.play);
-  const arrowRight = useKeyPress(
-    ["ArrowRight", "d"],
-    movementSound?.play
-  );
+  const arrowRight = useKeyPress(["ArrowRight", "d"], movementSound?.play);
   const arrowUp = useKeyPress(["ArrowUp", "w"], movementSound?.play);
   const arrowDown = useKeyPress(["ArrowDown", "s"], movementSound?.play);
   const spaceKey = useKeyPress([" "]);
@@ -209,15 +212,25 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
         }
       }
 
+      if (!splitted.current) {
+        player.current.collisionFilter.category = CollisionCategories.PLAYER;
+        player2.current.collisionFilter.category = CollisionCategories.PLAYER;
+      } else {
+        player.current.collisionFilter.category =
+          CollisionCategories.WATER_PLAYER;
+        player2.current.collisionFilter.category =
+          CollisionCategories.FIRE_PLAYER;
+      }
+
       if (player.current.speed === 0) {
         Body.setPosition(player.current, {
           x:
             Math.trunc(Math.round((player.current.position.x - 50) / 100)) *
-            100 +
+              100 +
             50,
           y:
             Math.trunc(Math.round((player.current.position.y - 50) / 100)) *
-            100 +
+              100 +
             50,
         });
       } else if (Math.abs(player.current.speed) <= 1) {
@@ -228,11 +241,11 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
         Body.setPosition(player2.current, {
           x:
             Math.trunc(Math.round((player2.current.position.x - 50) / 100)) *
-            100 +
+              100 +
             50,
           y:
             Math.trunc(Math.round((player2.current.position.y - 50) / 100)) *
-            100 +
+              100 +
             50,
         });
       } else if (Math.abs(player2.current.speed) <= 1) {
@@ -258,8 +271,12 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
       e.pairs.forEach(({ bodyA, bodyB }) => {
         collisionSubscribers.forEach((cb) => {
           if (cb) {
-            const player = (bodyA.plugin.id === 'player' ? bodyA : bodyB) as unknown as GameObjectBody;
-            const other = (bodyA.plugin.id === 'player' ? bodyB : bodyA) as unknown as GameObjectBody;
+            const player = (bodyA.plugin.id === "player"
+              ? bodyA
+              : bodyB) as unknown as GameObjectBody;
+            const other = (bodyA.plugin.id === "player"
+              ? bodyB
+              : bodyA) as unknown as GameObjectBody;
             cb(player, other);
           }
         });
@@ -267,9 +284,17 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
     });
   }, [engine]);
 
-  const subscribeCollision = (cb: (playerBody: GameObjectBody, otherBody: GameObjectBody, direction: React.MutableRefObject<Vector>) => void) => {
+  const subscribeCollision = (
+    cb: (
+      playerBody: GameObjectBody,
+      otherBody: GameObjectBody,
+      direction: React.MutableRefObject<Vector>
+    ) => void
+  ) => {
     collisionSubscribers.push(
-      debounce((playerBody: GameObjectBody, otherBody: GameObjectBody) => { cb(playerBody, otherBody, direction) }, 10)
+      debounce((playerBody: GameObjectBody, otherBody: GameObjectBody) => {
+        cb(playerBody, otherBody, direction);
+      }, 10)
     );
   };
 

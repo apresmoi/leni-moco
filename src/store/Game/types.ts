@@ -7,5 +7,7 @@ export interface Player {
 
 export interface Level {
   size: Size;
-  identifier: 'tutorial' | 'first' | 'hard';
+  identifier: "tutorial" | "first" | "hard";
+  nextLevel: "first" | "hard" | "end";
+  conditions: { [key: string]: boolean };
 }

@@ -1,26 +1,55 @@
-import React from 'react';
+import React from "react";
 import { CELL_HEIGHT, CELL_WIDTH } from "../../settings";
-import { useConstructGameObject } from '../useConstructGameObject'
-import type { GameObject } from '../../sharedTypes'
+import { useConstructGameObject } from "../useConstructGameObject";
+import type { GameObject, GameObjectBlock } from "../../sharedTypes";
 import { CollisionCategories } from "../../store/Physics";
+import { isPlayer, isThisBlock, isWinBlock } from "../../utils/collisions";
 
-
-
-const WinConditionBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({ x, y }) => (
+const WinConditionBlockSVG: React.ComponentType<
+  React.SVGProps<SVGSVGElement>
+> = ({ x, y }) => (
   <svg x={x} y={y} width={CELL_WIDTH} height={CELL_HEIGHT}>
-    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill='#FFD700' />
-    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill='none' />
+    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="#FFD700" />
+    <rect x={0} y={0} width={CELL_WIDTH} height={CELL_HEIGHT} fill="none" />
   </svg>
-)
+);
 const gameObjectOptions = {
   isStatic: true,
+  isSensor: true,
   collisionFilter: {
     category: CollisionCategories.WIN_BLOCK,
   },
-}
-interface WinConditionBlockProps extends GameObject { }
+};
+interface WinConditionBlockProps extends GameObjectBlock {}
 
 export function WinConditionBlock(props: WinConditionBlockProps) {
-  const { size } = useConstructGameObject({ ...props, gameObjectOptions });
-  return <WinConditionBlockSVG x={size.min.x} y={size.min.y} />;
+  const { size, physics } = useConstructGameObject({
+    ...props,
+    width: props.width / 2,
+    height: props.height / 2,
+    x: props.x + props.width / 4,
+    y: props.y + props.height / 4,
+    gameObjectOptions,
+  });
+  React.useEffect(() => {
+    physics.subscribeCollision((a, b) => {
+      // TODO - JC -check if collision detection is fine
+
+      if (
+        (a.collisionFilter.category === CollisionCategories.WIN_BLOCK &&
+          b.collisionFilter.category === CollisionCategories.PLAYER) ||
+        (b.collisionFilter.category === CollisionCategories.WIN_BLOCK &&
+          a.collisionFilter.category === CollisionCategories.PLAYER)
+      ) {
+        // here be magic
+        props.onSolve?.();
+      }
+    });
+  }, [props.onSolve]);
+  return (
+    <WinConditionBlockSVG
+      x={size.min.x - props.width / 4}
+      y={size.min.y - props.width / 4}
+    />
+  );
 }
