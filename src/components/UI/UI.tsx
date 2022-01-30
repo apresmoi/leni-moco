@@ -7,7 +7,6 @@ import { InstructionsModal } from "../../components/InstructionsModal";
 import { Confirmation } from "../../components/Confirmation";
 import { sounds } from "../../assets/sounds";
 import "./styles.scoped.scss";
-import { useHistory } from "react-router";
 import { useGameCanvas } from "../GameCanvas";
 
 export function UI() {
