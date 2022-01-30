@@ -11,7 +11,7 @@ interface confirmationProps {
   const canvas = useGameCanvas();
 
   return (         
-    <svg width={canvas.width} data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="200 0 1800 1100">
+    <svg width={canvas.width} overflow="visible" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="100 0 1800 1100">
     <defs>
       <radialGradient id="a" cx="564.19" cy="980.19" r="1" gradientTransform="matrix(312.16 0 0 -105.25 -175517.49 103778.52)" gradientUnits="userSpaceOnUse">
         <stop offset=".28" stop-color="#5ca132"/>
@@ -32,7 +32,7 @@ interface confirmationProps {
         <stop offset="1" stop-color="#9c2515"/>
       </linearGradient>
     </defs>
-    <path fill="#30341d" d="M.64 0h1728v1117H.64z"/>
+    <path fill="#30341d" d="M-100 0h2500v2000H.64z"/>
     <text transform="translate(292.27 398.92)" font-size="65" fill="#fff" font-family="MochiyPopPOne-Regular, Mochiy Pop P One">{props.label}</text>
     <g className="clickable" onClick={props.onClickYes} data-name="Yes Button">
       <path d="M384 547.71a5.71 5.71 0 0 1 5.71-5.71h77.12l9.43 1.16h.33l10.3-1.16h320.4a5.71 5.71 0 0 1 5.71 5.71v112.12c0 1.88-1 3.72-1.5 5.54a6.77 6.77 0 0 0-.14.73 4.43 4.43 0 0 0 .21 2.19c.55 1.58 1.43 3.15 1.43 4.82v7.82a5.71 5.71 0 0 1-5.71 5.71H389.71a5.71 5.71 0 0 1-5.71-5.71Z" fill="url(#a)"/>

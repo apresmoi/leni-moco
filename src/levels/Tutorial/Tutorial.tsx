@@ -70,6 +70,12 @@ export const Tutorial = React.memo(() => {
       {/* LEFT BORDER */}
       <WallBlock
         {...cellSizes}
+        {...getSVGPosByGridPos({ col: -1, row: 0 })}
+        {...{ col: -1, row: 0 }}
+        type="RIGHT_BUMP"
+      />
+      <WallBlock
+        {...cellSizes}
         {...getSVGPosByGridPos({ col: -1, row: 1 })}
         {...{ col: -1, row: 1 }}
         type="RIGHT_BUMP"
@@ -100,6 +106,12 @@ export const Tutorial = React.memo(() => {
       />
 
       {/* RIGHT BORDER */}
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 5, row: 0 })}
+        {...{ col: 5, row: 0 }}
+        type="LEFT_BUMP"
+      />
       <WallBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 5, row: 1 })}
@@ -134,6 +146,12 @@ export const Tutorial = React.memo(() => {
       {/* BOTTOM BORDER */}
       <WallBlock
         {...cellSizes}
+        {...getSVGPosByGridPos({ col: -1, row: 6 })}
+        {...{ col: -1, row: 6 }}
+        type="TOP_BUMP"
+      />
+      <WallBlock
+        {...cellSizes}
         {...getSVGPosByGridPos({ col: 0, row: 6 })}
         {...{ col: 0, row: 6 }}
         type="TOP_BUMP"
@@ -162,6 +180,12 @@ export const Tutorial = React.memo(() => {
         {...{ col: 4, row: 6 }}
         type="TOP_BUMP"
       />
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 5, row: 6 })}
+        {...{ col: 5, row: 6 }}
+        type="TOP_BUMP"
+      />
 
       {/* NEUTRAL BLOCKS */}
       <NeutralSolidBlock
@@ -169,7 +193,7 @@ export const Tutorial = React.memo(() => {
         {...getSVGPosByGridPos({ col: 1, row: 2 })}
         {...{ col: 1, row: 2 }}
       />
-      <NeutralSolidBlock
+      <ShadowBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 2, row: 2 })}
         {...{ col: 2, row: 2 }}
@@ -214,6 +238,14 @@ export const Tutorial = React.memo(() => {
             game.setActiveLevel(game.level.nextLevel);
           }, 400);
         }}
+      />
+
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 2, row: -1 })}
+        {...{ col: 2, row: 0 }}
+        type="DOWN_BUMP"
+        opacity={0}
       />
 
       <StartingBlock

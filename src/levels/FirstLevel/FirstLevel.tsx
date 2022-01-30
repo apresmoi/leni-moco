@@ -45,6 +45,12 @@ export const FirstLevel = React.memo(() => {
       {/* TOP BORDER */}
       <WallBlock
         {...cellSizes}
+        {...getSVGPosByGridPos({ col: -1, row: 0 })}
+        {...{ col: -1, row: 0 }}
+        type="DOWN_BUMP"
+      />
+      <WallBlock
+        {...cellSizes}
         {...getSVGPosByGridPos({ col: 0, row: 0 })}
         {...{ col: 0, row: 0 }}
         type="DOWN_BUMP"
@@ -89,6 +95,12 @@ export const FirstLevel = React.memo(() => {
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 8, row: 0 })}
         {...{ col: 8, row: 0 }}
+        type="DOWN_BUMP"
+      />
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 9, row: 0 })}
+        {...{ col: 9, row: 0 }}
         type="DOWN_BUMP"
       />
 
@@ -207,6 +219,12 @@ export const FirstLevel = React.memo(() => {
       {/* BOTTOM BORDER */}
       <WallBlock
         {...cellSizes}
+        {...getSVGPosByGridPos({ col: -1, row: 10 })}
+        {...{ col: -1, row: 10 }}
+        type="TOP_BUMP"
+      />
+      <WallBlock
+        {...cellSizes}
         {...getSVGPosByGridPos({ col: 0, row: 10 })}
         {...{ col: 0, row: 10 }}
         type="TOP_BUMP"
@@ -257,6 +275,12 @@ export const FirstLevel = React.memo(() => {
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 8, row: 10 })}
         {...{ col: 8, row: 10 }}
+        type="TOP_BUMP"
+      />
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 9, row: 10 })}
+        {...{ col: 9, row: 10 }}
         type="TOP_BUMP"
       />
 
@@ -333,11 +357,6 @@ export const FirstLevel = React.memo(() => {
       {/* SHADOW BLOCKS */}
       <ShadowBlock
         {...cellSizes}
-        {...getSVGPosByGridPos({ col: 1, row: 9 })}
-        {...{ col: 1, row: 9 }}
-      />
-      <ShadowBlock
-        {...cellSizes}
         {...getSVGPosByGridPos({ col: 0, row: 3 })}
         {...{ col: 0, row: 3 }}
       />
@@ -358,10 +377,43 @@ export const FirstLevel = React.memo(() => {
       />
       <ShadowBlock
         {...cellSizes}
+        {...getSVGPosByGridPos({ col: 1, row: 7 })}
+        {...{ col: 1, row: 7 }}
+      />
+      <ShadowBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 5, row: 6 })}
+        {...{ col: 5, row: 6 }}
+      />
+      <ShadowBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 7, row: 7 })}
+        {...{ col: 7, row: 7 }}
+      />
+      <ShadowBlock
+        {...cellSizes}
         {...getSVGPosByGridPos({ col: 7, row: 8 })}
         {...{ col: 7, row: 8 }}
       />
+      <ShadowBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 3, row: 9 })}
+        {...{ col: 3, row: 9 }}
+      />
+      <ShadowBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 5, row: 9 })}
+        {...{ col: 5, row: 9 }}
+      />
 
+
+      <WallBlock
+        {...cellSizes}
+        {...getSVGPosByGridPos({ col: 4, row: -1 })}
+        {...{ col: 4, row: -1 }}
+        type="DOWN_BUMP"
+        opacity={0}
+      />
       <WinConditionBlock
         {...cellSizes}
         {...getSVGPosByGridPos({ col: 4, row: 0 })}
