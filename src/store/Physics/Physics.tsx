@@ -7,6 +7,7 @@ import { CELL_SIZE, CELL_WIDTH } from "../../settings";
 import debounce from "lodash.debounce";
 import { GameObjectBody } from '../../sharedTypes'
 import { useSound } from "../../assets";
+import { sounds } from "../../assets/sounds";
 
 export enum CollisionCategories {
   WALL = 1,
@@ -172,14 +173,17 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
   React.useEffect(() => {
     if (shiftKey) {
       game.changePlayerSide();
+      if(game.player?.isSplited){
+        sounds.select.play();
+      }
     }
-  }, [shiftKey]);
+  }, [game.player?.isSplited, shiftKey]);
 
   React.useEffect(() => {
     if (spaceKey)
       if (!game.player?.isSplited) {
         Body.setPosition(player2.current, player.current.position);
-
+        sounds.split.play();
         Body.applyForce(player.current, player.current.position, {
           x: -1 * 75,
           y: 0,
