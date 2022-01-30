@@ -1,18 +1,23 @@
 import * as React from "react";
+import { useGameCanvas } from "../GameCanvas";
 
 interface instructionsModalProps {
   onInstructions: () => void,
 }
 
 export function InstructionsModal(props: instructionsModalProps) {
+    const size = useGameCanvas();
 
   return (
-    <svg
+
+    <svg width={size.width} height={size.height} overflow="visible">
+
+    {/* <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
     viewBox="120 -200 1200 1200"
     overflow="visible"
-  >
+  > */}
     <defs>
       <radialGradient
         id="d"
@@ -149,7 +154,13 @@ export function InstructionsModal(props: instructionsModalProps) {
       </clipPath>
     </defs>
 
-    <rect x="-1000" y="-200" width="2500" height="1200" fill="black" opacity="0.5" />
+
+    <g
+          transform={`translate(${size.width / 2 - (1500 * 0.7) / 2},${
+            size.height / 2 - (741 * 0.7) / 2
+          }) scale(0.7)`}
+        >
+    <rect x="-1000" y="-500" width="3000" height="1500" fill="black" opacity="0.5" />
     <rect
       width="826"
       height="770"
@@ -484,6 +495,7 @@ export function InstructionsModal(props: instructionsModalProps) {
     >
       [
     </text>
+    </g>
   </svg>
   );
 }
