@@ -15,3 +15,8 @@ export interface Player {
 export interface Level {
   size: Size;
 }
+
+export interface Inventory{
+  leftSlime:  string;
+  rightSlime: string;
+}

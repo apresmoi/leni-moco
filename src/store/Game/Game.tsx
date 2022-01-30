@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMusic } from "../../hooks/useMusic";
 
-import { Player, Position, Level } from "./types";
+import { Player, Position, Level, Inventory } from "./types";
 
 type IGameStoreContext = {
   player?: Player;
@@ -12,6 +12,10 @@ type IGameStoreContext = {
   setLevel: (level: Level) => void;
   paused?: boolean;
   setPaused: (paused: boolean) => void;
+  inventory?: Inventory;
+  showInventory?: boolean;
+  setShowInventory: (showInventory: boolean) => void;
+  changeInventory: (inventory: Inventory) => void;
 };
 
 export const GameStoreContext = React.createContext<IGameStoreContext>({
@@ -20,6 +24,8 @@ export const GameStoreContext = React.createContext<IGameStoreContext>({
   changePlayerSide: () => {},
   setLevel: () => {},
   setPaused: () => {},
+  changeInventory: () => {},
+  setShowInventory: () => {},
 });
 
 export function useGame() {
@@ -35,6 +41,8 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
   });
   const [paused, setPaused] = React.useState(true);
   const [level, setLevel] = React.useState<Level>();
+  const [inventory, setInventory] =  React.useState<Inventory>();
+  const [showInventory, setShowInventory] = React.useState(false);
 
   useMusic();
 
@@ -42,11 +50,13 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
     player,
     level,
     paused,
+    inventory,
+    showInventory,
     setLevel: setLevel,
     changePlayer: setPlayer,
     changePlayerSide: () => {
       setPlayer((p) =>
-        p && p.isSplited ? { ...p, active: p.active === "left" ? "right" : "left" } : p
+      p && p.isSplited ? { ...p, active: p.active === "left" ? "right" : "left" } : p
       );
     },
     changePlayerPosition: (position: Position, position2: Position) => {
@@ -55,13 +65,15 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
         position.y !== player?.position.y ||
         position2.x !== player?.position2.x ||
         position2.y !== player?.position2.y
-      ) {
-        setPlayer((p) => {
-          return { ...p, position, position2 } as Player;
-        });
-      }
-    },
+        ) {
+          setPlayer((p) => {
+            return { ...p, position, position2 } as Player;
+          });
+        }
+      },
     setPaused,
+    changeInventory: setInventory,
+    setShowInventory,
   };
 
   return (
