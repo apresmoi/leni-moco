@@ -46,7 +46,7 @@ export function UI() {
   }
 
   function onClickYes() {
-    history.push("/");
+    history.push("/credits");
   }
 
   function onClickNo() {
@@ -89,9 +89,7 @@ export function UI() {
       {showDeathModal && (
         <Confirmation
           label="You are dead, do you want to play again?"
-          onClickYes={() => {
-            window.location.reload();
-          }}
+          onClickYes={onReset}
           onClickNo={onClickYes}
         />
       )}
