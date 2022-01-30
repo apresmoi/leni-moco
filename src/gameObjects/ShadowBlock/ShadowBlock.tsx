@@ -41,9 +41,12 @@ const ShadowBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
 );
 const gameObjectOptions = {
   isStatic: true,
-  isSensor: true,
   collisionFilter: {
     category: CollisionCategories.SHADOW_BLOCK,
+    mask:
+      CollisionCategories.PLAYER |
+      CollisionCategories.FIRE_PLAYER |
+      CollisionCategories.WATER_PLAYER,
   },
   allowedCollisionsCategories: [CollisionCategories.SHADOW_PLAYER],
   killCollisionCategories: [],
@@ -54,6 +57,12 @@ interface ShadowBlockProps extends GameObject {}
 export function ShadowBlock(props: ShadowBlockProps) {
   const { size, physics } = useConstructGameObject({
     ...props,
+
+    width: props.width * 0.5,
+    height: props.height * 0.5,
+    x: props.x + props.width * 0.25,
+    y: props.y + props.height * 0.25,
+
     gameObjectOptions: {
       ...gameObjectOptions,
       plugin: {
@@ -61,10 +70,10 @@ export function ShadowBlock(props: ShadowBlockProps) {
       },
     },
   });
-  React.useEffect(() => {
-    physics.subscribeCollision((a, b) => {
-      // TODO - JC -check if collision detection is fine
-    });
-  }, []);
-  return <ShadowBlockSVG x={size.min.x} y={size.min.y} />;
+  return (
+    <ShadowBlockSVG
+      x={size.min.x - 0.25 * props.width}
+      y={size.min.y - 0.25 * props.height}
+    />
+  );
 }

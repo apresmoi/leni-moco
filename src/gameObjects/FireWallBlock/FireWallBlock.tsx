@@ -1,7 +1,11 @@
 import React from "react";
 import { CELL_HEIGHT, CELL_WIDTH } from "../../settings";
 import { useConstructGameObject } from "../useConstructGameObject";
-import type { GameObject, GameObjectBlock, GameObjectBody } from "../../sharedTypes";
+import type {
+  GameObject,
+  GameObjectBlock,
+  GameObjectBody,
+} from "../../sharedTypes";
 import { shouldSolveBlock } from "../../utils/collisions";
 import { CollisionCategories } from "../../store/Physics";
 import { v4 as uuid } from "uuid";
@@ -44,9 +48,9 @@ const FireWallBlockSVG: React.ComponentType<React.SVGProps<SVGSVGElement>> = ({
 
 const gameObjectOptions = {
   isStatic: true,
-  isSensor: true,
   collisionFilter: {
     category: CollisionCategories.FIRE_BLOCK,
+    mask: CollisionCategories.PLAYER | CollisionCategories.SHADOW_PLAYER,
   },
   allowedCollisionsCategories: [CollisionCategories.FIRE_PLAYER],
   killCollisionCategories: [CollisionCategories.SHADOW_PLAYER],

@@ -40,6 +40,11 @@ const gameObjectOptions = {
   isStatic: true,
   collisionFilter: {
     category: CollisionCategories.NEUTRAL_BLOCK,
+    mask:
+      CollisionCategories.PLAYER |
+      CollisionCategories.WATER_PLAYER |
+      CollisionCategories.FIRE_PLAYER |
+      CollisionCategories.SHADOW_PLAYER,
   },
 };
 interface NeutralSolidBlockProps extends GameObject {}
