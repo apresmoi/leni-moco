@@ -332,10 +332,10 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
       e.pairs.forEach(({ bodyA, bodyB }) => {
         collisionSubscribers.current.forEach((cb) => {
           if (cb) {
-            const player = (bodyA.plugin.id === "player"
+            const player = (["player", "player2"].includes(bodyA.plugin.id)
               ? bodyA
               : bodyB) as unknown as GameObjectBody;
-            const other = (bodyA.plugin.id === "player"
+            const other = (["player", "player2"].includes(bodyA.plugin.id)
               ? bodyB
               : bodyA) as unknown as GameObjectBody;
             cb(player, other);

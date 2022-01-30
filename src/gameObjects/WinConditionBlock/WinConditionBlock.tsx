@@ -45,7 +45,7 @@ const gameObjectOptions = {
   isSensor: true,
   collisionFilter: {
     category: CollisionCategories.WIN_BLOCK,
-    mask: CollisionCategories.PLAYER
+    mask: CollisionCategories.PLAYER,
   },
 };
 interface WinConditionBlockProps extends GameObjectBlock {}
@@ -60,12 +60,9 @@ export function WinConditionBlock(props: WinConditionBlockProps) {
     gameObjectOptions,
   });
   React.useEffect(() => {
-    const fn = (a: GameObjectBody, b: GameObjectBody) => {
+    const fn = (playerBody: GameObjectBody, otherBody: GameObjectBody) => {
       if (
-        (a.collisionFilter.category === CollisionCategories.WIN_BLOCK &&
-          b.collisionFilter.category === CollisionCategories.PLAYER) ||
-        (b.collisionFilter.category === CollisionCategories.WIN_BLOCK &&
-          a.collisionFilter.category === CollisionCategories.PLAYER)
+        otherBody.collisionFilter.category === CollisionCategories.WIN_BLOCK
       ) {
         props.onSolve?.();
       }
