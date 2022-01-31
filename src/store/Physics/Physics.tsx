@@ -376,6 +376,7 @@ export function PhysicsStore(props: React.PropsWithChildren<{}>) {
           : bodyA) as unknown as GameObjectBody;
 
         if (shouldKillPlayer(player, other)) {
+          sounds.death.play();
           if (player.plugin.id === "player") game.killLeftPlayer();
           if (player.plugin.id === "player2") game.killRightPlayer();
         }

@@ -112,7 +112,7 @@ export function GameStore(props: React.PropsWithChildren<{}>) {
     killLeftPlayer,
     killRightPlayer,
     stepped,
-  };
+   };
 
   return (
     <GameStoreContext.Provider value={contextValue}>
